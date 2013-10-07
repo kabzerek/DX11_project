@@ -11,3 +11,12 @@
 *.lai
 *.la
 *.a
+
+# 'binary files differ'
+*.exe
+*.ilk
+*.pdb
+*.sdf
+*.tlog
+*.obj
+*.idb
