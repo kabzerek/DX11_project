@@ -20,3 +20,5 @@
 *.tlog
 *.obj
 *.idb
+*.suo
+*.log
