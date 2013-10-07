@@ -22,3 +22,7 @@
 *.idb
 *.suo
 *.log
+Project.log
+PwAG.log
+*.Build.CppClean.log
+*.v11.suo
