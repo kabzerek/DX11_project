@@ -39,6 +39,9 @@
     <ClCompile Include="CameraClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TextureClass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="InputClass.h">
@@ -62,13 +65,16 @@
     <ClInclude Include="ModelClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="TextureClass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Color.vs">
-      <Filter>Source Files</Filter>
+      <Filter>Resource Files</Filter>
     </None>
     <None Include="Color.ps">
-      <Filter>Source Files</Filter>
+      <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
 </Project>
