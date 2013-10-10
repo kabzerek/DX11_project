@@ -12,6 +12,7 @@
 
 #include "InputClass.h"
 #include "GraphicsClass.h"
+#include "LogClass.h"
 
 class SystemClass
 {

@@ -18,6 +18,8 @@ SystemClass::~SystemClass()
 
 bool SystemClass::Initialize()
 {
+	LogClass::GetInstance().Print("inicjalizacja SystemClass");
+
 	int screenWidth, screenHeight;
 	bool result;
 
@@ -75,6 +77,8 @@ void SystemClass::Shutdown()
 
 	// Shutdown the window.
 	ShutdownWindows();
+
+	LogClass::GetInstance().Shutdown();
 	
 	return;
 }
