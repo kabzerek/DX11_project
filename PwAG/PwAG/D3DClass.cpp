@@ -201,7 +201,12 @@ bool D3DClass::Initialize(int screenWidth, int screenHeight, bool vsync, HWND hw
 										   D3D11_SDK_VERSION, &swapChainDesc, &m_swapChain, &m_device, NULL, &m_deviceContext);
 	if(FAILED(result))
 	{
-		return false;
+		result = D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_REFERENCE, NULL, 0, &featureLevel, 1, 
+										   D3D11_SDK_VERSION, &swapChainDesc, &m_swapChain, &m_device, NULL, &m_deviceContext);
+		if(FAILED(result))
+		{
+			return false;
+		}
 	}
 
 	// Get the pointer to the back buffer.
