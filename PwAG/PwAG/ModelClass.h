@@ -6,6 +6,10 @@
 #include <d3d11.h>
 #include <d3dx10math.h>
 
+#include <assimp\Importer.hpp>	//C++ importer
+#include <assimp\scene.h>		//Output data structures
+#include <assimp\postprocess.h>	//Post processing flags
+
 #include "TextureClass.h"
 
 class ModelClass
@@ -38,6 +42,9 @@ private:
 
 	bool LoadTexture(ID3D11Device*, WCHAR*);
 	void ReleaseTexture();
+
+	D3DXVECTOR3 aiVector3DtoD3DXVector3(aiVector3D aiVec);
+	//D3DXVECTOR2 aiVector3DtoD3DXVector2(aiVector3D** aiVec);
 
 private:
 	ID3D11Buffer *m_vertexBuffer, *m_indexBuffer;

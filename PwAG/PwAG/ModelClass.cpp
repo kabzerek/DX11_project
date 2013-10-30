@@ -82,12 +82,46 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
     D3D11_SUBRESOURCE_DATA vertexData, indexData;
 	HRESULT result;
 
+	std::string pFile = "data/teapots.DAE";
 
+	//Create an instance of the Importer class
+	Assimp::Importer importer;
+
+	//And have it read the given file with some example postprocessing
+	unsigned int processFlags =
+		//aiProcess_CalcTangentSpace         | // calculate tangents and bitangents if possible
+		//aiProcess_JoinIdenticalVertices    | // join identical vertices/ optimize indexing
+		//aiProcess_ValidateDataStructure    | // perform a full validation of the loader's output
+		//aiProcess_Triangulate              | // Ensure all verticies are triangulated (each 3 vertices are triangle)
+		//aiProcess_ConvertToLeftHanded      | // convert everything to D3D left handed space (by default right-handed, for OpenGL)
+		//aiProcess_SortByPType              | // ?
+		//aiProcess_ImproveCacheLocality     | // improve the cache locality of the output vertices
+		//aiProcess_RemoveRedundantMaterials | // remove redundant materials
+		//aiProcess_FindDegenerates          | // remove degenerated polygons from the import
+		//aiProcess_FindInvalidData          | // detect invalid model data, such as invalid normal vectors
+		//aiProcess_GenUVCoords              | // convert spherical, cylindrical, box and planar mapping to proper UVs
+		//aiProcess_TransformUVCoords        | // preprocess UV transformations (scaling, translation ...)
+		//aiProcess_FindInstances            | // search for instanced meshes and remove them by references to one master
+		//aiProcess_LimitBoneWeights         | // limit bone weights to 4 per vertex
+		//aiProcess_OptimizeMeshes           | // join small meshes, if possible;
+		//aiProcess_SplitByBoneCount         | // split meshes with too many bones. Necessary for our (limited) hardware skinning shader
+		0;
+
+	const aiScene* scene = importer.ReadFile(pFile, processFlags);
+
+	//if the import failed, report it
+	if(!scene)
+	{
+		return false;
+	}
+	
 	// Set the number of vertices in the vertex array.
-	m_vertexCount = 4;
+	//m_vertexCount = 4;
+	m_vertexCount = scene->mMeshes[0]->mNumVertices;
 
 	// Set the number of indices in the index array.
-	m_indexCount = 6;
+	//m_indexCount = 6;
+	m_indexCount = scene->mMeshes[0]->mNumFaces * 3;
 
 	// Create the vertex array.
 	vertices = new VertexType[m_vertexCount];
@@ -102,7 +136,7 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 	{
 		return false;
 	}
-
+/*
 	// Load the vertex array with data.
 	vertices[0].position = D3DXVECTOR3(-1.0f, -1.0f, 0.0f);  // Bottom left.
 	vertices[0].texture = D3DXVECTOR2(0.0f, 1.0f);
@@ -119,7 +153,15 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 	vertices[3].position = D3DXVECTOR3(1.0f, -1.0f, 0.0f);  // Bottom right.
 	vertices[3].texture = D3DXVECTOR2(1.0f, 1.0f);
 	vertices[3].normal = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
-
+*/
+	for(unsigned int v = 0; v < m_vertexCount; ++v)
+	{
+		vertices[v].position = aiVector3DtoD3DXVector3(scene->mMeshes[0]->mVertices[v]);
+		vertices[v].normal = aiVector3DtoD3DXVector3(scene->mMeshes[0]->mNormals[v]);
+		vertices[v].texture = D3DXVECTOR2(1.0f, 0.0f);
+		//vertices[v].texture = aiVector3DtoD3DXVector2(scene->mMeshes[0]->mTextureCoords[v]);
+	}
+/*
 	// Load the index array with data.
 	indices[0] = 0;  // Bottom left
 	indices[1] = 1;  // Top left
@@ -127,6 +169,14 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 	indices[3] = 0;  // Bottom left
 	indices[4] = 2; // Top right
 	indices[5] = 3; // Bottom right
+*/
+	for(unsigned int face = 0; face < scene->mMeshes[0]->mNumFaces; ++face)
+	{
+		for(unsigned int idx = 0; idx < 3; ++idx)
+		{
+			indices[face*3+idx] = scene->mMeshes[0]->mFaces[face].mIndices[idx];
+		}
+	}
 
 	// Set up the description of the static vertex buffer.
     vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
@@ -257,3 +307,22 @@ void ModelClass::ReleaseTexture()
 
 	return;
 }
+
+D3DXVECTOR3 ModelClass::aiVector3DtoD3DXVector3(aiVector3D aiVec)
+{
+	D3DXVECTOR3 dxVec;
+	dxVec.x = aiVec.x;
+	dxVec.y = aiVec.y;
+	dxVec.z = aiVec.z;
+
+	return dxVec;
+}
+
+//D3DXVECTOR2 ModelClass::aiVector3DtoD3DXVector2(aiVector3D** aiVec)
+//{
+//	D3DXVECTOR2 dxVec;
+//	dxVec.x = aiVec.x;
+//	dxVec.y = aiVec.y;
+//
+//	return dxVec;
+//}
