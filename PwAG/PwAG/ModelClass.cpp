@@ -92,8 +92,8 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 		//aiProcess_CalcTangentSpace         | // calculate tangents and bitangents if possible
 		//aiProcess_JoinIdenticalVertices    | // join identical vertices/ optimize indexing
 		//aiProcess_ValidateDataStructure    | // perform a full validation of the loader's output
-		//aiProcess_Triangulate              | // Ensure all verticies are triangulated (each 3 vertices are triangle)
-		//aiProcess_ConvertToLeftHanded      | // convert everything to D3D left handed space (by default right-handed, for OpenGL)
+		aiProcess_Triangulate              | // Ensure all verticies are triangulated (each 3 vertices are triangle)
+		aiProcess_ConvertToLeftHanded      | // convert everything to D3D left handed space (by default right-handed, for OpenGL)
 		//aiProcess_SortByPType              | // ?
 		//aiProcess_ImproveCacheLocality     | // improve the cache locality of the output vertices
 		//aiProcess_RemoveRedundantMaterials | // remove redundant materials
@@ -116,12 +116,15 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 	}
 	
 	// Set the number of vertices in the vertex array.
-	//m_vertexCount = 4;
-	m_vertexCount = scene->mMeshes[0]->mNumVertices;
-
+	m_vertexCount = 0;
 	// Set the number of indices in the index array.
-	//m_indexCount = 6;
-	m_indexCount = scene->mMeshes[0]->mNumFaces * 3;
+	m_indexCount = 0;
+
+	for(int m = 0; m < scene->mNumMeshes; ++m)
+	{
+		m_vertexCount += scene->mMeshes[m]->mNumVertices;
+		m_indexCount += scene->mMeshes[m]->mNumFaces * 3;
+	}
 
 	// Create the vertex array.
 	vertices = new VertexType[m_vertexCount];
@@ -153,15 +156,7 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 	vertices[3].position = D3DXVECTOR3(1.0f, -1.0f, 0.0f);  // Bottom right.
 	vertices[3].texture = D3DXVECTOR2(1.0f, 1.0f);
 	vertices[3].normal = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
-*/
-	for(unsigned int v = 0; v < m_vertexCount; ++v)
-	{
-		vertices[v].position = aiVector3DtoD3DXVector3(scene->mMeshes[0]->mVertices[v]);
-		vertices[v].normal = aiVector3DtoD3DXVector3(scene->mMeshes[0]->mNormals[v]);
-		vertices[v].texture = D3DXVECTOR2(1.0f, 0.0f);
-		//vertices[v].texture = aiVector3DtoD3DXVector2(scene->mMeshes[0]->mTextureCoords[v]);
-	}
-/*
+
 	// Load the index array with data.
 	indices[0] = 0;  // Bottom left
 	indices[1] = 1;  // Top left
@@ -170,11 +165,29 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 	indices[4] = 2; // Top right
 	indices[5] = 3; // Bottom right
 */
-	for(unsigned int face = 0; face < scene->mMeshes[0]->mNumFaces; ++face)
+
+	unsigned int ver = 0;
+	unsigned int ind = 0;
+	for(unsigned int m = 0; m < scene->mNumMeshes; ++m)
 	{
-		for(unsigned int idx = 0; idx < 3; ++idx)
+		for(unsigned int v = 0; v < scene->mMeshes[m]->mNumVertices; ++v)
 		{
-			indices[face*3+idx] = scene->mMeshes[0]->mFaces[face].mIndices[idx];
+			vertices[ver].position = aiVector3DtoD3DXVector3(scene->mMeshes[m]->mVertices[v]);
+			vertices[ver].normal = aiVector3DtoD3DXVector3(scene->mMeshes[m]->mNormals[v]);
+			vertices[ver].texture = D3DXVECTOR2(1.0f, 0.0f);
+			//vertices[ver].texture = aiVector3DtoD3DXVector2(scene->mMeshes[0]->mTextureCoords[v]);
+
+			ver++;
+		}
+
+		for(unsigned int face = 0; face < scene->mMeshes[m]->mNumFaces; ++face)
+		{
+			for(unsigned int idx = 0; idx < 3; ++idx)
+			{
+				indices[ind] = scene->mMeshes[m]->mFaces[face].mIndices[idx];
+
+				ind++;
+			}
 		}
 	}
 
