@@ -9,7 +9,8 @@
 #include "LightClass.h"
 //#include "MultiTextureShaderClass.h"
 //#include "AlphaMapShaderClass.h"
-#include "BumpMapShaderClass.h"
+//#include "BumpMapShaderClass.h"
+#include "SpecMapShaderClass.h"
 
 const bool FULL_SCREEN = false;
 const bool VSYNC_ENABLED = true;
@@ -38,7 +39,8 @@ private:
 	LightClass* m_Light;
 	//MultiTextureShaderClass* m_MultiTextureShader;
 	//AlphaMapShaderClass* m_AlphaMapShader;
-	BumpMapShaderClass* m_BumpMapShader;
+	//BumpMapShaderClass* m_BumpMapShader;	
+	SpecMapShaderClass* m_SpecMapShader;
 };
 
 #endif

@@ -41,6 +41,9 @@
     <ClCompile Include="BumpMapShaderClass.cpp">
       <Filter>Classess</Filter>
     </ClCompile>
+    <ClCompile Include="SpecMapShaderClass.cpp">
+      <Filter>Classess</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraClass.h">
@@ -85,6 +88,9 @@
     <ClInclude Include="BumpMapShaderClass.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="SpecMapShaderClass.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Color.ps">
@@ -121,6 +127,12 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="Bumpmap.vs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Specmap.ps">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Specmap.vs">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>
