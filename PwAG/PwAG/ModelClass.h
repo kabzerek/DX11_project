@@ -51,7 +51,7 @@ private:
 	void ReleaseModel();
 
 	D3DXVECTOR3 aiVector3DtoD3DXVector3(aiVector3D aiVec);
-	//D3DXVECTOR2 aiVector3DtoD3DXVector2(aiVector3D** aiVec);
+	D3DXVECTOR2 aiVector3DtoD3DXVector2(aiVector3D aiVec);
 
 private:
 	ID3D11Buffer* m_vertexBuffer, * m_indexBuffer;

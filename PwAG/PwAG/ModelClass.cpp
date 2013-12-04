@@ -291,8 +291,7 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 		{
 			vertices[ver].position = aiVector3DtoD3DXVector3(m_model->mMeshes[m]->mVertices[v]);
 			vertices[ver].normal = aiVector3DtoD3DXVector3(m_model->mMeshes[m]->mNormals[v]);
-			vertices[ver].texture = D3DXVECTOR2(1.0f, 0.0f);
-			//vertices[ver].texture = aiVector3DtoD3DXVector2(m_model->mMeshes[0]->mTextureCoords[v]);
+			vertices[ver].texture = aiVector3DtoD3DXVector2(m_model->mMeshes[0]->mTextureCoords[0][v]);
 
 			ver++;
 		}
@@ -413,11 +412,11 @@ D3DXVECTOR3 ModelClass::aiVector3DtoD3DXVector3(aiVector3D aiVec)
 	return dxVec;
 }
 
-//D3DXVECTOR2 ModelClass::aiVector3DtoD3DXVector2(aiVector3D** aiVec)
-//{
-//	D3DXVECTOR2 dxVec;
-//	dxVec.x = aiVec.x;
-//	dxVec.y = aiVec.y;
-//
-//	return dxVec;
-//}
+D3DXVECTOR2 ModelClass::aiVector3DtoD3DXVector2(aiVector3D aiVec)
+{
+	D3DXVECTOR2 dxVec;
+	dxVec.x = aiVec.x;
+	dxVec.y = aiVec.y;
+
+	return dxVec;
+}
