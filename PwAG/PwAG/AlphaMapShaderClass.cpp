@@ -22,7 +22,7 @@ bool AlphaMapShaderClass::Initialize(ID3D11Device* device, HWND hwnd)
 	bool result;
 
 	// Initialize the vertex and pixel shaders.
-	result = InitializeShader(device, hwnd, L"alphamap.vs", L"alphamap.ps");
+	result = InitializeShader(device, hwnd, L"../PwAG/alphamap.vs", L"../PwAG/alphamap.ps");
 	if(!result)
 	{
 		return false;

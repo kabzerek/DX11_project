@@ -10,7 +10,8 @@ GraphicsClass::GraphicsClass()
 	m_Light = 0;	
 	//m_MultiTextureShader = 0;
 	//m_AlphaMapShader = 0;
-	m_BumpMapShader = 0;
+	//m_BumpMapShader = 0;
+	m_SpecMapShader = 0;
 }
 
 
@@ -64,27 +65,42 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	// Initialize the model object.
 	//result = m_Model->Initialize(m_D3D->GetDevice(), "data/square.DAE", L"data/stone01.dds", 
 	//			     L"data/dirt01.dds", L"data/alpha01.dds");
-	result = m_Model->Initialize(m_D3D->GetDevice(), "data/square.DAE", L"data/stone01.dds", L"data/bump01.dds");
+	result = m_Model->Initialize(m_D3D->GetDevice(), "../PwAG/data/square.DAE", L"../PwAG/data/stone02.dds", 
+				     L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds");
 	if(!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
 		return false;
 	}
 
-	// Create the bump map shader object.
-	m_BumpMapShader = new BumpMapShaderClass;
-	if(!m_BumpMapShader)
+	// Create the specular map shader object.
+	m_SpecMapShader = new SpecMapShaderClass;
+	if(!m_SpecMapShader)
 	{
+		return false;
+	}
+	// Initialize the specular map shader object.
+	result = m_SpecMapShader->Initialize(m_D3D->GetDevice(), hwnd);
+	if(!result)
+	{
+		MessageBox(hwnd, L"Could not initialize the specular map shader object.", L"Error", MB_OK);
 		return false;
 	}
 
-	// Initialize the bump map shader object.
-	result = m_BumpMapShader->Initialize(m_D3D->GetDevice(), hwnd);
-	if(!result)
-	{
-		MessageBox(hwnd, L"Could not initialize the bump map shader object.", L"Error", MB_OK);
-		return false;
-	}
+	//// Create the bump map shader object.
+	//m_BumpMapShader = new BumpMapShaderClass;
+	//if(!m_BumpMapShader)
+	//{
+	//	return false;
+	//}
+
+	//// Initialize the bump map shader object.
+	//result = m_BumpMapShader->Initialize(m_D3D->GetDevice(), hwnd);
+	//if(!result)
+	//{
+	//	MessageBox(hwnd, L"Could not initialize the bump map shader object.", L"Error", MB_OK);
+	//	return false;
+	//}
 
 
 	//// Create the alpha map shader object.
@@ -148,10 +164,10 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 
 	// Initialize the light object.
 	// Initialize the light object.
-	m_Light->SetAmbientColor(0.15f, 0.15f, 0.15f, 1.0f);
+	//m_Light->SetAmbientColor(0.15f, 0.15f, 0.15f, 1.0f);
 	m_Light->SetDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
 	m_Light->SetDirection(0.0f, 0.0f, 1.0f);
-	m_Light->SetSpecularColor(1.0f, 0.2f, 0.2f, 1.0f);
+	m_Light->SetSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	m_Light->SetSpecularPower(16.0f);
 
 	return true;
@@ -160,13 +176,21 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 
 void GraphicsClass::Shutdown()
 {
-	// Release the bump map shader object.
-	if(m_BumpMapShader)
+	// Release the specular map shader object.
+	if(m_SpecMapShader)
 	{
-		m_BumpMapShader->Shutdown();
-		delete m_BumpMapShader;
-		m_BumpMapShader = 0;
+		m_SpecMapShader->Shutdown();
+		delete m_SpecMapShader;
+		m_SpecMapShader = 0;
 	}
+
+	// Release the bump map shader object.
+	//if(m_BumpMapShader)
+	//{
+	//	m_BumpMapShader->Shutdown();
+	//	delete m_BumpMapShader;
+	//	m_BumpMapShader = 0;
+	//}
 
 	// Release the alpha map shader object.
 	//if(m_AlphaMapShader)
@@ -274,9 +298,14 @@ bool GraphicsClass::Render(float rotation)
 	// Put the model vertex and index buffers on the graphics pipeline to prepare them for drawing.
 	m_Model->Render(m_D3D->GetDeviceContext());
 	
-	// Render the model using the bump map shader.
-	m_BumpMapShader->Render(m_D3D->GetDeviceContext(), m_Model->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
-				m_Model->GetTextureArray(), m_Light->GetDirection(), m_Light->GetDiffuseColor());
+	// Render the model using the specular map shader.
+	m_SpecMapShader->Render(m_D3D->GetDeviceContext(), m_Model->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
+				m_Model->GetTextureArray(), m_Light->GetDirection(), m_Light->GetDiffuseColor(), 
+				m_Camera->GetPosition(), m_Light->GetSpecularColor(), m_Light->GetSpecularPower());
+
+	//// Render the model using the bump map shader.
+	//m_BumpMapShader->Render(m_D3D->GetDeviceContext(), m_Model->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
+	//			m_Model->GetTextureArray(), m_Light->GetDirection(), m_Light->GetDiffuseColor());
 
 	//// Render the model using the alpha map shader.
 	//m_AlphaMapShader->Render(m_D3D->GetDeviceContext(), m_Model->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
