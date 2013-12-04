@@ -8,23 +8,11 @@
 #include <assimp\scene.h>		//Output data structures
 #include <assimp\postprocess.h>	//Post processing flags
 
-#include <vector>
-
 #include "TextureClass.h"
 #include "TextureArrayClass.h"
 
 class ModelClass
 {
-public:
-	class ModelInit
-	{
-	public:
-		ModelInit(char * n, aiVector3D p){name = n; position = p;};
-
-		char* name;
-		aiVector3D position;
-	};
-
 private:
 	struct VertexType
 	{
@@ -47,18 +35,12 @@ private:
 		float x, y, z;
 	};
 
-	struct ModelType
-	{
-		Assimp::Importer* m_importer;
-		const aiScene* m_model;
-	};
-
 public:
 	ModelClass();
 	ModelClass(const ModelClass&);
 	~ModelClass();
 	
-	bool Initialize(ID3D11Device*, std::vector<ModelInit>, WCHAR*, WCHAR*, WCHAR*);
+	bool Initialize(ID3D11Device*, char*, WCHAR*, WCHAR*, WCHAR*, aiVector3D);
 	void Shutdown();
 	void Render(ID3D11DeviceContext*);
 
@@ -66,6 +48,7 @@ public:
 	ID3D11ShaderResourceView** GetTextureArray();
 	//ID3D11ShaderResourceView* GetTexture();
 
+	void SetPosition(aiVector3D);
 
 private:
 	bool InitializeBuffers(ID3D11Device*);
@@ -77,10 +60,8 @@ private:
 	bool LoadTextures(ID3D11Device*, WCHAR*, WCHAR*, WCHAR*);
 	void ReleaseTextures();
 
-	bool LoadModel(char*, aiVector3D);
+	bool LoadModel(char*);
 	void ReleaseModel();
-
-	void SetModelPosition(const aiScene*, aiVector3D);
 
 	D3DXVECTOR3 aiVector3DtoD3DXVector3(aiVector3D aiVec);
 	D3DXVECTOR2 aiVector3DtoD3DXVector2(aiVector3D aiVec);
@@ -91,7 +72,8 @@ private:
 	TextureClass* m_Texture;
 	TextureArrayClass* m_TextureArray;
 
-	std::vector<ModelType> m_models;
+	Assimp::Importer* m_importer;
+	const aiScene* m_model;
 };
 
 #endif

@@ -20,15 +20,17 @@ public:
 	bool Frame();
 
 	bool IsEscapePressed();
+	bool IsLeftPressed();
+	bool IsRightPressed();
+	bool IsUpPressed();
+	bool IsDownPressed();
+	bool IsAPressed();
+	bool IsZPressed();
+	bool IsPgUpPressed();
+	bool IsPgDownPressed();
 	void GetMouseLocation(int&, int&);
 
-	//void KeyDown(unsigned int);
-	//void KeyUp(unsigned int);
-
-	//bool IsKeyDown(unsigned int);
-
 private:
-	//bool m_keys[256];
 	bool ReadKeyboard();
 	bool ReadMouse();
 	void ProcessInput();
