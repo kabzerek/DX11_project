@@ -486,20 +486,24 @@ bool GraphicsClass::RenderSceneToTexture()
 	m_Light->GetViewMatrix(lightViewMatrix);
 	m_Light->GetProjectionMatrix(lightProjectionMatrix);
 
-	// Setup the translation matrix for the cube model.
-	m_Model->GetPosition(posX, posY, posZ);
-	D3DXMatrixTranslation(&worldMatrix, posX, posY, posZ);
-
-	// Render the cube model with the depth shader.
-	m_Model->Render(m_D3D->GetDeviceContext());
-	result = m_DepthShader->Render(m_D3D->GetDeviceContext(), m_Model->GetIndexCount(), worldMatrix, lightViewMatrix, lightProjectionMatrix);
-	if(!result)
+	std::vector<ModelClass*>::iterator it;
+	for(it = m_Models.begin(); it != m_Models.end(); ++it)
 	{
-		return false;
-	}
+		// Setup the translation matrix for the cube model.
+		(*it)->GetPosition(posX, posY, posZ);
+		D3DXMatrixTranslation(&worldMatrix, posX, posY, posZ);
 
-	// Reset the world matrix.
-	m_D3D->GetWorldMatrix(worldMatrix);
+		// Render the cube model with the depth shader.
+		(*it)->Render(m_D3D->GetDeviceContext());
+		result = m_DepthShader->Render(m_D3D->GetDeviceContext(), (*it)->GetIndexCount(), worldMatrix, lightViewMatrix, lightProjectionMatrix);
+		if(!result)
+		{
+			return false;
+		}
+
+		// Reset the world matrix.
+		m_D3D->GetWorldMatrix(worldMatrix);
+	}
 
 	// Reset the render target back to the original back buffer and not the render to texture anymore.
 	m_D3D->SetBackBufferRenderTarget();
@@ -543,33 +547,39 @@ bool GraphicsClass::Render()
 	m_Light->GetViewMatrix(lightViewMatrix);
 	m_Light->GetProjectionMatrix(lightProjectionMatrix);
 
-	// Setup the translation matrix for the cube model.
-	m_Model->GetPosition(posX, posY, posZ);
-	D3DXMatrixTranslation(&worldMatrix, posX, posY, posZ);
-	
-	// Put the cube model vertex and index buffers on the graphics pipeline to prepare them for drawing.
-	//m_Model->Render(m_D3D->GetDeviceContext());
-
 	std::vector<ModelClass*>::iterator it;
 	for(it = m_Models.begin(); it != m_Models.end(); ++it)
 	{
+		// Setup the translation matrix for the cube model.
+		(*it)->GetPosition(posX, posY, posZ);
+		D3DXMatrixTranslation(&worldMatrix, posX, posY, posZ);
+	
+		// Put the cube model vertex and index buffers on the graphics pipeline to prepare them for drawing.
+		//m_Model->Render(m_D3D->GetDeviceContext());
+
 		(*it)->Render(m_D3D->GetDeviceContext());
 
 		// Render the model using the specular map shader.
-		m_SpecMapShader->Render(m_D3D->GetDeviceContext(), (*it)->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
+		result = m_SpecMapShader->Render(m_D3D->GetDeviceContext(), (*it)->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
 				(*it)->GetTextureArray(), m_Light->GetDirection(), m_Light->GetDiffuseColor(), 
 				m_Camera->GetPosition(), m_Light->GetSpecularColor(), m_Light->GetSpecularPower());
-	}
+		
+		if(!result)
+		{
+			return false;
+		}
 
-	// Render the model using the shadow shader.
-	result = m_ShadowShader->Render(m_D3D->GetDeviceContext(), m_Model->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix, lightViewMatrix, 
-					lightProjectionMatrix, m_Model->GetTexture(), m_RenderTexture->GetShaderResourceView(), m_Light->GetPosition(),
-					m_Light->GetAmbientColor(), m_Light->GetDiffuseColor());
-	if(!result)
-	{
-		return false;
-	}
+		//// Render the model using the shadow shader.
+		//result = m_ShadowShader->Render(m_D3D->GetDeviceContext(), (*it)->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix, lightViewMatrix, 
+		//			lightProjectionMatrix, (*it)->GetTexture(), m_RenderTexture->GetShaderResourceView(), m_Light->GetPosition(),
+		//			m_Light->GetAmbientColor(), m_Light->GetDiffuseColor());
 
+		//if(!result)
+		//{
+		//	return false;
+		//}
+	}
+	
 	// Reset the world matrix.
 	m_D3D->GetWorldMatrix(worldMatrix);
 
