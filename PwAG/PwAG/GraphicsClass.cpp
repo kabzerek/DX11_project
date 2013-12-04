@@ -250,11 +250,13 @@ void GraphicsClass::Shutdown()
 }
 
 
-bool GraphicsClass::Frame()
+bool GraphicsClass::Frame(int mouseX, int mouseY)
 {
 	bool result;
 
 	static float rotation = 0.0f;
+
+	//int mouseX, int mouseY
 
 	rotation += (float)D3DX_PI * 0.007f;
 	if(rotation > 360.0f)
