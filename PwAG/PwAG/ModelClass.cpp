@@ -32,6 +32,13 @@ bool ModelClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* te
 		return false;
 	}
 
+//LOAD SECOND MODEL!!!!!!!!!!!!!!!!!!!!!!!!!
+	result = LoadModel("data/Scene1.dae");
+	if(!result)
+	{
+		return false;
+	}
+
 	// Initialize the vertex and index buffers.
 	result = InitializeBuffers(device);
 	if(!result)
@@ -109,11 +116,14 @@ void ModelClass::ReleaseTextures()
 
 bool ModelClass::LoadModel(char* modelFilename)
 {
-	//Create an instance of the Importer class
-	m_importer = new Assimp::Importer();
+	ModelType model;
+
+	//Create a new instance of the Importer class
+	//Assimp::Importer* importer = new Assimp::Importer();
+	model.m_importer = new Assimp::Importer();
 
 	//if creating the importer failed, report it
-	if(!m_importer)
+	if(!model.m_importer)
 	{
 		return false;
 	}
@@ -130,7 +140,7 @@ bool ModelClass::LoadModel(char* modelFilename)
 		//aiProcess_RemoveRedundantMaterials | // remove redundant materials
 		//aiProcess_FindDegenerates          | // remove degenerated polygons from the import
 		//aiProcess_FindInvalidData          | // detect invalid model data, such as invalid normal vectors
-		//aiProcess_GenUVCoords              | // convert spherical, cylindrical, box and planar mapping to proper UVs
+		aiProcess_GenUVCoords              | // convert spherical, cylindrical, box and planar mapping to proper UVs
 		aiProcess_TransformUVCoords        | // preprocess UV transformations (scaling, translation ...)
 		//aiProcess_FindInstances            | // search for instanced meshes and remove them by references to one master
 		//aiProcess_LimitBoneWeights         | // limit bone weights to 4 per vertex
@@ -138,13 +148,16 @@ bool ModelClass::LoadModel(char* modelFilename)
 		//aiProcess_SplitByBoneCount         | // split meshes with too many bones. Necessary for our (limited) hardware skinning shader
 		0;
 
-	m_model = m_importer->ReadFile(modelFilename, processFlags);
+	model.m_model = model.m_importer->ReadFile(modelFilename, processFlags);
 
 	//if the import failed, report it
-	if(!m_model)
+	if(!model.m_model)
 	{
 		return false;
 	}
+
+	//push to vector
+	m_models.push_back(model);
 
 	return true;
 }
@@ -159,12 +172,21 @@ void ModelClass::ReleaseModel()
 	//	m_model = 0;
 	//}
 
-	if(m_importer)
+	//if(m_importer)
+	//{
+	//	delete m_importer;
+	//	m_importer = 0;
+	//	m_model = 0;
+	//}
+
+	std::vector<ModelType>::iterator it;
+	for(it = m_models.begin(); it != m_models.end(); ++it)
 	{
-		delete m_importer;
-		m_importer = 0;
-		m_model = 0;
+		delete (*it).m_importer;
+		(*it).m_importer = 0;
+		(*it).m_model = 0;
 	}
+	m_models.clear();
 }
 
 //ID3D11ShaderResourceView* ModelClass::GetTexture()
@@ -234,10 +256,14 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 	// Set the number of indices in the index array.
 	m_indexCount = 0;
 
-	for(int m = 0; m < m_model->mNumMeshes; ++m)
+	std::vector<ModelType>::iterator it;
+	for(it = m_models.begin(); it != m_models.end(); ++it)
 	{
-		m_vertexCount += m_model->mMeshes[m]->mNumVertices;
-		m_indexCount += m_model->mMeshes[m]->mNumFaces * 3;
+		for(int m = 0; m < (*it).m_model->mNumMeshes; ++m)
+		{
+			m_vertexCount += (*it).m_model->mMeshes[m]->mNumVertices;
+			m_indexCount  += (*it).m_model->mMeshes[m]->mNumFaces * 3;
+		}
 	}
 
 	// Create the vertex array.
@@ -282,26 +308,32 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 
 	unsigned int ver = 0;
 	unsigned int ind = 0;
-	for(unsigned int m = 0; m < m_model->mNumMeshes; ++m)
+
+	for(it = m_models.begin(); it != m_models.end(); ++it)
 	{
-		for(unsigned int v = 0; v < m_model->mMeshes[m]->mNumVertices; ++v)
+		const aiScene* tmp = (*it).m_model;
+		for(unsigned int m = 0; m < (*it).m_model->mNumMeshes; ++m)
 		{
-			vertices[ver].position = aiVector3DtoD3DXVector3(m_model->mMeshes[m]->mVertices[v]);
-			vertices[ver].normal = aiVector3DtoD3DXVector3(m_model->mMeshes[m]->mNormals[v]);
-            vertices[ver].texture = aiVector3DtoD3DXVector2(m_model->mMeshes[m]->mTextureCoords[0][v]); 
-            vertices[ver].tangent = aiVector3DtoD3DXVector3(m_model->mMeshes[m]->mTangents[v]); 
-            vertices[ver].binormal = aiVector3DtoD3DXVector3(m_model->mMeshes[m]->mBitangents[v]); 
-
-			ver++;
-		}
-
-		for(unsigned int face = 0; face < m_model->mMeshes[m]->mNumFaces; ++face)
-		{
-			for(unsigned int idx = 0; idx < 3; ++idx)
+			aiMesh* tmp_mesh = (*it).m_model->mMeshes[m];
+			for(unsigned int v = 0; v < (*it).m_model->mMeshes[m]->mNumVertices; ++v)
 			{
-				indices[ind] = m_model->mMeshes[m]->mFaces[face].mIndices[idx];
+				vertices[ver].position = aiVector3DtoD3DXVector3((*it).m_model->mMeshes[m]->mVertices[v]);
+				vertices[ver].normal = aiVector3DtoD3DXVector3((*it).m_model->mMeshes[m]->mNormals[v]);
+				vertices[ver].texture = aiVector3DtoD3DXVector2((*it).m_model->mMeshes[m]->mTextureCoords[0][v]); 
+				vertices[ver].tangent = aiVector3DtoD3DXVector3((*it).m_model->mMeshes[m]->mTangents[v]); 
+				vertices[ver].binormal = aiVector3DtoD3DXVector3((*it).m_model->mMeshes[m]->mBitangents[v]); 
 
-				ind++;
+				ver++;
+			}
+
+			for(unsigned int face = 0; face < (*it).m_model->mMeshes[m]->mNumFaces; ++face)
+			{
+				for(unsigned int idx = 0; idx < 3; ++idx)
+				{
+					indices[ind] = (*it).m_model->mMeshes[m]->mFaces[face].mIndices[idx];
+
+					ind++;
+				}
 			}
 		}
 	}

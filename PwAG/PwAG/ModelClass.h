@@ -10,6 +10,8 @@
 #include <assimp\scene.h>		//Output data structures
 #include <assimp\postprocess.h>	//Post processing flags
 
+#include <vector>
+
 #include "TextureClass.h"
 #include "TextureArrayClass.h"
 
@@ -35,6 +37,12 @@ private:
 	struct VectorType
 	{
 		float x, y, z;
+	};
+
+	struct ModelType
+	{
+		Assimp::Importer* m_importer;
+		const aiScene* m_model;
 	};
 
 public:
@@ -72,9 +80,8 @@ private:
 	int m_vertexCount, m_indexCount;
 	TextureClass* m_Texture;
 	TextureArrayClass* m_TextureArray;
-	Assimp::Importer* m_importer;
-	const aiScene* m_model;
 
+	std::vector<ModelType> m_models;
 };
 
 #endif
