@@ -24,10 +24,10 @@ public:
 
 	bool Initialize(int, int, HWND);
 	void Shutdown();
-	bool Frame();
+	bool Frame(int, int);
 
 private:
-	bool Render(float rotation);
+	bool Render(float);
 
 	D3DClass* m_D3D;
 	CameraClass* m_Camera;
