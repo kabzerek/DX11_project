@@ -8,7 +8,8 @@ GraphicsClass::GraphicsClass()
 	m_Model = 0;
 	//m_LightShader = 0;
 	//m_Light = 0;	
-	m_MultiTextureShader = 0;
+	//m_MultiTextureShader = 0;
+	m_AlphaMapShader = 0;
 }
 
 
@@ -60,28 +61,43 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	}
 
 	// Initialize the model object.
-	result = m_Model->Initialize(m_D3D->GetDevice(), "data/teapots.DAE", L"data/stone01.dds", 
-				     L"data/dirt01.dds");
+	result = m_Model->Initialize(m_D3D->GetDevice(), "data/square.DAE", L"data/stone01.dds", 
+				     L"data/dirt01.dds", L"data/alpha01.dds");
 	if(!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
 		return false;
 	}
 
-	// Create the multitexture shader object.
-	m_MultiTextureShader = new MultiTextureShaderClass;
-	if(!m_MultiTextureShader)
+	// Create the alpha map shader object.
+	m_AlphaMapShader = new AlphaMapShaderClass;
+	if(!m_AlphaMapShader)
 	{
 		return false;
 	}
 
-	// Initialize the multitexture shader object.
-	result = m_MultiTextureShader->Initialize(m_D3D->GetDevice(), hwnd);
+	// Initialize the alpha map shader object.
+	result = m_AlphaMapShader->Initialize(m_D3D->GetDevice(), hwnd);
 	if(!result)
 	{
-		MessageBox(hwnd, L"Could not initialize the multitexture shader object.", L"Error", MB_OK);
+		MessageBox(hwnd, L"Could not initialize the alpha map shader object.", L"Error", MB_OK);
 		return false;
 	}
+
+	// Create the multitexture shader object.
+	//m_MultiTextureShader = new MultiTextureShaderClass;
+	//if(!m_MultiTextureShader)
+	//{
+	//	return false;
+	//}
+
+	//// Initialize the multitexture shader object.
+	//result = m_MultiTextureShader->Initialize(m_D3D->GetDevice(), hwnd);
+	//if(!result)
+	//{
+	//	MessageBox(hwnd, L"Could not initialize the multitexture shader object.", L"Error", MB_OK);
+	//	return false;
+	//}
 
 
 	//	// Create the light shader object.
@@ -126,13 +142,21 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 
 void GraphicsClass::Shutdown()
 {
-	// Release the multitexture shader object.
-	if(m_MultiTextureShader)
+	// Release the alpha map shader object.
+	if(m_AlphaMapShader)
 	{
-		m_MultiTextureShader->Shutdown();
-		delete m_MultiTextureShader;
-		m_MultiTextureShader = 0;
+		m_AlphaMapShader->Shutdown();
+		delete m_AlphaMapShader;
+		m_AlphaMapShader = 0;
 	}
+
+	// Release the multitexture shader object.
+	//if(m_MultiTextureShader)
+	//{
+	//	m_MultiTextureShader->Shutdown();
+	//	delete m_MultiTextureShader;
+	//	m_MultiTextureShader = 0;
+	//}
 
 	// Release the light object.
 	//if(m_Light)
@@ -222,10 +246,13 @@ bool GraphicsClass::Render(float rotation)
 	// Put the model vertex and index buffers on the graphics pipeline to prepare them for drawing.
 	m_Model->Render(m_D3D->GetDeviceContext());
 	
+	// Render the model using the alpha map shader.
+	m_AlphaMapShader->Render(m_D3D->GetDeviceContext(), m_Model->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
+				 m_Model->GetTextureArray());
 
-	// Render the model using the multitexture shader.
-	m_MultiTextureShader->Render(m_D3D->GetDeviceContext(), m_Model->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
-				     m_Model->GetTextureArray());
+	//// Render the model using the multitexture shader.
+	//m_MultiTextureShader->Render(m_D3D->GetDeviceContext(), m_Model->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
+	//			     m_Model->GetTextureArray());
 
 
 	//// Render the model using the light shader.

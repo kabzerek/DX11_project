@@ -5,9 +5,10 @@
 #include "D3DClass.h"
 #include "CameraClass.h"
 #include "ModelClass.h"
-#include "LightShaderClass.h"
-#include "LightClass.h"
-#include "MultiTextureShaderClass.h"
+//#include "LightShaderClass.h"
+//#include "LightClass.h"
+//#include "MultiTextureShaderClass.h"
+#include "AlphaMapShaderClass.h"
 
 const bool FULL_SCREEN = false;
 const bool VSYNC_ENABLED = true;
@@ -34,7 +35,8 @@ private:
 	ModelClass* m_Model;
 	//LightShaderClass* m_LightShader;
 	//LightClass* m_Light;
-	MultiTextureShaderClass* m_MultiTextureShader;
+	//MultiTextureShaderClass* m_MultiTextureShader;
+	AlphaMapShaderClass* m_AlphaMapShader;
 };
 
 #endif

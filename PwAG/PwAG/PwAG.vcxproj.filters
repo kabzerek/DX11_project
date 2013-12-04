@@ -35,6 +35,9 @@
     <ClCompile Include="MultiTextureShaderClass.cpp">
       <Filter>Classess</Filter>
     </ClCompile>
+    <ClCompile Include="AlphaMapShaderClass.cpp">
+      <Filter>Classess</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraClass.h">
@@ -73,6 +76,9 @@
     <ClInclude Include="MultiTextureShaderClass.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="AlphaMapShaderClass.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Color.ps">
@@ -97,6 +103,12 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="Multitexture.vs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Alphamap.ps">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Alphamap.vs">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>
