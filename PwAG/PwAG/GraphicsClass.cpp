@@ -6,8 +6,9 @@ GraphicsClass::GraphicsClass()
 	m_D3D = 0;
 	m_Camera = 0;
 	m_Model = 0;
-	m_LightShader = 0;
-	m_Light = 0;
+	//m_LightShader = 0;
+	//m_Light = 0;	
+	m_MultiTextureShader = 0;
 }
 
 
@@ -59,47 +60,65 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	}
 
 	// Initialize the model object.
-	result = m_Model->Initialize(m_D3D->GetDevice(), L"../PwAG/data/seafloor.dds");
+	result = m_Model->Initialize(m_D3D->GetDevice(), "../Engine/data/square.txt", L"../Engine/data/stone01.dds", 
+				     L"../Engine/data/dirt01.dds");
 	if(!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
 		return false;
 	}
-		// Create the light shader object.
-	m_LightShader = new LightShaderClass;
-	if(!m_LightShader)
+
+	// Create the multitexture shader object.
+	m_MultiTextureShader = new MultiTextureShaderClass;
+	if(!m_MultiTextureShader)
 	{
 		return false;
 	}
 
-	// Initialize the light shader object.
-	result = m_LightShader->Initialize(m_D3D->GetDevice(), hwnd);
+	// Initialize the multitexture shader object.
+	result = m_MultiTextureShader->Initialize(m_D3D->GetDevice(), hwnd);
 	if(!result)
 	{
-		MessageBox(hwnd, L"Could not initialize the light shader object.", L"Error", MB_OK);
+		MessageBox(hwnd, L"Could not initialize the multitexture shader object.", L"Error", MB_OK);
+		return false;
+	}
+
+
+	//	// Create the light shader object.
+	//m_LightShader = new LightShaderClass;
+	//if(!m_LightShader)
+	//{
+	//	return false;
+	//}
+
+	//// Initialize the light shader object.
+	//result = m_LightShader->Initialize(m_D3D->GetDevice(), hwnd);
+	//if(!result)
+	//{
+	//	MessageBox(hwnd, L"Could not initialize the light shader object.", L"Error", MB_OK);
 	//	return false;
 	//}
 	//// Create the texture shader object.
 	//m_LightShader = new LightShaderClass;
 	//if(!m_LightShader)
 	//{
-		return false;
-	}
+	//	return false;
+	//}
 
 	// Create the light object.
-	m_Light = new LightClass;
-	if(!m_Light)
-	{
-		return false;
-	}
+	//m_Light = new LightClass;
+	//if(!m_Light)
+	//{
+	//	return false;
+	//}
 
-	// Initialize the light object.
-	// Initialize the light object.
-	m_Light->SetAmbientColor(0.15f, 0.15f, 0.15f, 1.0f);
-	m_Light->SetDiffuseColor(0.2f, 1.0f, 0.2f, 1.0f);
-	m_Light->SetDirection(0.0f, 0.0f, 1.0f);
-	m_Light->SetSpecularColor(1.0f, 0.2f, 0.2f, 1.0f);
-	m_Light->SetSpecularPower(16.0f);
+	//// Initialize the light object.
+	//// Initialize the light object.
+	//m_Light->SetAmbientColor(0.15f, 0.15f, 0.15f, 1.0f);
+	//m_Light->SetDiffuseColor(0.2f, 1.0f, 0.2f, 1.0f);
+	//m_Light->SetDirection(0.0f, 0.0f, 1.0f);
+	//m_Light->SetSpecularColor(1.0f, 0.2f, 0.2f, 1.0f);
+	//m_Light->SetSpecularPower(16.0f);
 
 	return true;
 }
@@ -107,20 +126,28 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 
 void GraphicsClass::Shutdown()
 {
-	// Release the light object.
-	if(m_Light)
+	// Release the multitexture shader object.
+	if(m_MultiTextureShader)
 	{
-		delete m_Light;
-		m_Light = 0;
+		m_MultiTextureShader->Shutdown();
+		delete m_MultiTextureShader;
+		m_MultiTextureShader = 0;
 	}
 
-	// Release the light shader object.
-	if(m_LightShader)
-	{
-		m_LightShader->Shutdown();
-		delete m_LightShader;
-		m_LightShader = 0;
-	}
+	// Release the light object.
+	//if(m_Light)
+	//{
+	//	delete m_Light;
+	//	m_Light = 0;
+	//}
+
+	//// Release the light shader object.
+	//if(m_LightShader)
+	//{
+	//	m_LightShader->Shutdown();
+	//	delete m_LightShader;
+	//	m_LightShader = 0;
+	//}
 
 	// Release the model object.
 	if(m_Model)
@@ -194,11 +221,17 @@ bool GraphicsClass::Render(float rotation)
 
 	// Put the model vertex and index buffers on the graphics pipeline to prepare them for drawing.
 	m_Model->Render(m_D3D->GetDeviceContext());
+	
 
-	// Render the model using the light shader.
-	result = m_LightShader->Render(m_D3D->GetDeviceContext(), m_Model->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix, 
-				       m_Model->GetTexture(), m_Light->GetDirection(), m_Light->GetAmbientColor(), m_Light->GetDiffuseColor(), 
-				       m_Camera->GetPosition(), m_Light->GetSpecularColor(), m_Light->GetSpecularPower());
+	// Render the model using the multitexture shader.
+	m_MultiTextureShader->Render(m_D3D->GetDeviceContext(), m_Model->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
+				     m_Model->GetTextureArray());
+
+
+	//// Render the model using the light shader.
+	//result = m_LightShader->Render(m_D3D->GetDeviceContext(), m_Model->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix, 
+	//			       m_Model->GetTexture(), m_Light->GetDirection(), m_Light->GetAmbientColor(), m_Light->GetDiffuseColor(), 
+	//			       m_Camera->GetPosition(), m_Light->GetSpecularColor(), m_Light->GetSpecularPower());
 	if(!result)
 	{
 		return false;

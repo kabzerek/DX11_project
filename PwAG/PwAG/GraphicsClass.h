@@ -7,7 +7,7 @@
 #include "ModelClass.h"
 #include "LightShaderClass.h"
 #include "LightClass.h"
-
+#include "MultiTextureShaderClass.h"
 
 const bool FULL_SCREEN = false;
 const bool VSYNC_ENABLED = true;
@@ -32,8 +32,9 @@ private:
 	D3DClass* m_D3D;
 	CameraClass* m_Camera;
 	ModelClass* m_Model;
-	LightShaderClass* m_LightShader;
-	LightClass* m_Light;
+	//LightShaderClass* m_LightShader;
+	//LightClass* m_Light;
+	MultiTextureShaderClass* m_MultiTextureShader;
 };
 
 #endif

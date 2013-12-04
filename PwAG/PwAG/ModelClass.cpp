@@ -5,6 +5,7 @@ ModelClass::ModelClass()
 	m_vertexBuffer = 0;
 	m_indexBuffer = 0;
 	m_Texture = 0;
+	m_TextureArray = 0;
 }
 
 
@@ -18,7 +19,7 @@ ModelClass::~ModelClass()
 }
 
 
-bool ModelClass::Initialize(ID3D11Device* device, WCHAR* textureFilename)
+bool ModelClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* textureFilename1, WCHAR* textureFilename2)
 {
 	bool result;
 
@@ -31,7 +32,9 @@ bool ModelClass::Initialize(ID3D11Device* device, WCHAR* textureFilename)
 	}
 
 	// Load the texture for this model.
-	result = LoadTexture(device, textureFilename);
+	
+	//result = LoadTexture(device, textureFilename);
+	result = LoadTextures(device, textureFilename1, textureFilename2);
 	if(!result)
 	{
 		return false;
@@ -44,14 +47,97 @@ bool ModelClass::Initialize(ID3D11Device* device, WCHAR* textureFilename)
 void ModelClass::Shutdown()
 {
 	// Release the model texture.
-	ReleaseTexture();
+	//ReleaseTexture();
+	ReleaseTextures();
 
 	// Shutdown the vertex and index buffers.
 	ShutdownBuffers();
 
+// RELEASE MODEL FFS!!! :P
+
 	return;
 }
 
+ID3D11ShaderResourceView** ModelClass::GetTextureArray()
+{
+	return m_TextureArray->GetTextureArray();
+}
+
+bool ModelClass::LoadTextures(ID3D11Device* device, WCHAR* filename1, WCHAR* filename2)
+{
+	bool result;
+
+
+	// Create the texture array object.
+	m_TextureArray = new TextureArrayClass;
+	if(!m_TextureArray)
+	{
+		return false;
+	}
+
+	// Initialize the texture array object.
+	result = m_TextureArray->Initialize(device, filename1, filename2);
+	if(!result)
+	{
+		return false;
+	}
+
+	return true;
+}
+
+void ModelClass::ReleaseTextures()
+{
+	// Release the texture array object.
+	if(m_TextureArray)
+	{
+		m_TextureArray->Shutdown();
+		delete m_TextureArray;
+		m_TextureArray = 0;
+	}
+
+	return;
+}
+
+
+//ID3D11ShaderResourceView* ModelClass::GetTexture()
+//{
+//	return m_Texture->GetTexture();
+//}
+//bool ModelClass::LoadTexture(ID3D11Device* device, WCHAR* filename)
+//{
+//	bool result;
+//
+//
+//	// Create the texture object.
+//	m_Texture = new TextureClass;
+//	if(!m_Texture)
+//	{
+//		return false;
+//	}
+//
+//	// Initialize the texture object.
+//	result = m_Texture->Initialize(device, filename);
+//	if(!result)
+//	{
+//		return false;
+//	}
+//
+//	return true;
+//}
+//
+//
+//void ModelClass::ReleaseTexture()
+//{
+//	// Release the texture object.
+//	if(m_Texture)
+//	{
+//		m_Texture->Shutdown();
+//		delete m_Texture;
+//		m_Texture = 0;
+//	}
+//
+//	return;
+//}
 
 void ModelClass::Render(ID3D11DeviceContext* deviceContext)
 {
@@ -66,13 +152,6 @@ int ModelClass::GetIndexCount()
 {
 	return m_indexCount;
 }
-
-
-ID3D11ShaderResourceView* ModelClass::GetTexture()
-{
-	return m_Texture->GetTexture();
-}
-
 
 bool ModelClass::InitializeBuffers(ID3D11Device* device)
 {
@@ -107,6 +186,7 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 		//aiProcess_SplitByBoneCount         | // split meshes with too many bones. Necessary for our (limited) hardware skinning shader
 		0;
 
+// KOMENTARZ DLA GRZESIA WYWAL TE ZMIENNA JAKO ZMIENNA KLASY LOLZ
 	const aiScene* scene = importer.ReadFile(pFile, processFlags);
 
 	//if the import failed, report it
@@ -285,41 +365,6 @@ void ModelClass::RenderBuffers(ID3D11DeviceContext* deviceContext)
 }
 
 
-bool ModelClass::LoadTexture(ID3D11Device* device, WCHAR* filename)
-{
-	bool result;
-
-
-	// Create the texture object.
-	m_Texture = new TextureClass;
-	if(!m_Texture)
-	{
-		return false;
-	}
-
-	// Initialize the texture object.
-	result = m_Texture->Initialize(device, filename);
-	if(!result)
-	{
-		return false;
-	}
-
-	return true;
-}
-
-
-void ModelClass::ReleaseTexture()
-{
-	// Release the texture object.
-	if(m_Texture)
-	{
-		m_Texture->Shutdown();
-		delete m_Texture;
-		m_Texture = 0;
-	}
-
-	return;
-}
 
 D3DXVECTOR3 ModelClass::aiVector3DtoD3DXVector3(aiVector3D aiVec)
 {
