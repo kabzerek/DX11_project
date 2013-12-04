@@ -26,7 +26,7 @@ bool MultiTextureShaderClass::Initialize(ID3D11Device* device, HWND hwnd)
 
 	//The multitexture HLSL shader files are loaded here in the Initialize function.
 	// Initialize the vertex and pixel shaders.
-	result = InitializeShader(device, hwnd, L"../Engine/multitexture.vs", L"../Engine/multitexture.ps");
+	result = InitializeShader(device, hwnd, L"multitexture.vs", L"multitexture.ps");
 	if(!result)
 	{
 		return false;

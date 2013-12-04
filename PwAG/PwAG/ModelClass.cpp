@@ -1,5 +1,9 @@
 #include "ModelClass.h"
 
+//aiScene::~aiScene()
+//{
+//}
+
 ModelClass::ModelClass()
 {
 	m_vertexBuffer = 0;
@@ -152,17 +156,17 @@ void ModelClass::ReleaseModel()
 {
 	//FreeScene is called automatically by destructor
 
-	if(m_model)
-	{
-		
-		delete m_model;
-		m_model = 0;
-	}
+	//if(m_model)
+	//{
+	//	delete m_model;
+	//	m_model = 0;
+	//}
 
 	if(m_importer)
 	{
 		delete m_importer;
 		m_importer = 0;
+		m_model = 0;
 	}
 }
 

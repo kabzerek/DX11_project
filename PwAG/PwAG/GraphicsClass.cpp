@@ -232,10 +232,10 @@ bool GraphicsClass::Render(float rotation)
 	//result = m_LightShader->Render(m_D3D->GetDeviceContext(), m_Model->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix, 
 	//			       m_Model->GetTexture(), m_Light->GetDirection(), m_Light->GetAmbientColor(), m_Light->GetDiffuseColor(), 
 	//			       m_Camera->GetPosition(), m_Light->GetSpecularColor(), m_Light->GetSpecularPower());
-	if(!result)
-	{
-		return false;
-	}
+	//if(!result)
+	//{
+	//	return false;
+	//}
 
 	// Present the rendered scene to the screen.
 	m_D3D->EndScene();

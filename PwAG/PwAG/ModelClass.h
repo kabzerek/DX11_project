@@ -60,6 +60,7 @@ private:
 	TextureArrayClass* m_TextureArray;
 	Assimp::Importer* m_importer;
 	const aiScene* m_model;
+
 };
 
 #endif
