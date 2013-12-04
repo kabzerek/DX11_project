@@ -38,6 +38,9 @@
     <ClCompile Include="AlphaMapShaderClass.cpp">
       <Filter>Classess</Filter>
     </ClCompile>
+    <ClCompile Include="BumpMapShaderClass.cpp">
+      <Filter>Classess</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraClass.h">
@@ -79,6 +82,9 @@
     <ClInclude Include="AlphaMapShaderClass.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="BumpMapShaderClass.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Color.ps">
@@ -109,6 +115,12 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="Alphamap.vs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Bumpmap.ps">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Bumpmap.vs">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

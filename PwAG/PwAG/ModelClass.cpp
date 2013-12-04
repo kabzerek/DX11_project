@@ -20,8 +20,8 @@ ModelClass::~ModelClass()
 {
 }
 
-bool ModelClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* textureFilename1, WCHAR* textureFilename2, 
-			    WCHAR* textureFilename3)
+bool ModelClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* textureFilename1, WCHAR* textureFilename2)//, 
+			   // WCHAR* textureFilename3)
 {
 	bool result;
 
@@ -31,7 +31,6 @@ bool ModelClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* te
 	{
 		return false;
 	}
-
 
 	// Initialize the vertex and index buffers.
 	result = InitializeBuffers(device);
@@ -43,7 +42,7 @@ bool ModelClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* te
 	// Load the texture for this model.
 	
 	//result = LoadTexture(device, textureFilename);
-	result = LoadTextures(device, textureFilename1, textureFilename2, textureFilename3);
+	result = LoadTextures(device, textureFilename1, textureFilename2);//, textureFilename3);
 	if(!result)
 	{
 		return false;
@@ -73,7 +72,7 @@ ID3D11ShaderResourceView** ModelClass::GetTextureArray()
 	return m_TextureArray->GetTextureArray();
 }
 
-bool ModelClass::LoadTextures(ID3D11Device* device, WCHAR* filename1, WCHAR* filename2, WCHAR* filename3)
+bool ModelClass::LoadTextures(ID3D11Device* device, WCHAR* filename1, WCHAR* filename2)//, WCHAR* filename3)
 {
 	bool result;
 
@@ -86,7 +85,7 @@ bool ModelClass::LoadTextures(ID3D11Device* device, WCHAR* filename1, WCHAR* fil
 	}
 
 	// Initialize the texture array object.
-	result = m_TextureArray->Initialize(device, filename1, filename2, filename3);
+	result = m_TextureArray->Initialize(device, filename1, filename2);//, filename3);
 	if(!result)
 	{
 		return false;
@@ -121,7 +120,7 @@ bool ModelClass::LoadModel(char* modelFilename)
 
 	//And have it read the given file with some example postprocessing
 	unsigned int processFlags =
-		//aiProcess_CalcTangentSpace         | // calculate tangents and bitangents if possible
+		aiProcess_CalcTangentSpace         | // calculate tangents and bitangents if possible
 		//aiProcess_JoinIdenticalVertices    | // join identical vertices/ optimize indexing
 		//aiProcess_ValidateDataStructure    | // perform a full validation of the loader's output
 		aiProcess_Triangulate			   | // Ensure all verticies are triangulated (each 3 vertices are triangle)
@@ -132,7 +131,7 @@ bool ModelClass::LoadModel(char* modelFilename)
 		//aiProcess_FindDegenerates          | // remove degenerated polygons from the import
 		//aiProcess_FindInvalidData          | // detect invalid model data, such as invalid normal vectors
 		//aiProcess_GenUVCoords              | // convert spherical, cylindrical, box and planar mapping to proper UVs
-		//aiProcess_TransformUVCoords        | // preprocess UV transformations (scaling, translation ...)
+		aiProcess_TransformUVCoords        | // preprocess UV transformations (scaling, translation ...)
 		//aiProcess_FindInstances            | // search for instanced meshes and remove them by references to one master
 		//aiProcess_LimitBoneWeights         | // limit bone weights to 4 per vertex
 		//aiProcess_OptimizeMeshes           | // join small meshes, if possible;
@@ -289,7 +288,9 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 		{
 			vertices[ver].position = aiVector3DtoD3DXVector3(m_model->mMeshes[m]->mVertices[v]);
 			vertices[ver].normal = aiVector3DtoD3DXVector3(m_model->mMeshes[m]->mNormals[v]);
-			vertices[ver].texture = aiVector3DtoD3DXVector2(m_model->mMeshes[0]->mTextureCoords[0][v]);
+            vertices[ver].texture = aiVector3DtoD3DXVector2(m_model->mMeshes[m]->mTextureCoords[0][v]); 
+            vertices[ver].tangent = aiVector3DtoD3DXVector3(m_model->mMeshes[m]->mTangents[v]); 
+            vertices[ver].binormal = aiVector3DtoD3DXVector3(m_model->mMeshes[m]->mBitangents[v]); 
 
 			ver++;
 		}

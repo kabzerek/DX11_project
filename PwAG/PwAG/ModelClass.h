@@ -21,6 +21,20 @@ private:
 		D3DXVECTOR3 position;
 	    D3DXVECTOR2 texture;
 		D3DXVECTOR3 normal;
+		D3DXVECTOR3 tangent;
+		D3DXVECTOR3 binormal;
+	};
+
+	struct TempVertexType
+	{
+		float x, y, z;
+		float tu, tv;
+		float nx, ny, nz;
+	};
+
+	struct VectorType
+	{
+		float x, y, z;
 	};
 
 public:
@@ -28,7 +42,7 @@ public:
 	ModelClass(const ModelClass&);
 	~ModelClass();
 	
-	bool Initialize(ID3D11Device*, char*, WCHAR*, WCHAR*, WCHAR*);
+	bool Initialize(ID3D11Device*, char*, WCHAR*, WCHAR*);//, WCHAR*);
 	void Shutdown();
 	void Render(ID3D11DeviceContext*);
 
@@ -44,7 +58,7 @@ private:
 
 	//bool LoadTexture(ID3D11Device*, WCHAR*);
 	//void ReleaseTexture();
-	bool LoadTextures(ID3D11Device*, WCHAR*, WCHAR*, WCHAR*);
+	bool LoadTextures(ID3D11Device*, WCHAR*, WCHAR*);//, WCHAR*);
 	void ReleaseTextures();
 
 	bool LoadModel(char* modelFilename);
