@@ -90,7 +90,9 @@
     <ClCompile Include="InputClass.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="ModelClass.cpp" />
+    <ClCompile Include="MultiTextureShaderClass.cpp" />
     <ClCompile Include="SystemClass.cpp" />
+    <ClCompile Include="TextureArrayClass.cpp" />
     <ClCompile Include="TextureClass.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -102,7 +104,9 @@
     <ClInclude Include="InputClass.h" />
     <ClInclude Include="LogClass.hpp" />
     <ClInclude Include="ModelClass.h" />
+    <ClInclude Include="MultiTextureShaderClass.h" />
     <ClInclude Include="SystemClass.h" />
+    <ClInclude Include="TextureArrayClass.h" />
     <ClInclude Include="TextureClass.h" />
   </ItemGroup>
   <ItemGroup>
