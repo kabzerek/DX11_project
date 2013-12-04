@@ -1,16 +1,12 @@
 #ifndef _MODELCLASS_H_
 #define _MODELCLASS_H_
 
-
-
 #include <d3d11.h>
 #include <d3dx10math.h>
 
 #include <assimp\Importer.hpp>	//C++ importer
 #include <assimp\scene.h>		//Output data structures
 #include <assimp\postprocess.h>	//Post processing flags
-
-#include <vector>
 
 #include "TextureClass.h"
 #include "TextureArrayClass.h"
@@ -39,18 +35,12 @@ private:
 		float x, y, z;
 	};
 
-	struct ModelType
-	{
-		Assimp::Importer* m_importer;
-		const aiScene* m_model;
-	};
-
 public:
 	ModelClass();
 	ModelClass(const ModelClass&);
 	~ModelClass();
 	
-	bool Initialize(ID3D11Device*, char*, WCHAR*, WCHAR*, WCHAR*);
+	bool Initialize(ID3D11Device*, char*, WCHAR*, WCHAR*, WCHAR*, aiVector3D);
 	void Shutdown();
 	void Render(ID3D11DeviceContext*);
 
@@ -58,6 +48,7 @@ public:
 	ID3D11ShaderResourceView** GetTextureArray();
 	//ID3D11ShaderResourceView* GetTexture();
 
+	void SetPosition(aiVector3D);
 
 private:
 	bool InitializeBuffers(ID3D11Device*);
@@ -69,7 +60,7 @@ private:
 	bool LoadTextures(ID3D11Device*, WCHAR*, WCHAR*, WCHAR*);
 	void ReleaseTextures();
 
-	bool LoadModel(char* modelFilename);
+	bool LoadModel(char*);
 	void ReleaseModel();
 
 	D3DXVECTOR3 aiVector3DtoD3DXVector3(aiVector3D aiVec);
@@ -81,7 +72,8 @@ private:
 	TextureClass* m_Texture;
 	TextureArrayClass* m_TextureArray;
 
-	std::vector<ModelType> m_models;
+	Assimp::Importer* m_importer;
+	const aiScene* m_model;
 };
 
 #endif

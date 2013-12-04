@@ -17,6 +17,8 @@
 #include "DebugWindowClass.h"
 //#include "TextureShaderClass.h"
 
+#include <vector>
+
 const bool FULL_SCREEN = false;
 const bool VSYNC_ENABLED = true;
 const float SCREEN_DEPTH = 1000.0f;
@@ -41,7 +43,8 @@ private:
 
 	D3DClass* m_D3D;
 	CameraClass* m_Camera;
-	ModelClass* m_Model;
+	//ModelClass* m_Model;
+	std::vector<ModelClass*> m_Models;
 //	LightShaderClass* m_LightShader;
 	LightClass* m_Light;
 	//TextureShaderClass* m_TextureShader;

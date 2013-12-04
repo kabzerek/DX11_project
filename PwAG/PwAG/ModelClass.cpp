@@ -21,7 +21,7 @@ ModelClass::~ModelClass()
 }
 
 bool ModelClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* textureFilename1, WCHAR* textureFilename2, 
-			    WCHAR* textureFilename3)
+							WCHAR* textureFilename3, aiVector3D modelPosition)
 {
 	bool result;
 
@@ -32,12 +32,8 @@ bool ModelClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* te
 		return false;
 	}
 
-//LOAD SECOND MODEL!!!!!!!!!!!!!!!!!!!!!!!!!
-	result = LoadModel("data/Scene1.dae");
-	if(!result)
-	{
-		return false;
-	}
+	// Set position of the model
+	SetPosition(modelPosition);
 
 	// Initialize the vertex and index buffers.
 	result = InitializeBuffers(device);
@@ -116,14 +112,11 @@ void ModelClass::ReleaseTextures()
 
 bool ModelClass::LoadModel(char* modelFilename)
 {
-	ModelType model;
-
 	//Create a new instance of the Importer class
-	//Assimp::Importer* importer = new Assimp::Importer();
-	model.m_importer = new Assimp::Importer();
+	m_importer = new Assimp::Importer();
 
 	//if creating the importer failed, report it
-	if(!model.m_importer)
+	if(!m_importer)
 	{
 		return false;
 	}
@@ -148,16 +141,13 @@ bool ModelClass::LoadModel(char* modelFilename)
 		//aiProcess_SplitByBoneCount         | // split meshes with too many bones. Necessary for our (limited) hardware skinning shader
 		0;
 
-	model.m_model = model.m_importer->ReadFile(modelFilename, processFlags);
+	m_model = m_importer->ReadFile(modelFilename, processFlags);
 
 	//if the import failed, report it
-	if(!model.m_model)
+	if(!m_model)
 	{
 		return false;
 	}
-
-	//push to vector
-	m_models.push_back(model);
 
 	return true;
 }
@@ -172,21 +162,19 @@ void ModelClass::ReleaseModel()
 	//	m_model = 0;
 	//}
 
-	//if(m_importer)
-	//{
-	//	delete m_importer;
-	//	m_importer = 0;
-	//	m_model = 0;
-	//}
-
-	std::vector<ModelType>::iterator it;
-	for(it = m_models.begin(); it != m_models.end(); ++it)
+	if(m_importer)
 	{
-		delete (*it).m_importer;
-		(*it).m_importer = 0;
-		(*it).m_model = 0;
+		delete m_importer;
+		m_importer = 0;
+		m_model = 0;
 	}
-	m_models.clear();
+}
+
+void ModelClass::SetPosition(aiVector3D modelPosition)
+{
+	for(unsigned int m = 0; m < m_model->mNumMeshes; ++m)
+			for(unsigned int v = 0; v < m_model->mMeshes[m]->mNumVertices; ++v)
+				m_model->mMeshes[m]->mVertices[v] += modelPosition;
 }
 
 //ID3D11ShaderResourceView* ModelClass::GetTexture()
@@ -256,14 +244,10 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 	// Set the number of indices in the index array.
 	m_indexCount = 0;
 
-	std::vector<ModelType>::iterator it;
-	for(it = m_models.begin(); it != m_models.end(); ++it)
+	for(int m = 0; m < m_model->mNumMeshes; ++m)
 	{
-		for(int m = 0; m < (*it).m_model->mNumMeshes; ++m)
-		{
-			m_vertexCount += (*it).m_model->mMeshes[m]->mNumVertices;
-			m_indexCount  += (*it).m_model->mMeshes[m]->mNumFaces * 3;
-		}
+		m_vertexCount += m_model->mMeshes[m]->mNumVertices;
+		m_indexCount  += m_model->mMeshes[m]->mNumFaces * 3;
 	}
 
 	// Create the vertex array.
@@ -309,33 +293,32 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 	unsigned int ver = 0;
 	unsigned int ind = 0;
 
-	for(it = m_models.begin(); it != m_models.end(); ++it)
+	unsigned int idxOffset = 0;
+
+	for(unsigned int m = 0; m < m_model->mNumMeshes; ++m)
 	{
-		const aiScene* tmp = (*it).m_model;
-		for(unsigned int m = 0; m < (*it).m_model->mNumMeshes; ++m)
+		for(unsigned int v = 0; v < m_model->mMeshes[m]->mNumVertices; ++v)
 		{
-			aiMesh* tmp_mesh = (*it).m_model->mMeshes[m];
-			for(unsigned int v = 0; v < (*it).m_model->mMeshes[m]->mNumVertices; ++v)
+			vertices[ver].position = aiVector3DtoD3DXVector3(m_model->mMeshes[m]->mVertices[v]);
+			vertices[ver].normal = aiVector3DtoD3DXVector3(m_model->mMeshes[m]->mNormals[v]);
+			vertices[ver].texture = aiVector3DtoD3DXVector2(m_model->mMeshes[m]->mTextureCoords[0][v]); 
+			vertices[ver].tangent = aiVector3DtoD3DXVector3(m_model->mMeshes[m]->mTangents[v]); 
+			vertices[ver].binormal = aiVector3DtoD3DXVector3(m_model->mMeshes[m]->mBitangents[v]); 
+			
+			ver++;
+		}
+
+		for(unsigned int face = 0; face < m_model->mMeshes[m]->mNumFaces; ++face)
+		{
+			for(unsigned int idx = 0; idx < 3; ++idx)
 			{
-				vertices[ver].position = aiVector3DtoD3DXVector3((*it).m_model->mMeshes[m]->mVertices[v]);
-				vertices[ver].normal = aiVector3DtoD3DXVector3((*it).m_model->mMeshes[m]->mNormals[v]);
-				vertices[ver].texture = aiVector3DtoD3DXVector2((*it).m_model->mMeshes[m]->mTextureCoords[0][v]); 
-				vertices[ver].tangent = aiVector3DtoD3DXVector3((*it).m_model->mMeshes[m]->mTangents[v]); 
-				vertices[ver].binormal = aiVector3DtoD3DXVector3((*it).m_model->mMeshes[m]->mBitangents[v]); 
-
-				ver++;
-			}
-
-			for(unsigned int face = 0; face < (*it).m_model->mMeshes[m]->mNumFaces; ++face)
-			{
-				for(unsigned int idx = 0; idx < 3; ++idx)
-				{
-					indices[ind] = (*it).m_model->mMeshes[m]->mFaces[face].mIndices[idx];
-
-					ind++;
-				}
+				indices[ind] = m_model->mMeshes[m]->mFaces[face].mIndices[idx] + idxOffset;
+				
+				ind++;
 			}
 		}
+
+		idxOffset += m_model->mMeshes[m]->mNumVertices;
 	}
 
 	// Set up the description of the static vertex buffer.
