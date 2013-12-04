@@ -1,8 +1,6 @@
 #ifndef _MODELCLASS_H_
 #define _MODELCLASS_H_
 
-
-
 #include <d3d11.h>
 #include <d3dx10math.h>
 
@@ -17,6 +15,16 @@
 
 class ModelClass
 {
+public:
+	class ModelInit
+	{
+	public:
+		ModelInit(char * n, aiVector3D p){name = n; position = p;};
+
+		char* name;
+		aiVector3D position;
+	};
+
 private:
 	struct VertexType
 	{
@@ -50,7 +58,7 @@ public:
 	ModelClass(const ModelClass&);
 	~ModelClass();
 	
-	bool Initialize(ID3D11Device*, char*, WCHAR*, WCHAR*, WCHAR*);
+	bool Initialize(ID3D11Device*, std::vector<ModelInit>, WCHAR*, WCHAR*, WCHAR*);
 	void Shutdown();
 	void Render(ID3D11DeviceContext*);
 
@@ -69,8 +77,10 @@ private:
 	bool LoadTextures(ID3D11Device*, WCHAR*, WCHAR*, WCHAR*);
 	void ReleaseTextures();
 
-	bool LoadModel(char* modelFilename);
+	bool LoadModel(char*, aiVector3D);
 	void ReleaseModel();
+
+	void SetModelPosition(const aiScene*, aiVector3D);
 
 	D3DXVECTOR3 aiVector3DtoD3DXVector3(aiVector3D aiVec);
 	D3DXVECTOR2 aiVector3DtoD3DXVector2(aiVector3D aiVec);

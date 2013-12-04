@@ -12,6 +12,8 @@
 //#include "BumpMapShaderClass.h"
 #include "SpecMapShaderClass.h"
 
+#include <vector>
+
 const bool FULL_SCREEN = false;
 const bool VSYNC_ENABLED = true;
 const float SCREEN_DEPTH = 1000.0f;
@@ -41,6 +43,8 @@ private:
 	//AlphaMapShaderClass* m_AlphaMapShader;
 	//BumpMapShaderClass* m_BumpMapShader;	
 	SpecMapShaderClass* m_SpecMapShader;
+
+	std::vector<ModelClass::ModelInit> m_ModelsToLoad;
 };
 
 #endif

@@ -20,23 +20,20 @@ ModelClass::~ModelClass()
 {
 }
 
-bool ModelClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* textureFilename1, WCHAR* textureFilename2, 
+bool ModelClass::Initialize(ID3D11Device* device, std::vector<ModelInit> models, WCHAR* textureFilename1, WCHAR* textureFilename2, 
 			    WCHAR* textureFilename3)
 {
 	bool result;
 
-	// Load in the model data
-	result = LoadModel(modelFilename);
-	if(!result)
+	// Load in the models data
+	std::vector<ModelInit>::iterator it;
+	for(it = models.begin(); it != models.end(); ++it)
 	{
-		return false;
-	}
-
-//LOAD SECOND MODEL!!!!!!!!!!!!!!!!!!!!!!!!!
-	result = LoadModel("data/Scene1.dae");
-	if(!result)
-	{
-		return false;
+		result = LoadModel((*it).name, (*it).position);
+		if(!result)
+		{
+			return false;
+		}
 	}
 
 	// Initialize the vertex and index buffers.
@@ -114,7 +111,7 @@ void ModelClass::ReleaseTextures()
 	return;
 }
 
-bool ModelClass::LoadModel(char* modelFilename)
+bool ModelClass::LoadModel(char* modelFilename, aiVector3D modelPosition)
 {
 	ModelType model;
 
@@ -156,6 +153,9 @@ bool ModelClass::LoadModel(char* modelFilename)
 		return false;
 	}
 
+	//set model initial position
+	SetModelPosition(model.m_model, modelPosition);
+
 	//push to vector
 	m_models.push_back(model);
 
@@ -187,6 +187,13 @@ void ModelClass::ReleaseModel()
 		(*it).m_model = 0;
 	}
 	m_models.clear();
+}
+
+void ModelClass::SetModelPosition(const aiScene* model, aiVector3D modelPosition)
+{
+	for(unsigned int m = 0; m < model->mNumMeshes; ++m)
+			for(unsigned int v = 0; v < model->mMeshes[m]->mNumVertices; ++v)
+				model->mMeshes[m]->mVertices[v] += modelPosition;
 }
 
 //ID3D11ShaderResourceView* ModelClass::GetTexture()
@@ -309,12 +316,14 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 	unsigned int ver = 0;
 	unsigned int ind = 0;
 
+	unsigned int idxOffset = 0;
+
 	for(it = m_models.begin(); it != m_models.end(); ++it)
 	{
-		const aiScene* tmp = (*it).m_model;
+		//const aiScene* tmp = (*it).m_model;
 		for(unsigned int m = 0; m < (*it).m_model->mNumMeshes; ++m)
 		{
-			aiMesh* tmp_mesh = (*it).m_model->mMeshes[m];
+			//aiMesh* tmp_mesh = (*it).m_model->mMeshes[m];
 			for(unsigned int v = 0; v < (*it).m_model->mMeshes[m]->mNumVertices; ++v)
 			{
 				vertices[ver].position = aiVector3DtoD3DXVector3((*it).m_model->mMeshes[m]->mVertices[v]);
@@ -330,11 +339,13 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 			{
 				for(unsigned int idx = 0; idx < 3; ++idx)
 				{
-					indices[ind] = (*it).m_model->mMeshes[m]->mFaces[face].mIndices[idx];
+					indices[ind] = (*it).m_model->mMeshes[m]->mFaces[face].mIndices[idx] + idxOffset;
 
 					ind++;
 				}
 			}
+
+			idxOffset += (*it).m_model->mMeshes[m]->mNumVertices;
 		}
 	}
 

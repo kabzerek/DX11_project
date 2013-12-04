@@ -62,10 +62,14 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 		return false;
 	}
 
-	// Initialize the model object.
+	// Initialize the model objects.
 	//result = m_Model->Initialize(m_D3D->GetDevice(), "data/square.DAE", L"data/stone01.dds", 
 	//			     L"data/dirt01.dds", L"data/alpha01.dds");
-	result = m_Model->Initialize(m_D3D->GetDevice(), "../PwAG/data/square.DAE", L"../PwAG/data/stone02.dds", 
+	m_ModelsToLoad.push_back(ModelClass::ModelInit("../PwAG/data/square.DAE", aiVector3D(-100.0f, -50.0f,    0.0f)));
+	m_ModelsToLoad.push_back(ModelClass::ModelInit("../PwAG/data/square.DAE", aiVector3D( 125.0f,  25.0f,  +50.0f)));
+	m_ModelsToLoad.push_back(ModelClass::ModelInit("../PwAG/data/square.DAE", aiVector3D(   0.0f, 100.0f, +250.0f)));
+
+	result = m_Model->Initialize(m_D3D->GetDevice(), m_ModelsToLoad, L"../PwAG/data/stone02.dds", 
 				     L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds");
 	if(!result)
 	{
