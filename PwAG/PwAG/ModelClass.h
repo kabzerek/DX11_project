@@ -47,14 +47,19 @@ private:
 	bool LoadTextures(ID3D11Device*, WCHAR*, WCHAR*);
 	void ReleaseTextures();
 
+	bool LoadModel(char* modelFilename);
+	void ReleaseModel();
+
 	D3DXVECTOR3 aiVector3DtoD3DXVector3(aiVector3D aiVec);
 	//D3DXVECTOR2 aiVector3DtoD3DXVector2(aiVector3D** aiVec);
 
 private:
-	ID3D11Buffer *m_vertexBuffer, *m_indexBuffer;
+	ID3D11Buffer* m_vertexBuffer, * m_indexBuffer;
 	int m_vertexCount, m_indexCount;
 	TextureClass* m_Texture;
 	TextureArrayClass* m_TextureArray;
+	Assimp::Importer* m_importer;
+	const aiScene* m_model;
 };
 
 #endif

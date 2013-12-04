@@ -23,6 +23,13 @@ bool ModelClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* te
 {
 	bool result;
 
+	// Load in the model data
+	result = LoadModel(modelFilename);
+	if(!result)
+	{
+		return false;
+	}
+
 
 	// Initialize the vertex and index buffers.
 	result = InitializeBuffers(device);
@@ -53,7 +60,8 @@ void ModelClass::Shutdown()
 	// Shutdown the vertex and index buffers.
 	ShutdownBuffers();
 
-// RELEASE MODEL FFS!!! :P
+	// Release the model
+	ReleaseModel();
 
 	return;
 }
@@ -98,6 +106,65 @@ void ModelClass::ReleaseTextures()
 	return;
 }
 
+bool ModelClass::LoadModel(char* modelFilename)
+{
+	//Create an instance of the Importer class
+	m_importer = new Assimp::Importer();
+
+	//if creating the importer failed, report it
+	if(!m_importer)
+	{
+		return false;
+	}
+
+	//And have it read the given file with some example postprocessing
+	unsigned int processFlags =
+		//aiProcess_CalcTangentSpace         | // calculate tangents and bitangents if possible
+		//aiProcess_JoinIdenticalVertices    | // join identical vertices/ optimize indexing
+		//aiProcess_ValidateDataStructure    | // perform a full validation of the loader's output
+		aiProcess_Triangulate			   | // Ensure all verticies are triangulated (each 3 vertices are triangle)
+		aiProcess_ConvertToLeftHanded      | // convert everything to D3D left handed space (by default right-handed, for OpenGL)
+		//aiProcess_SortByPType              | // ?
+		//aiProcess_ImproveCacheLocality     | // improve the cache locality of the output vertices
+		//aiProcess_RemoveRedundantMaterials | // remove redundant materials
+		//aiProcess_FindDegenerates          | // remove degenerated polygons from the import
+		//aiProcess_FindInvalidData          | // detect invalid model data, such as invalid normal vectors
+		//aiProcess_GenUVCoords              | // convert spherical, cylindrical, box and planar mapping to proper UVs
+		//aiProcess_TransformUVCoords        | // preprocess UV transformations (scaling, translation ...)
+		//aiProcess_FindInstances            | // search for instanced meshes and remove them by references to one master
+		//aiProcess_LimitBoneWeights         | // limit bone weights to 4 per vertex
+		//aiProcess_OptimizeMeshes           | // join small meshes, if possible;
+		//aiProcess_SplitByBoneCount         | // split meshes with too many bones. Necessary for our (limited) hardware skinning shader
+		0;
+
+	m_model = m_importer->ReadFile(modelFilename, processFlags);
+
+	//if the import failed, report it
+	if(!m_model)
+	{
+		return false;
+	}
+
+	return true;
+}
+
+void ModelClass::ReleaseModel()
+{
+	//FreeScene is called automatically by destructor
+
+	if(m_model)
+	{
+		
+		delete m_model;
+		m_model = 0;
+	}
+
+	if(m_importer)
+	{
+		delete m_importer;
+		m_importer = 0;
+	}
+}
 
 //ID3D11ShaderResourceView* ModelClass::GetTexture()
 //{
@@ -160,50 +227,16 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 	D3D11_BUFFER_DESC vertexBufferDesc, indexBufferDesc;
     D3D11_SUBRESOURCE_DATA vertexData, indexData;
 	HRESULT result;
-
-	std::string pFile = "data/teapots.DAE";
-
-	//Create an instance of the Importer class
-	Assimp::Importer importer;
-
-	//And have it read the given file with some example postprocessing
-	unsigned int processFlags =
-		//aiProcess_CalcTangentSpace         | // calculate tangents and bitangents if possible
-		//aiProcess_JoinIdenticalVertices    | // join identical vertices/ optimize indexing
-		//aiProcess_ValidateDataStructure    | // perform a full validation of the loader's output
-		aiProcess_Triangulate              | // Ensure all verticies are triangulated (each 3 vertices are triangle)
-		aiProcess_ConvertToLeftHanded      | // convert everything to D3D left handed space (by default right-handed, for OpenGL)
-		//aiProcess_SortByPType              | // ?
-		//aiProcess_ImproveCacheLocality     | // improve the cache locality of the output vertices
-		//aiProcess_RemoveRedundantMaterials | // remove redundant materials
-		//aiProcess_FindDegenerates          | // remove degenerated polygons from the import
-		//aiProcess_FindInvalidData          | // detect invalid model data, such as invalid normal vectors
-		//aiProcess_GenUVCoords              | // convert spherical, cylindrical, box and planar mapping to proper UVs
-		//aiProcess_TransformUVCoords        | // preprocess UV transformations (scaling, translation ...)
-		//aiProcess_FindInstances            | // search for instanced meshes and remove them by references to one master
-		//aiProcess_LimitBoneWeights         | // limit bone weights to 4 per vertex
-		//aiProcess_OptimizeMeshes           | // join small meshes, if possible;
-		//aiProcess_SplitByBoneCount         | // split meshes with too many bones. Necessary for our (limited) hardware skinning shader
-		0;
-
-// KOMENTARZ DLA GRZESIA WYWAL TE ZMIENNA JAKO ZMIENNA KLASY LOLZ
-	const aiScene* scene = importer.ReadFile(pFile, processFlags);
-
-	//if the import failed, report it
-	if(!scene)
-	{
-		return false;
-	}
 	
 	// Set the number of vertices in the vertex array.
 	m_vertexCount = 0;
 	// Set the number of indices in the index array.
 	m_indexCount = 0;
 
-	for(int m = 0; m < scene->mNumMeshes; ++m)
+	for(int m = 0; m < m_model->mNumMeshes; ++m)
 	{
-		m_vertexCount += scene->mMeshes[m]->mNumVertices;
-		m_indexCount += scene->mMeshes[m]->mNumFaces * 3;
+		m_vertexCount += m_model->mMeshes[m]->mNumVertices;
+		m_indexCount += m_model->mMeshes[m]->mNumFaces * 3;
 	}
 
 	// Create the vertex array.
@@ -248,23 +281,23 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 
 	unsigned int ver = 0;
 	unsigned int ind = 0;
-	for(unsigned int m = 0; m < scene->mNumMeshes; ++m)
+	for(unsigned int m = 0; m < m_model->mNumMeshes; ++m)
 	{
-		for(unsigned int v = 0; v < scene->mMeshes[m]->mNumVertices; ++v)
+		for(unsigned int v = 0; v < m_model->mMeshes[m]->mNumVertices; ++v)
 		{
-			vertices[ver].position = aiVector3DtoD3DXVector3(scene->mMeshes[m]->mVertices[v]);
-			vertices[ver].normal = aiVector3DtoD3DXVector3(scene->mMeshes[m]->mNormals[v]);
+			vertices[ver].position = aiVector3DtoD3DXVector3(m_model->mMeshes[m]->mVertices[v]);
+			vertices[ver].normal = aiVector3DtoD3DXVector3(m_model->mMeshes[m]->mNormals[v]);
 			vertices[ver].texture = D3DXVECTOR2(1.0f, 0.0f);
-			//vertices[ver].texture = aiVector3DtoD3DXVector2(scene->mMeshes[0]->mTextureCoords[v]);
+			//vertices[ver].texture = aiVector3DtoD3DXVector2(m_model->mMeshes[0]->mTextureCoords[v]);
 
 			ver++;
 		}
 
-		for(unsigned int face = 0; face < scene->mMeshes[m]->mNumFaces; ++face)
+		for(unsigned int face = 0; face < m_model->mMeshes[m]->mNumFaces; ++face)
 		{
 			for(unsigned int idx = 0; idx < 3; ++idx)
 			{
-				indices[ind] = scene->mMeshes[m]->mFaces[face].mIndices[idx];
+				indices[ind] = m_model->mMeshes[m]->mFaces[face].mIndices[idx];
 
 				ind++;
 			}
