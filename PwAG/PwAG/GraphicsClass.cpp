@@ -12,6 +12,11 @@ GraphicsClass::GraphicsClass()
 	//m_AlphaMapShader = 0;
 	//m_BumpMapShader = 0;
 	m_SpecMapShader = 0;
+	m_RenderTexture = 0;
+	//m_DebugWindow = 0;
+	//m_TextureShader = 0;
+	m_DepthShader = 0;	
+	m_ShadowShader = 0;
 }
 
 
@@ -65,7 +70,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	// Initialize the model object.
 	//result = m_Model->Initialize(m_D3D->GetDevice(), "data/square.DAE", L"data/stone01.dds", 
 	//			     L"data/dirt01.dds", L"data/alpha01.dds");
-	result = m_Model->Initialize(m_D3D->GetDevice(), "../PwAG/data/square.DAE", L"../PwAG/data/stone02.dds", 
+	result = m_Model->Initialize(m_D3D->GetDevice(), "../PwAG/data/Enigma001.DAE", L"../PwAG/data/stone02.dds", 
 				     L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds");
 	if(!result)
 	{
@@ -132,9 +137,52 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	//	MessageBox(hwnd, L"Could not initialize the multitexture shader object.", L"Error", MB_OK);
 	//	return false;
 	//}
+	
+	// Create the render to texture object.
+	m_RenderTexture = new RenderTextureClass;
+	if(!m_RenderTexture)
+	{
+		return false;
+	}
 
+	// Initialize the render to texture object.
+	result = m_RenderTexture->Initialize(m_D3D->GetDevice(), SHADOWMAP_WIDTH, SHADOWMAP_HEIGHT, SCREEN_DEPTH, SCREEN_NEAR);
+	if(!result)
+	{
+		return false;
+	}
 
-	//	// Create the light shader object.
+	// Create the debug window object.
+	//m_DebugWindow = new DebugWindowClass;
+	//if(!m_DebugWindow)
+	//{
+	//	return false;
+	//}
+
+	//// Initialize the debug window object.
+	//result = m_DebugWindow->Initialize(m_D3D->GetDevice(), screenWidth, screenHeight, 100, 100);
+	//if(!result)
+	//{
+	//	MessageBox(hwnd, L"Could not initialize the debug window object.", L"Error", MB_OK);
+	//	return false;
+	//}
+
+	//// Create the texture shader object.
+	//m_TextureShader = new TextureShaderClass;
+	//if(!m_TextureShader)
+	//{
+	//	return false;
+	//}
+
+	//// Initialize the texture shader object.
+	//result = m_TextureShader->Initialize(m_D3D->GetDevice(), hwnd);
+	//if(!result)
+	//{
+	//	MessageBox(hwnd, L"Could not initialize the texture shader object.", L"Error", MB_OK);
+	//	return false;
+	//}
+
+	//// Create the light shader object.
 	//m_LightShader = new LightShaderClass;
 	//if(!m_LightShader)
 	//{
@@ -146,12 +194,6 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	//if(!result)
 	//{
 	//	MessageBox(hwnd, L"Could not initialize the light shader object.", L"Error", MB_OK);
-	//	return false;
-	//}
-	//// Create the texture shader object.
-	//m_LightShader = new LightShaderClass;
-	//if(!m_LightShader)
-	//{
 	//	return false;
 	//}
 
@@ -170,6 +212,54 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	m_Light->SetSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	m_Light->SetSpecularPower(16.0f);
 
+	m_Light->SetLookAt(0.0f, 0.0f, 0.0f);
+	m_Light->GenerateProjectionMatrix(SCREEN_DEPTH, SCREEN_NEAR);
+
+	// Create the render to texture object.
+	m_RenderTexture = new RenderTextureClass;
+	if(!m_RenderTexture)
+	{
+		return false;
+	}
+
+	// Initialize the render to texture object.
+	result = m_RenderTexture->Initialize(m_D3D->GetDevice(), SHADOWMAP_WIDTH, SHADOWMAP_HEIGHT, SCREEN_DEPTH, SCREEN_NEAR);
+	if(!result)
+	{
+		MessageBox(hwnd, L"Could not initialize the render to texture object.", L"Error", MB_OK);
+		return false;
+	}
+
+	// Create the depth shader object.
+	m_DepthShader = new DepthShaderClass;
+	if(!m_DepthShader)
+	{
+		return false;
+	}
+
+	// Initialize the depth shader object.
+	result = m_DepthShader->Initialize(m_D3D->GetDevice(), hwnd);
+	if(!result)
+	{
+		MessageBox(hwnd, L"Could not initialize the depth shader object.", L"Error", MB_OK);
+		return false;
+	}
+
+	// Create the shadow shader object.
+	m_ShadowShader = new ShadowShaderClass;
+	if(!m_ShadowShader)
+	{
+		return false;
+	}
+
+	// Initialize the shadow shader object.
+	result = m_ShadowShader->Initialize(m_D3D->GetDevice(), hwnd);
+	if(!result)
+	{
+		MessageBox(hwnd, L"Could not initialize the shadow shader object.", L"Error", MB_OK);
+		return false;
+	}
+
 	return true;
 }
 
@@ -182,6 +272,52 @@ void GraphicsClass::Shutdown()
 		m_SpecMapShader->Shutdown();
 		delete m_SpecMapShader;
 		m_SpecMapShader = 0;
+	}
+		// Release the shadow shader object.
+	if(m_ShadowShader)
+	{
+		m_ShadowShader->Shutdown();
+		delete m_ShadowShader;
+		m_ShadowShader = 0;
+	}
+
+	// Release the depth shader object.
+	if(m_DepthShader)
+	{
+		m_DepthShader->Shutdown();
+		delete m_DepthShader;
+		m_DepthShader = 0;
+	}
+
+	// Release the render to texture object.
+	if(m_RenderTexture)
+	{
+		m_RenderTexture->Shutdown();
+		delete m_RenderTexture;
+		m_RenderTexture = 0;
+	}
+	//// Release the texture shader object.
+	//if(m_TextureShader)
+	//{
+	//	m_TextureShader->Shutdown();
+	//	delete m_TextureShader;
+	//	m_TextureShader = 0;
+	//}
+
+	//// Release the debug window object.
+	//if(m_DebugWindow)
+	//{
+	//	m_DebugWindow->Shutdown();
+	//	delete m_DebugWindow;
+	//	m_DebugWindow = 0;
+	//}
+
+	// Release the render to texture object.
+	if(m_RenderTexture)
+	{
+		m_RenderTexture->Shutdown();
+		delete m_RenderTexture;
+		m_RenderTexture = 0;
 	}
 
 	// Release the bump map shader object.
@@ -250,22 +386,28 @@ void GraphicsClass::Shutdown()
 }
 
 
-bool GraphicsClass::Frame(int mouseX, int mouseY)
+bool GraphicsClass::Frame(float posX, float posY, float posZ, float rotX, float rotY, float rotZ)
 {
 	bool result;
+	static float lightPositionX = -5.0f;
 
-	static float rotation = 0.0f;
 
-	//int mouseX, int mouseY
+	// Set the position of the camera.
+	m_Camera->SetPosition(posX, posY, posZ);
+	m_Camera->SetRotation(rotX, rotY, rotZ);
 
-	rotation += (float)D3DX_PI * 0.007f;
-	if(rotation > 360.0f)
+	// Update the position of the light each frame.
+	lightPositionX += 0.05f;
+	if(lightPositionX > 5.0f)
 	{
-		rotation -= 360.0f;
+		lightPositionX = -5.0f;
 	}
+
+	// Update the position of the light.
+	m_Light->SetPosition(lightPositionX, 8.0f, -5.0f);
 	
 	// Render the graphics scene.
-	result = Render(rotation);
+	result = Render();
 	if(!result)
 	{
 		return false;
@@ -275,11 +417,67 @@ bool GraphicsClass::Frame(int mouseX, int mouseY)
 }
 
 
-bool GraphicsClass::Render(float rotation)
+bool GraphicsClass::RenderSceneToTexture()
 {
-	D3DXMATRIX worldMatrix, viewMatrix, projectionMatrix;
+	D3DXMATRIX worldMatrix, lightViewMatrix, lightProjectionMatrix, translateMatrix;
+	float posX, posY, posZ;
 	bool result;
 
+
+	// Set the render target to be the render to texture.
+	m_RenderTexture->SetRenderTarget(m_D3D->GetDeviceContext());
+
+	// Clear the render to texture.
+	m_RenderTexture->ClearRenderTarget(m_D3D->GetDeviceContext(), 0.0f, 0.0f, 0.0f, 1.0f);
+
+	// Generate the light view matrix based on the light's position.
+	m_Light->GenerateViewMatrix();
+
+	// Get the world matrix from the d3d object.
+	m_D3D->GetWorldMatrix(worldMatrix);
+
+	// Get the view and orthographic matrices from the light object.
+	m_Light->GetViewMatrix(lightViewMatrix);
+	m_Light->GetProjectionMatrix(lightProjectionMatrix);
+
+	// Setup the translation matrix for the cube model.
+	m_Model->GetPosition(posX, posY, posZ);
+	D3DXMatrixTranslation(&worldMatrix, posX, posY, posZ);
+
+	// Render the cube model with the depth shader.
+	m_Model->Render(m_D3D->GetDeviceContext());
+	result = m_DepthShader->Render(m_D3D->GetDeviceContext(), m_Model->GetIndexCount(), worldMatrix, lightViewMatrix, lightProjectionMatrix);
+	if(!result)
+	{
+		return false;
+	}
+
+	// Reset the world matrix.
+	m_D3D->GetWorldMatrix(worldMatrix);
+
+	// Reset the render target back to the original back buffer and not the render to texture anymore.
+	m_D3D->SetBackBufferRenderTarget();
+
+	// Reset the viewport back to the original.
+	m_D3D->ResetViewport();
+
+	return true;
+}
+
+
+bool GraphicsClass::Render()
+{
+	D3DXMATRIX worldMatrix, viewMatrix, projectionMatrix, translateMatrix;
+	D3DXMATRIX lightViewMatrix, lightProjectionMatrix;
+	bool result;
+	float posX, posY, posZ;
+
+	// First render the scene to a texture.
+	result = RenderSceneToTexture();
+	if(!result)
+	{
+		return false;
+	}
 
 	// Clear the buffers to begin the scene.
 	m_D3D->BeginScene(0.0f, 0.0f, 0.0f, 1.0f);
@@ -287,43 +485,36 @@ bool GraphicsClass::Render(float rotation)
 	// Generate the view matrix based on the camera's position.
 	m_Camera->Render();
 
+	// Generate the light view matrix based on the light's position.
+	m_Light->GenerateViewMatrix();
+
 	// Get the world, view, and projection matrices from the camera and d3d objects.
 	m_Camera->GetViewMatrix(viewMatrix);
 	m_D3D->GetWorldMatrix(worldMatrix);
 	m_D3D->GetProjectionMatrix(projectionMatrix);
 
-	// Rotate the world matrix by the rotation value so that the triangle will spin.
-	D3DXMatrixRotationY(&worldMatrix, rotation);
+	// Get the light's view and projection matrices from the light object.
+	m_Light->GetViewMatrix(lightViewMatrix);
+	m_Light->GetProjectionMatrix(lightProjectionMatrix);
 
-	// Put the model vertex and index buffers on the graphics pipeline to prepare them for drawing.
-	m_Model->Render(m_D3D->GetDeviceContext());
+	// Setup the translation matrix for the cube model.
+	m_Model->GetPosition(posX, posY, posZ);
+	D3DXMatrixTranslation(&worldMatrix, posX, posY, posZ);
 	
-	// Render the model using the specular map shader.
-	m_SpecMapShader->Render(m_D3D->GetDeviceContext(), m_Model->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
-				m_Model->GetTextureArray(), m_Light->GetDirection(), m_Light->GetDiffuseColor(), 
-				m_Camera->GetPosition(), m_Light->GetSpecularColor(), m_Light->GetSpecularPower());
+	// Put the cube model vertex and index buffers on the graphics pipeline to prepare them for drawing.
+	m_Model->Render(m_D3D->GetDeviceContext());
 
-	//// Render the model using the bump map shader.
-	//m_BumpMapShader->Render(m_D3D->GetDeviceContext(), m_Model->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
-	//			m_Model->GetTextureArray(), m_Light->GetDirection(), m_Light->GetDiffuseColor());
+	// Render the model using the shadow shader.
+	result = m_ShadowShader->Render(m_D3D->GetDeviceContext(), m_Model->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix, lightViewMatrix, 
+					lightProjectionMatrix, m_Model->GetTexture(), m_RenderTexture->GetShaderResourceView(), m_Light->GetPosition(),
+					m_Light->GetAmbientColor(), m_Light->GetDiffuseColor());
+	if(!result)
+	{
+		return false;
+	}
 
-	//// Render the model using the alpha map shader.
-	//m_AlphaMapShader->Render(m_D3D->GetDeviceContext(), m_Model->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
-	//			 m_Model->GetTextureArray());
-
-	//// Render the model using the multitexture shader.
-	//m_MultiTextureShader->Render(m_D3D->GetDeviceContext(), m_Model->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
-	//			     m_Model->GetTextureArray());
-
-
-	//// Render the model using the light shader.
-	//result = m_LightShader->Render(m_D3D->GetDeviceContext(), m_Model->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix, 
-	//			       m_Model->GetTexture(), m_Light->GetDirection(), m_Light->GetAmbientColor(), m_Light->GetDiffuseColor(), 
-	//			       m_Camera->GetPosition(), m_Light->GetSpecularColor(), m_Light->GetSpecularPower());
-	//if(!result)
-	//{
-	//	return false;
-	//}
+	// Reset the world matrix.
+	m_D3D->GetWorldMatrix(worldMatrix);
 
 	// Present the rendered scene to the screen.
 	m_D3D->EndScene();

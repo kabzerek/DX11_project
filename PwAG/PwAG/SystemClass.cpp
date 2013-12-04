@@ -1,10 +1,14 @@
 #include "SystemClass.h"
 
+
 SystemClass::SystemClass()
 {
 	m_Input = 0;
 	m_Graphics = 0;
+	m_Timer = 0;
+	m_Position = 0;
 }
+
 
 SystemClass::SystemClass(const SystemClass& other)
 {
@@ -18,8 +22,6 @@ SystemClass::~SystemClass()
 
 bool SystemClass::Initialize()
 {
-	LogClass::GetInstance().Print("inicjalizacja SystemClass");
-
 	int screenWidth, screenHeight;
 	bool result;
 
@@ -46,9 +48,6 @@ bool SystemClass::Initialize()
 		return false;
 	}
 
-	// Initialize the input object.
-	//m_Input->Initialize();
-
 	// Create the graphics object.  This object will handle rendering all the graphics for this application.
 	m_Graphics = new GraphicsClass;
 	if(!m_Graphics)
@@ -63,11 +62,51 @@ bool SystemClass::Initialize()
 		return false;
 	}
 	
+	// Create the timer object.
+	m_Timer = new TimerClass;
+	if(!m_Timer)
+	{
+		return false;
+	}
+
+	// Initialize the timer object.
+	result = m_Timer->Initialize();
+	if(!result)
+	{
+		MessageBox(m_hwnd, L"Could not initialize the timer object.", L"Error", MB_OK);
+		return false;
+	}
+
+	// Create the position object.
+	m_Position = new PositionClass;
+	if(!m_Position)
+	{
+		return false;
+	}
+
+	// Set the initial position of the viewer to the same as the initial camera position.
+	m_Position->SetPosition(0.0f, 2.0f, -10.0f);
+
 	return true;
 }
 
+
 void SystemClass::Shutdown()
 {
+	// Release the position object.
+	if(m_Position)
+	{
+		delete m_Position;
+		m_Position = 0;
+	}
+
+	// Release the timer object.
+	if(m_Timer)
+	{
+		delete m_Timer;
+		m_Timer = 0;
+	}
+
 	// Release the graphics object.
 	if(m_Graphics)
 	{
@@ -79,18 +118,16 @@ void SystemClass::Shutdown()
 	// Release the input object.
 	if(m_Input)
 	{
-		m_Input->Shutdown();
 		delete m_Input;
 		m_Input = 0;
 	}
 
 	// Shutdown the window.
 	ShutdownWindows();
-
-	LogClass::GetInstance().Shutdown();
 	
 	return;
 }
+
 
 void SystemClass::Run()
 {
@@ -123,59 +160,102 @@ void SystemClass::Run()
 			result = Frame();
 			if(!result)
 			{
-				MessageBox(m_hwnd, L"Frame Processing Failed", L"Error", MB_OK);
 				done = true;
 			}
-		}
-
-		// Check if the user pressed escape and wants to quit.
-		if(m_Input->IsEscapePressed() == true)
-		{
-			done = true;
 		}
 
 	}
 
 	return;
-
 }
+
 
 bool SystemClass::Frame()
 {
 	bool result;
-	int mouseX, mouseY;
+	float posX, posY, posZ, rotX, rotY, rotZ;
 
-	// Do the input frame processing.
+
+	// Read the user input.
 	result = m_Input->Frame();
 	if(!result)
 	{
 		return false;
 	}
+	
+	// Check if the user pressed escape and wants to exit the application.
+	if(m_Input->IsEscapePressed() == true)
+	{
+		return false;
+	}
 
-	// Get the location of the mouse from the input object,
-	m_Input->GetMouseLocation(mouseX, mouseY);
+	// Update the system stats.
+	m_Timer->Frame();
 
-	// Do the frame processing for the graphics object.
-	result = m_Graphics->Frame(mouseX, mouseY);
+	// Do the frame input processing.
+	result = HandleInput(m_Timer->GetTime());
 	if(!result)
 	{
 		return false;
 	}
 
-	//// Finally render the graphics to the screen.
-	//result = m_Graphics->Render();
-	//if(!result)
-	//{
-	//	return false;
-	//}
+	// Get the view point position/rotation.
+	m_Position->GetPosition(posX, posY, posZ);
+	m_Position->GetRotation(rotX, rotY, rotZ);
+
+	// Do the frame processing for the graphics object.
+	result = m_Graphics->Frame(posX, posY, posZ, rotX, rotY, rotZ);
+	if(!result)
+	{
+		return false;
+	}
 
 	return true;
 }
+
+
+bool SystemClass::HandleInput(float frameTime)
+{
+	bool keyDown;
+
+
+	// Set the frame time for calculating the updated position.
+	m_Position->SetFrameTime(frameTime);
+
+	// Handle the input.
+	keyDown = m_Input->IsLeftPressed();
+	m_Position->TurnLeft(keyDown);
+
+	keyDown = m_Input->IsRightPressed();
+	m_Position->TurnRight(keyDown);
+
+	keyDown = m_Input->IsUpPressed();
+	m_Position->MoveForward(keyDown);
+
+	keyDown = m_Input->IsDownPressed();
+	m_Position->MoveBackward(keyDown);
+
+	keyDown = m_Input->IsAPressed();
+	m_Position->MoveUpward(keyDown);
+
+	keyDown = m_Input->IsZPressed();
+	m_Position->MoveDownward(keyDown);
+
+	keyDown = m_Input->IsPgUpPressed();
+	m_Position->LookUpward(keyDown);
+
+	keyDown = m_Input->IsPgDownPressed();
+	m_Position->LookDownward(keyDown);
+	
+	return true;
+}
+
 
 LRESULT CALLBACK SystemClass::MessageHandler(HWND hwnd, UINT umsg, WPARAM wparam, LPARAM lparam)
 {
 	return DefWindowProc(hwnd, umsg, wparam, lparam);
 }
+
 
 void SystemClass::InitializeWindows(int& screenWidth, int& screenHeight)
 {
@@ -184,28 +264,28 @@ void SystemClass::InitializeWindows(int& screenWidth, int& screenHeight)
 	int posX, posY;
 
 
-	// Get an external pointer to this object.
+	// Get an external pointer to this object.	
 	ApplicationHandle = this;
 
 	// Get the instance of this application.
 	m_hinstance = GetModuleHandle(NULL);
 
 	// Give the application a name.
-	m_applicationName = L"DX11Tut";
+	m_applicationName = L"Engine";
 
 	// Setup the windows class with default settings.
-	wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
-	wc.lpfnWndProc = WndProc;
-	wc.cbClsExtra = 0;
-	wc.cbWndExtra = 0;
-	wc.hInstance = m_hinstance;
-	wc.hIcon = LoadIcon(NULL, IDI_WINLOGO);
-	wc.hIconSm = wc.hIcon;
-	wc.hCursor = LoadCursor(NULL, IDC_ARROW);
+	wc.style         = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
+	wc.lpfnWndProc   = WndProc;
+	wc.cbClsExtra    = 0;
+	wc.cbWndExtra    = 0;
+	wc.hInstance     = m_hinstance;
+	wc.hIcon		 = LoadIcon(NULL, IDI_WINLOGO);
+	wc.hIconSm       = wc.hIcon;
+	wc.hCursor       = LoadCursor(NULL, IDC_ARROW);
 	wc.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
-	wc.lpszMenuName = NULL;
+	wc.lpszMenuName  = NULL;
 	wc.lpszClassName = m_applicationName;
-	wc.cbSize = sizeof(WNDCLASSEX);
+	wc.cbSize        = sizeof(WNDCLASSEX);
 	
 	// Register the window class.
 	RegisterClassEx(&wc);
@@ -244,8 +324,9 @@ void SystemClass::InitializeWindows(int& screenWidth, int& screenHeight)
 
 	// Create the window with the screen settings and get the handle to it.
 	m_hwnd = CreateWindowEx(WS_EX_APPWINDOW, m_applicationName, m_applicationName, 
-				WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_POPUP,
-				posX, posY, screenWidth, screenHeight, NULL, NULL, m_hinstance, NULL);
+						    WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_POPUP,
+						    posX, posY, screenWidth, screenHeight, NULL, NULL, m_hinstance, NULL);
+
 	// Bring the window up on the screen and set it as main focus.
 	ShowWindow(m_hwnd, SW_SHOW);
 	SetForegroundWindow(m_hwnd);
@@ -256,6 +337,7 @@ void SystemClass::InitializeWindows(int& screenWidth, int& screenHeight)
 
 	return;
 }
+
 
 void SystemClass::ShutdownWindows()
 {
@@ -282,6 +364,7 @@ void SystemClass::ShutdownWindows()
 	return;
 }
 
+
 LRESULT CALLBACK WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam)
 {
 	switch(umessage)
@@ -307,5 +390,3 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam)
 		}
 	}
 }
-
-

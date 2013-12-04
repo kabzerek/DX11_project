@@ -47,6 +47,27 @@
     <ClCompile Include="MoveLookController.cpp">
       <Filter>Classess</Filter>
     </ClCompile>
+    <ClCompile Include="ShadowShaderClass.cpp">
+      <Filter>Classess</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderTextureClass.cpp">
+      <Filter>Classess</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugWindowClass.cpp">
+      <Filter>Classess</Filter>
+    </ClCompile>
+    <ClCompile Include="DepthShaderClass.cpp">
+      <Filter>Classess</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureShaderClass.cpp">
+      <Filter>Classess</Filter>
+    </ClCompile>
+    <ClCompile Include="TimerClass.cpp">
+      <Filter>Classess</Filter>
+    </ClCompile>
+    <ClCompile Include="PositionClass.cpp">
+      <Filter>Classess</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraClass.h">
@@ -97,6 +118,27 @@
     <ClInclude Include="MoveLookController.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="ShadowShaderClass.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderTextureClass.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugWindowClass.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="DepthShaderClass.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureShaderClass.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="TimerClass.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="PositionClass.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Color.ps">
@@ -139,6 +181,18 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="Specmap.vs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shadow.ps">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shadow.vs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Depth.vs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Depth.ps">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>
