@@ -588,14 +588,13 @@ bool GraphicsClass::Render()
 		//}
 
 		// Render the model using the shadow shader.
-		result = m_ShadowShader->Render(m_D3D->GetDeviceContext(), (*it)->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix, lightViewMatrix, 
-					lightProjectionMatrix, (*it)->GetTexture(), m_RenderTexture->GetShaderResourceView(), m_Light->GetPosition(),
-					m_Light->GetAmbientColor(), m_Light->GetDiffuseColor());
+		//result = m_ShadowShader->Render(m_D3D->GetDeviceContext(), m_CubeModel->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix, lightViewMatrix, 
+        //            lightProjectionMatrix, m_RenderTexture->GetShaderResourceView(), m_Light->GetPosition());
 
-		if(!result)
-		{
-			return false;
-		}
+		//if(!result)
+		//{
+		//	return false;
+		//}
 	
 	
 		// Reset the world matrix.

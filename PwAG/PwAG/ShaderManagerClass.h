@@ -32,10 +32,23 @@ public:
 						   D3DXVECTOR3, D3DXVECTOR4, D3DXVECTOR4, D3DXVECTOR3, D3DXVECTOR4, float);
 	bool RenderMultiTextureShader(ID3D11DeviceContext*, int, D3DXMATRIX, D3DXMATRIX, D3DXMATRIX, ID3D11ShaderResourceView**);
 	bool RenderShadowShader(ID3D11DeviceContext*, int, D3DXMATRIX, D3DXMATRIX, D3DXMATRIX, D3DXMATRIX, D3DXMATRIX, 
-							ID3D11ShaderResourceView*, ID3D11ShaderResourceView*, D3DXVECTOR3, D3DXVECTOR4, D3DXVECTOR4);
-	bool RenderSoftShadowShader(
-	bool RenderSpecMapShader(
+							ID3D11ShaderResourceView*, D3DXVECTOR3);
+	bool RenderSoftShadowShader(ID3D11DeviceContext*, int, D3DXMATRIX, D3DXMATRIX, D3DXMATRIX, ID3D11ShaderResourceView*, 
+								ID3D11ShaderResourceView*, D3DXVECTOR3, D3DXVECTOR4, D3DXVECTOR4);
+	bool RenderSpecMapShader(ID3D11DeviceContext*, int, D3DXMATRIX, D3DXMATRIX, D3DXMATRIX, ID3D11ShaderResourceView**, 
+							 D3DXVECTOR3, D3DXVECTOR4, D3DXVECTOR3, D3DXVECTOR4, float);
 	bool RenderTextureShader(ID3D11DeviceContext*, int, D3DXMATRIX, D3DXMATRIX, D3DXMATRIX, ID3D11ShaderResourceView*);
+
+private:
+	AlphaMapShaderClass* m_AlphaMapShader;
+	BumpMapShaderClass* m_BumpMapShader;
+	DepthShaderClass* m_DepthShader;
+	LightShaderClass* m_LightShader;
+	MultiTextureShaderClass* m_MultiTextureShader;
+	ShadowShaderClass* m_ShadowShader;
+	SoftShadowShaderClass* m_SoftShadowShader;
+	SpecMapShaderClass* m_SpecMapShader;
+	TextureShaderClass* m_TextureShader;
 };
 
 #endif
