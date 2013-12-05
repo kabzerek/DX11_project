@@ -68,6 +68,9 @@
     <ClCompile Include="PositionClass.cpp">
       <Filter>Classess</Filter>
     </ClCompile>
+    <ClCompile Include="SoftShadowShaderClass.cpp">
+      <Filter>Classess</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraClass.h">
@@ -139,6 +142,9 @@
     <ClInclude Include="PositionClass.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="SoftShadowShaderClass.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Color.ps">
@@ -193,6 +199,12 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="Depth.ps">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="SoftShadow.ps">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="SoftShadow.vs">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

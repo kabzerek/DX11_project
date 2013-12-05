@@ -99,6 +99,7 @@
     <ClCompile Include="PositionClass.cpp" />
     <ClCompile Include="RenderTextureClass.cpp" />
     <ClCompile Include="ShadowShaderClass.cpp" />
+    <ClCompile Include="SoftShadowShaderClass.cpp" />
     <ClCompile Include="SpecMapShaderClass.cpp" />
     <ClCompile Include="SystemClass.cpp" />
     <ClCompile Include="TextureArrayClass.cpp" />
@@ -124,6 +125,7 @@
     <ClInclude Include="PositionClass.h" />
     <ClInclude Include="RenderTextureClass.h" />
     <ClInclude Include="ShadowShaderClass.h" />
+    <ClInclude Include="SoftShadowShaderClass.h" />
     <ClInclude Include="SpecMapShaderClass.h" />
     <ClInclude Include="SystemClass.h" />
     <ClInclude Include="TextureArrayClass.h" />
@@ -146,6 +148,8 @@
     <None Include="Multitexture.vs" />
     <None Include="Shadow.ps" />
     <None Include="Shadow.vs" />
+    <None Include="SoftShadow.ps" />
+    <None Include="SoftShadow.vs" />
     <None Include="Specmap.ps" />
     <None Include="Specmap.vs" />
     <None Include="Texture.ps" />
