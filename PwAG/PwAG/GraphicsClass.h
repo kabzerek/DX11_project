@@ -50,6 +50,7 @@ private:
 	bool RenderHorizontalBlurToTexture();
 	bool RenderVerticalBlurToTexture();
 	bool UpSampleTexture();
+	bool Render2DTextureScene();
 
 	D3DClass* m_D3D;
 	CameraClass* m_Camera;

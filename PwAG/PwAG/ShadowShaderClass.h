@@ -7,7 +7,6 @@
 #include <fstream>
 using namespace std;
 
-
 class ShadowShaderClass
 {
 private:
