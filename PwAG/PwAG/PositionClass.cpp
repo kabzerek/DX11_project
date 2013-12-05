@@ -191,8 +191,8 @@ void PositionClass::MoveLeftward(bool keydown)
 	radians = m_rotationY * 0.0174532925f;
 
 	// Update the position.
-	m_positionX -= cosf(radians) * m_leftwardSpeed;
-	m_positionZ -= sinf(radians) * m_leftwardSpeed;
+	m_positionX += cosf(radians) * m_leftwardSpeed;
+	m_positionZ += sinf(radians) * m_leftwardSpeed;
 
 	return;
 }
@@ -225,8 +225,8 @@ void PositionClass::MoveRightward(bool keydown)
 	radians = m_rotationY * 0.0174532925f;
 
 	// Update the position.
-	m_positionX += cosf(radians) * m_rightwardSpeed;
-	m_positionZ += sinf(radians) * m_rightwardSpeed;
+	m_positionX -= cosf(radians) * m_rightwardSpeed;
+	m_positionZ -= sinf(radians) * m_rightwardSpeed;
 
 	return;
 }
