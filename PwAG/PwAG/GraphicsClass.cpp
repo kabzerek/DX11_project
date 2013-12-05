@@ -58,7 +58,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	}
 
 	// Set the initial position of the camera.
-	m_Camera->SetPosition(0.0f, 0.0f, -500.0f);
+	m_Camera->SetPosition(0.0f, 0.0f, -50.0f);
 	
 	// Create the model object.
 
@@ -71,9 +71,9 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 		return false;
 	}
 	// Initialize the model object.
-	result = box1->Initialize(m_D3D->GetDevice(), "../PwAG/data/square.DAE", L"../PwAG/data/stone02.dds", 
+	result = box1->Initialize(m_D3D->GetDevice(), "../PwAG/data/cube.DAE", L"../PwAG/data/stone02.dds", 
 												  L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
-												  aiVector3D(-100.0f, -50.0f, 0.0f));
+												  aiVector3D(-4.0f, 0.0f, 0.0f));
 	
 	if(!result)
 	{
@@ -89,9 +89,9 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 		return false;
 	}
 	// Initialize the model object.
-	result = box2->Initialize(m_D3D->GetDevice(), "../PwAG/data/square.DAE", L"../PwAG/data/stone02.dds", 
+	result = box2->Initialize(m_D3D->GetDevice(), "../PwAG/data/sphere.DAE", L"../PwAG/data/stone02.dds", 
 												  L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
-												  aiVector3D(125.0f, 25.0f, 50.0f));
+												  aiVector3D(1.25f, 0.50f, 0.5f));
 	
 	if(!result)
 	{
@@ -107,9 +107,9 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 		return false;
 	}
 	// Initialize the model object.
-	result = box3->Initialize(m_D3D->GetDevice(), "../PwAG/data/square.DAE", L"../PwAG/data/stone02.dds", 
+	result = box3->Initialize(m_D3D->GetDevice(), "../PwAG/data/cube.DAE", L"../PwAG/data/stone02.dds", 
 												  L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
-												  aiVector3D(0.0f, 100.0f, 250.0f));
+												  aiVector3D(0.0f, 0.0f, 0.0f));
 	
 	if(!result)
 	{
@@ -118,6 +118,24 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	}
 
 	m_Models.push_back(box3);
+
+	ModelClass* grnd = new ModelClass;
+	if(!grnd)
+	{
+		return false;
+	}
+	// Initialize the model object.
+	result = grnd->Initialize(m_D3D->GetDevice(), "../PwAG/data/scene1.DAE", L"../PwAG/data/stone01.dds", 
+												  L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
+												  aiVector3D(0.0f, 0.0f, 0.0f));
+	
+	if(!result)
+	{
+		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
+		return false;
+	}
+
+	m_Models.push_back(grnd);
 
 	// Create the specular map shader object.
 	m_SpecMapShader = new SpecMapShaderClass;
@@ -493,7 +511,7 @@ bool GraphicsClass::RenderSceneToTexture()
 		(*it)->GetPosition(posX, posY, posZ);
 		D3DXMatrixTranslation(&worldMatrix, posX, posY, posZ);
 
-		// Render the cube model with the depth shader.
+		// Render the model with the depth shader.
 		(*it)->Render(m_D3D->GetDeviceContext());
 		result = m_DepthShader->Render(m_D3D->GetDeviceContext(), (*it)->GetIndexCount(), worldMatrix, lightViewMatrix, lightProjectionMatrix);
 		if(!result)
@@ -560,14 +578,14 @@ bool GraphicsClass::Render()
 		(*it)->Render(m_D3D->GetDeviceContext());
 
 		// Render the model using the specular map shader.
-		result = m_SpecMapShader->Render(m_D3D->GetDeviceContext(), (*it)->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
-				(*it)->GetTextureArray(), m_Light->GetDirection(), m_Light->GetDiffuseColor(), 
-				m_Camera->GetPosition(), m_Light->GetSpecularColor(), m_Light->GetSpecularPower());
-		
-		if(!result)
-		{
-			return false;
-		}
+		//result = m_SpecMapShader->Render(m_D3D->GetDeviceContext(), (*it)->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
+		//		(*it)->GetTextureArray(), m_Light->GetDirection(), m_Light->GetDiffuseColor(), 
+		//		m_Camera->GetPosition(), m_Light->GetSpecularColor(), m_Light->GetSpecularPower());
+		//
+		//if(!result)
+		//{
+		//	return false;
+		//}
 
 		// Render the model using the shadow shader.
 		result = m_ShadowShader->Render(m_D3D->GetDeviceContext(), (*it)->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix, lightViewMatrix, 
