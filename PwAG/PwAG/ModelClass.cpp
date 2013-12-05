@@ -202,6 +202,14 @@ ID3D11ShaderResourceView* ModelClass::GetTexture()
 	return m_TextureArray->GetTextureArray()[0];
 }
 
+/**
+ * UWAGA NA BRAK ZABEZPIECZENIA!
+ */
+ID3D11ShaderResourceView* ModelClass::GetTexture(char n)
+{
+	return m_TextureArray->GetTextureArray()[n];
+}
+
 //bool ModelClass::LoadTexture(ID3D11Device* device, WCHAR* filename)
 //{
 //	bool result;

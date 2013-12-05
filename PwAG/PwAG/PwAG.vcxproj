@@ -98,6 +98,7 @@
     <ClCompile Include="MultiTextureShaderClass.cpp" />
     <ClCompile Include="PositionClass.cpp" />
     <ClCompile Include="RenderTextureClass.cpp" />
+    <ClCompile Include="ShaderManagerClass.cpp" />
     <ClCompile Include="ShadowShaderClass.cpp" />
     <ClCompile Include="SpecMapShaderClass.cpp" />
     <ClCompile Include="SystemClass.cpp" />
@@ -123,6 +124,7 @@
     <ClInclude Include="MultiTextureShaderClass.h" />
     <ClInclude Include="PositionClass.h" />
     <ClInclude Include="RenderTextureClass.h" />
+    <ClInclude Include="ShaderManagerClass.h" />
     <ClInclude Include="ShadowShaderClass.h" />
     <ClInclude Include="SpecMapShaderClass.h" />
     <ClInclude Include="SystemClass.h" />

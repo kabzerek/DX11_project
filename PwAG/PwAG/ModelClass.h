@@ -47,6 +47,7 @@ public:
 	int GetIndexCount();
 	ID3D11ShaderResourceView** GetTextureArray();
 	ID3D11ShaderResourceView* GetTexture();
+	ID3D11ShaderResourceView* GetTexture(char);
 	D3DXVECTOR3 GetPosition();
 	void GetPosition(float&, float&, float&);
 
