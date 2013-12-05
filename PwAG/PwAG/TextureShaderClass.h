@@ -1,5 +1,6 @@
-//The TextureShaderClass is what we will use to invoke our HLSL shaders for drawing the 3D models that are on the GPU.
-
+////////////////////////////////////////////////////////////////////////////////
+// Filename: textureshaderclass.h
+////////////////////////////////////////////////////////////////////////////////
 #ifndef _TEXTURESHADERCLASS_H_
 #define _TEXTURESHADERCLASS_H_
 
@@ -8,7 +9,6 @@
 #include <d3dx11async.h>
 #include <fstream>
 using namespace std;
-
 
 class TextureShaderClass
 {

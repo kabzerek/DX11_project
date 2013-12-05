@@ -13,11 +13,11 @@ GraphicsClass::GraphicsClass()
 	m_ShaderManager = 0;
 
 	m_BlackWhiteRenderTexture = 0;
-	m_DownSampleTexure = 0;
+	m_DownSampleTexture = 0;
 	m_SmallWindow = 0;
 	m_HorizontalBlurTexture = 0;
 	m_VerticalBlurTexture = 0;
-	m_UpSampleTexure = 0;
+	m_UpSampleTexture = 0;
 	m_FullScreenWindow = 0;
 }
 
@@ -76,6 +76,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 
 	// Set the initial position of the camera.
 	m_Camera->SetPosition(0.0f, 0.0f, -50.0f);
+	m_Camera->RenderBaseViewMatrix();
 	
 	// Create the model object.
 	ModelClass* box1 = new ModelClass;
@@ -203,14 +204,14 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	downSampleHeight = SHADOWMAP_HEIGHT / 2;
 
 	// Create the down sample render to texture object.
-	m_DownSampleTexure = new RenderTextureClass;
-	if(!m_DownSampleTexure)
+	m_DownSampleTexture = new RenderTextureClass;
+	if(!m_DownSampleTexture)
 	{
 		return false;
 	}
 
 	// Initialize the down sample render to texture object.
-	result = m_DownSampleTexure->Initialize(m_D3D->GetDevice(), downSampleWidth, downSampleHeight, 100.0f, 1.0f);
+	result = m_DownSampleTexture->Initialize(m_D3D->GetDevice(), downSampleWidth, downSampleHeight, 100.0f, 1.0f);
 	if(!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the down sample render to texture object.", L"Error", MB_OK);
@@ -263,14 +264,14 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	}
 
 	// Create the up sample render to texture object.
-	m_UpSampleTexure = new RenderTextureClass;
-	if(!m_UpSampleTexure)
+	m_UpSampleTexture = new RenderTextureClass;
+	if(!m_UpSampleTexture)
 	{
 		return false;
 	}
 
 	// Initialize the up sample render to texture object.
-	result = m_UpSampleTexure->Initialize(m_D3D->GetDevice(), SHADOWMAP_WIDTH, SHADOWMAP_HEIGHT, SCREEN_DEPTH, 0.1f);
+	result = m_UpSampleTexture->Initialize(m_D3D->GetDevice(), SHADOWMAP_WIDTH, SHADOWMAP_HEIGHT, SCREEN_DEPTH, 0.1f);
 	if(!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the up sample render to texture object.", L"Error", MB_OK);
@@ -307,11 +308,11 @@ void GraphicsClass::Shutdown()
 	}
 
 	// Release the up sample render to texture object.
-	if(m_UpSampleTexure)
+	if(m_UpSampleTexture)
 	{
-		m_UpSampleTexure->Shutdown();
-		delete m_UpSampleTexure;
-		m_UpSampleTexure = 0;
+		m_UpSampleTexture->Shutdown();
+		delete m_UpSampleTexture;
+		m_UpSampleTexture = 0;
 	}
 
 	// Release the vertical blur render to texture object.
@@ -331,11 +332,11 @@ void GraphicsClass::Shutdown()
 	}
 
 	// Release the down sample render to texture object.
-	if(m_DownSampleTexure)
+	if(m_DownSampleTexture)
 	{
-		m_DownSampleTexure->Shutdown();
-		delete m_DownSampleTexure;
-		m_DownSampleTexure = 0;
+		m_DownSampleTexture->Shutdown();
+		delete m_DownSampleTexture;
+		m_DownSampleTexture = 0;
 	}
 
 	// Release the black and white render to texture.
@@ -555,10 +556,10 @@ bool GraphicsClass::DownSampleTexture()
 	bool result;
 
 	// Set the render target to be the render to texture.
-	m_DownSampleTexure->SetRenderTarget(m_D3D->GetDeviceContext());
+	m_DownSampleTexture->SetRenderTarget(m_D3D->GetDeviceContext());
 
 	// Clear the render to texture.
-	m_DownSampleTexure->ClearRenderTarget(m_D3D->GetDeviceContext(), 0.0f, 0.0f, 0.0f, 1.0f);
+	m_DownSampleTexture->ClearRenderTarget(m_D3D->GetDeviceContext(), 0.0f, 0.0f, 0.0f, 1.0f);
 
 	// Generate the view matrix based on the camera's position.
 	m_Camera->Render();
@@ -568,7 +569,7 @@ bool GraphicsClass::DownSampleTexture()
 	m_Camera->GetBaseViewMatrix(baseViewMatrix);
 	
 	// Get the ortho matrix from the render to texture since texture has different dimensions being that it is smaller.
-	m_DownSampleTexure->GetOrthoMatrix(orthoMatrix);
+	m_DownSampleTexture->GetOrthoMatrix(orthoMatrix);
 
 	// Turn off the Z buffer to begin all 2D rendering.
 	m_D3D->TurnZBufferOff();
@@ -630,7 +631,7 @@ bool GraphicsClass::RenderHorizontalBlurToTexture()
 	
 	// Render the small ortho window using the horizontal blur shader and the down sampled render to texture resource.
 	result = m_ShaderManager->RenderHorizontalBlurShader(m_D3D->GetDeviceContext(), m_SmallWindow->GetIndexCount(), worldMatrix, baseViewMatrix, orthoMatrix,
-						m_DownSampleTexure->GetShaderResourceView(), screenSizeX);
+						m_DownSampleTexture->GetShaderResourceView(), screenSizeX);
 	if(!result)
 	{
 		return false;
@@ -707,10 +708,10 @@ bool GraphicsClass::UpSampleTexture()
 
 
 	// Set the render target to be the render to texture.
-	m_UpSampleTexure->SetRenderTarget(m_D3D->GetDeviceContext());
+	m_UpSampleTexture->SetRenderTarget(m_D3D->GetDeviceContext());
 
 	// Clear the render to texture.
-	m_UpSampleTexure->ClearRenderTarget(m_D3D->GetDeviceContext(), 0.0f, 0.0f, 0.0f, 1.0f);
+	m_UpSampleTexture->ClearRenderTarget(m_D3D->GetDeviceContext(), 0.0f, 0.0f, 0.0f, 1.0f);
 
 	// Generate the view matrix based on the camera's position.
 	m_Camera->Render();
@@ -720,7 +721,7 @@ bool GraphicsClass::UpSampleTexture()
 	m_D3D->GetWorldMatrix(worldMatrix);
 
 	// Get the ortho matrix from the render to texture since texture has different dimensions.
-	m_UpSampleTexure->GetOrthoMatrix(orthoMatrix);
+	m_UpSampleTexture->GetOrthoMatrix(orthoMatrix);
 
 	// Turn off the Z buffer to begin all 2D rendering.
 	m_D3D->TurnZBufferOff();
@@ -773,7 +774,7 @@ bool GraphicsClass::Render2DTextureScene()
 
 	// Render the full screen ortho window using the texture shader and the full screen sized blurred render to texture resource.
 	result = m_ShaderManager->RenderTextureShader(m_D3D->GetDeviceContext(), m_FullScreenWindow->GetIndexCount(), worldMatrix, viewMatrix, orthoMatrix, 
-					 m_UpSampleTexure->GetShaderResourceView());
+					 m_UpSampleTexture->GetShaderResourceView());
 	if(!result)
 	{
 		return false;
@@ -882,11 +883,11 @@ bool GraphicsClass::Render()
 		
 		// Render the model using the shadow shader.
 		//result = m_ShaderManager->RenderSoftShadowShader(m_D3D->GetDeviceContext(), (*it)->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix, 
-  //                                      (*it)->GetTexture(), m_UpSampleTexure->GetShaderResourceView(), m_Light->GetPosition(), 
+  //                                      (*it)->GetTexture(), m_UpSampleTexture->GetShaderResourceView(), m_Light->GetPosition(), 
   //                                      m_Light->GetAmbientColor(), m_Light->GetDiffuseColor());
 
 		result = m_ShaderManager->RenderSoftShadowShader(m_D3D->GetDeviceContext(), (*it)->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix, 
-                                        (*it)->GetTexture(), m_DownSampleTexure->GetShaderResourceView(), m_Light->GetPosition(), 
+                                        (*it)->GetTexture(), m_UpSampleTexture->GetShaderResourceView(), m_Light->GetPosition(), 
                                         m_Light->GetAmbientColor(), m_Light->GetDiffuseColor());
 		if(!result)
 		{

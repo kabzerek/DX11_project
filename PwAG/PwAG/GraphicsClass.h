@@ -53,8 +53,8 @@ private:
 
 	ShaderManagerClass* m_ShaderManager;
 
-	RenderTextureClass *m_RenderTexture, *m_BlackWhiteRenderTexture, *m_DownSampleTexure;
-	RenderTextureClass *m_HorizontalBlurTexture, *m_VerticalBlurTexture, *m_UpSampleTexure;
+	RenderTextureClass *m_RenderTexture, *m_BlackWhiteRenderTexture, *m_DownSampleTexture;
+	RenderTextureClass *m_HorizontalBlurTexture, *m_VerticalBlurTexture, *m_UpSampleTexture;
 
 	//DebugWindowClass* m_DebugWindow;
 	OrthoWindowClass *m_SmallWindow, *m_FullScreenWindow;
