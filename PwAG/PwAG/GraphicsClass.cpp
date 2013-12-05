@@ -297,7 +297,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 
 
 void GraphicsClass::Shutdown()
-{}
+{
 	// Release the full screen ortho window object.
 	if(m_FullScreenWindow)
 	{
@@ -337,7 +337,7 @@ void GraphicsClass::Shutdown()
 		delete m_DownSampleTexure;
 		m_DownSampleTexure = 0;
 	}
-	}
+
 	// Release the black and white render to texture.
 	if(m_BlackWhiteRenderTexture)
 	{
@@ -773,7 +773,7 @@ bool GraphicsClass::Render2DTextureScene()
 	m_FullScreenWindow->Render(m_D3D->GetDeviceContext());
 
 	// Render the full screen ortho window using the texture shader and the full screen sized blurred render to texture resource.
-	result = m_TextureShader->Render(m_D3D->GetDeviceContext(), m_FullScreenWindow->GetIndexCount(), worldMatrix, viewMatrix, orthoMatrix, 
+	result = m_ShaderManager->RenderTextureShader(m_D3D->GetDeviceContext(), m_FullScreenWindow->GetIndexCount(), worldMatrix, viewMatrix, orthoMatrix, 
 					 m_UpSampleTexure->GetShaderResourceView());
 	if(!result)
 	{
