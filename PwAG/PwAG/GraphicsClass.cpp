@@ -569,19 +569,20 @@ bool GraphicsClass::Render()
 			return false;
 		}
 
-		//// Render the model using the shadow shader.
-		//result = m_ShadowShader->Render(m_D3D->GetDeviceContext(), (*it)->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix, lightViewMatrix, 
-		//			lightProjectionMatrix, (*it)->GetTexture(), m_RenderTexture->GetShaderResourceView(), m_Light->GetPosition(),
-		//			m_Light->GetAmbientColor(), m_Light->GetDiffuseColor());
+		// Render the model using the shadow shader.
+		result = m_ShadowShader->Render(m_D3D->GetDeviceContext(), (*it)->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix, lightViewMatrix, 
+					lightProjectionMatrix, (*it)->GetTexture(), m_RenderTexture->GetShaderResourceView(), m_Light->GetPosition(),
+					m_Light->GetAmbientColor(), m_Light->GetDiffuseColor());
 
-		//if(!result)
-		//{
-		//	return false;
-		//}
-	}
+		if(!result)
+		{
+			return false;
+		}
 	
-	// Reset the world matrix.
-	m_D3D->GetWorldMatrix(worldMatrix);
+	
+		// Reset the world matrix.
+		m_D3D->GetWorldMatrix(worldMatrix);
+	}
 
 	// Present the rendered scene to the screen.
 	m_D3D->EndScene();

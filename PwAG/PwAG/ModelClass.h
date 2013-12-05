@@ -46,9 +46,12 @@ public:
 
 	int GetIndexCount();
 	ID3D11ShaderResourceView** GetTextureArray();
-	//ID3D11ShaderResourceView* GetTexture();
+	ID3D11ShaderResourceView* GetTexture();
+	D3DXVECTOR3 GetPosition();
+	void GetPosition(float&, float&, float&);
 
-	void SetPosition(aiVector3D);
+	void SetInitialPosition(aiVector3D);
+	void SetPosition(D3DXVECTOR3);
 
 private:
 	bool InitializeBuffers(ID3D11Device*);
@@ -71,6 +74,7 @@ private:
 	int m_vertexCount, m_indexCount;
 	TextureClass* m_Texture;
 	TextureArrayClass* m_TextureArray;
+	D3DXVECTOR3 m_Position;
 
 	Assimp::Importer* m_importer;
 	const aiScene* m_model;

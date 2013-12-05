@@ -33,7 +33,7 @@ bool ModelClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* te
 	}
 
 	// Set position of the model
-	SetPosition(modelPosition);
+	SetInitialPosition(modelPosition);
 
 	// Initialize the vertex and index buffers.
 	result = InitializeBuffers(device);
@@ -170,17 +170,38 @@ void ModelClass::ReleaseModel()
 	}
 }
 
-void ModelClass::SetPosition(aiVector3D modelPosition)
+void ModelClass::SetInitialPosition(aiVector3D modelPosition)
 {
 	for(unsigned int m = 0; m < m_model->mNumMeshes; ++m)
 			for(unsigned int v = 0; v < m_model->mMeshes[m]->mNumVertices; ++v)
 				m_model->mMeshes[m]->mVertices[v] += modelPosition;
+
+	SetPosition(aiVector3DtoD3DXVector3(modelPosition));
 }
 
-//ID3D11ShaderResourceView* ModelClass::GetTexture()
-//{
-//	return m_Texture->GetTexture();
-//}
+void ModelClass::SetPosition(D3DXVECTOR3 modelPosition)
+{
+	m_Position = modelPosition;
+}
+
+D3DXVECTOR3 ModelClass::GetPosition()
+{
+	return m_Position;
+}
+
+void ModelClass::GetPosition(float& x, float&y, float& z)
+{
+	x = m_Position.x;
+	y = m_Position.y;
+	z = m_Position.z;
+}
+
+ID3D11ShaderResourceView* ModelClass::GetTexture()
+{
+	//return m_Texture->GetTexture();
+	return m_TextureArray->GetTextureArray()[0];
+}
+
 //bool ModelClass::LoadTexture(ID3D11Device* device, WCHAR* filename)
 //{
 //	bool result;
