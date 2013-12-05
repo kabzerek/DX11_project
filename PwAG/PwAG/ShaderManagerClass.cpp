@@ -226,6 +226,8 @@ bool ShaderManagerClass::Initialize(ID3D11Device* device, HWND hwnd)
 		MessageBox(hwnd, L"Could not initialize the VerticalBlurShader object.", L"Error", MB_OK);
 		return false;
 	}
+
+	return true;
 }
 
 void ShaderManagerClass::Shutdown()
