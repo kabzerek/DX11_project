@@ -266,3 +266,257 @@ void ShaderManagerClass::Shutdown()
 
 	return;
 }
+
+bool ShaderManagerClass::RenderAlphaMapShader(ID3D11DeviceContext* deviceContext, 
+											  int indexCount, 
+											  D3DXMATRIX worldMatrix, 
+											  D3DXMATRIX viewMatrix, 
+											  D3DXMATRIX projectionMatrix, 
+											  ID3D11ShaderResourceView** textureArray)
+{
+	bool result;
+
+	// Render the model using AlphaMapShader.
+	result = m_AlphaMapShader->Render(deviceContext, 
+									  indexCount, 
+									  worldMatrix, 
+									  viewMatrix, 
+									  projectionMatrix, 
+									  textureArray);
+	if(!result)
+	{
+		return false;
+	}
+
+	return true;
+}
+
+bool ShaderManagerClass::RenderBumpMapShader(ID3D11DeviceContext* deviceContext, 
+											 int indexCount, 
+											 D3DXMATRIX worldMatrix, 
+											 D3DXMATRIX viewMatrix, 
+											 D3DXMATRIX projectionMatrix, 
+											 ID3D11ShaderResourceView** textureArray, 
+											 D3DXVECTOR3 lightDirection,
+											 D3DXVECTOR4 diffuseColor)
+{
+	bool result;
+
+	// Render the model using BumpMapShader.
+	result = m_BumpMapShader->Render(deviceContext, 
+									 indexCount, 
+									 worldMatrix, 
+									 viewMatrix, 
+									 projectionMatrix, 
+									 textureArray, 
+									 lightDirection, 
+									 diffuseColor);
+	if(!result)
+	{
+		return false;
+	}
+
+	return true;
+}
+
+bool ShaderManagerClass::RenderDepthShader(ID3D11DeviceContext* deviceContext, 
+										   int indexCount, 
+										   D3DXMATRIX worldMatrix, 
+										   D3DXMATRIX viewMatrix, 
+										   D3DXMATRIX projectionMatrix)
+{
+	bool result;
+
+	// Render the model using DepthShader.
+	result = m_DepthShader->Render(deviceContext, 
+								   indexCount, 
+								   worldMatrix, 
+								   viewMatrix, 
+								   projectionMatrix);
+	if(!result)
+	{
+		return false;
+	}
+
+	return true;
+}
+
+bool ShaderManagerClass::RenderLightShader(ID3D11DeviceContext* deviceContext, 
+										   int indexCount, 
+										   D3DXMATRIX worldMatrix, 
+										   D3DXMATRIX viewMatrix, 
+										   D3DXMATRIX projectionMatrix, 
+										   ID3D11ShaderResourceView* texture, 
+										   D3DXVECTOR3 lightDirection, 
+										   D3DXVECTOR4 ambientColor,
+										   D3DXVECTOR4 diffuseColor, 
+										   D3DXVECTOR3 cameraPosition, 
+										   D3DXVECTOR4 specularColor, 
+										   float specularPower)
+{
+	bool result;
+
+	// Render the model using LightShader.
+	result = m_LightShader->Render(deviceContext, 
+								   indexCount, 
+								   worldMatrix, 
+								   viewMatrix, 
+								   projectionMatrix, 
+								   texture, 
+								   lightDirection, 
+								   ambientColor, 
+								   diffuseColor, 
+								   cameraPosition, 
+								   specularColor, 
+								   specularPower);
+	if(!result)
+	{
+		return false;
+	}
+
+	return true;
+}
+
+bool ShaderManagerClass::RenderMultiTextureShader(ID3D11DeviceContext* deviceContext, 
+												  int indexCount, 
+												  D3DXMATRIX worldMatrix, 
+												  D3DXMATRIX viewMatrix, 
+												  D3DXMATRIX projectionMatrix, 
+												  ID3D11ShaderResourceView** textureArray)
+{
+	bool result;
+
+	// Render the model using MultiTextureShader.
+	result = m_MultiTextureShader->Render(deviceContext, 
+										  indexCount, 
+										  worldMatrix, 
+										  viewMatrix, 
+										  projectionMatrix, 
+										  textureArray);
+	if(!result)
+	{
+		return false;
+	}
+
+	return true;
+}
+
+bool ShaderManagerClass::RenderShadowShader(ID3D11DeviceContext* deviceContext, 
+											int indexCount, 
+											D3DXMATRIX worldMatrix, 
+											D3DXMATRIX viewMatrix, 
+											D3DXMATRIX projectionMatrix, 
+											D3DXMATRIX lightViewMatrix, 
+											D3DXMATRIX lightProjectionMatrix, 
+											ID3D11ShaderResourceView* depthMapTexture, 
+											D3DXVECTOR3 lightPosition)
+{
+	bool result;
+
+	// Render the model using ShadowShader.
+	result = m_ShadowShader->Render(deviceContext, 
+									indexCount, 
+									worldMatrix, 
+									viewMatrix, 
+									projectionMatrix, 
+									lightViewMatrix, 
+									lightProjectionMatrix, 
+									depthMapTexture, 
+									lightPosition);
+	if(!result)
+	{
+		return false;
+	}
+
+	return true;
+}
+
+bool ShaderManagerClass::RenderSoftShadowShader(ID3D11DeviceContext* deviceContext, 
+												int indexCount, 
+												D3DXMATRIX worldMatrix, 
+												D3DXMATRIX viewMatrix, 
+												D3DXMATRIX projectionMatrix, 
+												ID3D11ShaderResourceView* texture, 
+												ID3D11ShaderResourceView* shadowTexture, 
+												D3DXVECTOR3 lightPosition, 
+												D3DXVECTOR4 ambientColor, 
+												D3DXVECTOR4 diffuseColor)
+{
+	bool result;
+
+	// Render the model using SoftShadowShader.
+	result = m_SoftShadowShader->Render(deviceContext, 
+										indexCount, 
+										worldMatrix, 
+										viewMatrix, 
+										projectionMatrix, 
+										texture, 
+										shadowTexture, 
+										lightPosition, 
+										ambientColor, 
+										diffuseColor);
+	if(!result)
+	{
+		return false;
+	}
+
+	return true;
+}
+
+bool ShaderManagerClass::RenderSpecMapShader(ID3D11DeviceContext* deviceContext, 
+											 int indexCount, 
+											 D3DXMATRIX worldMatrix, 
+											 D3DXMATRIX viewMatrix, 
+											 D3DXMATRIX projectionMatrix, 
+											 ID3D11ShaderResourceView** textureArray, 
+											 D3DXVECTOR3 lightDirection,
+											 D3DXVECTOR4 diffuseColor, 
+											 D3DXVECTOR3 cameraPosition, 
+											 D3DXVECTOR4 specularColor, 
+											 float specularPower)
+{
+	bool result;
+
+	// Render the model using SpecMapShader.
+	result = m_SpecMapShader->Render(deviceContext, 
+									 indexCount, 
+									 worldMatrix, 
+									 viewMatrix, 
+									 projectionMatrix, 
+									 textureArray, 
+									 lightDirection, 
+									 diffuseColor, 
+									 cameraPosition, 
+									 specularColor, 
+									 specularPower);
+	if(!result)
+	{
+		return false;
+	}
+
+	return true;
+}
+
+bool ShaderManagerClass::RenderTextureShader(ID3D11DeviceContext* deviceContext, 
+											 int indexCount, 
+											 D3DXMATRIX worldMatrix, 
+											 D3DXMATRIX viewMatrix, 
+											 D3DXMATRIX projectionMatrix, 
+											 ID3D11ShaderResourceView* texture)
+{
+	bool result;
+
+	// Render the model using TextureShader.
+	result = m_TextureShader->Render(deviceContext, 
+									 indexCount, 
+									 worldMatrix, 
+									 viewMatrix, 
+									 projectionMatrix, 
+									 texture);
+	if(!result)
+	{
+		return false;
+	}
+
+	return true;
+}
