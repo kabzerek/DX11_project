@@ -218,34 +218,68 @@ bool SystemClass::HandleInput(float frameTime)
 {
 	bool keyDown;
 
-
+	/****************************************
+	 * W = UpArrow		=> MoveForward		*
+	 * S = DownArrow	=> MoveDownward		*
+	 * A = LeftArrow	=> MoveLeftward		*
+	 * D = RightArrow	=> MoveRightward	*
+	 *										*
+	 * Q = PgUp			=> MoveUpward		*
+	 * Z = PgDown		=> MoveDownward		*
+	 *										*
+	 * MouseRightButton (hold) => Turn		*
+	 ****************************************/
+	
 	// Set the frame time for calculating the updated position.
 	m_Position->SetFrameTime(frameTime);
 
 	// Handle the input.
-	keyDown = m_Input->IsLeftPressed();
-	m_Position->TurnLeft(keyDown);
+	//keyDown = m_Input->IsLeftPressed();
+	//m_Position->TurnLeft(keyDown);
 
-	keyDown = m_Input->IsRightPressed();
-	m_Position->TurnRight(keyDown);
+	//keyDown = m_Input->IsRightPressed();
+	//m_Position->TurnRight(keyDown);
 
-	keyDown = m_Input->IsUpPressed();
+	//keyDown = m_Input->IsUpPressed();
+	//m_Position->MoveForward(keyDown);
+
+	//keyDown = m_Input->IsDownPressed();
+	//m_Position->MoveBackward(keyDown);
+
+	//keyDown = m_Input->IsAPressed();
+	//m_Position->MoveUpward(keyDown);
+
+	//keyDown = m_Input->IsZPressed();
+	//m_Position->MoveDownward(keyDown);
+
+	//keyDown = m_Input->IsPgUpPressed();
+	//m_Position->LookUpward(keyDown);
+
+	//keyDown = m_Input->IsPgDownPressed();
+	//m_Position->LookDownward(keyDown);
+
+	keyDown = (m_Input->IsLeftPressed() || m_Input->IsAPressed());
+	m_Position->MoveLeftward(keyDown);
+
+	keyDown = (m_Input->IsRightPressed() || m_Input->IsDPressed());
+	m_Position->MoveRightward(keyDown);
+
+	keyDown = (m_Input->IsUpPressed() || m_Input->IsWPressed());
 	m_Position->MoveForward(keyDown);
 
-	keyDown = m_Input->IsDownPressed();
+	keyDown = (m_Input->IsDownPressed() || m_Input->IsSPressed());
 	m_Position->MoveBackward(keyDown);
 
-	keyDown = m_Input->IsAPressed();
+	keyDown = (m_Input->IsPgUpPressed() || m_Input->IsQPressed());
 	m_Position->MoveUpward(keyDown);
 
-	keyDown = m_Input->IsZPressed();
+	keyDown = (m_Input->IsPgDownPressed() || m_Input->IsZPressed());
 	m_Position->MoveDownward(keyDown);
 
-	keyDown = m_Input->IsPgUpPressed();
-	m_Position->LookUpward(keyDown);
-
-	keyDown = m_Input->IsPgDownPressed();
-	m_Position->LookDownward(keyDown);
+	keyDown = m_Input->IsMouseRightPressed();
+	int deltaX, deltaY;
+	m_Input->GetMouseDelta(deltaX, deltaY);
+	m_Position->Turn(keyDown, deltaX, deltaY);
 	
 	return true;
 }

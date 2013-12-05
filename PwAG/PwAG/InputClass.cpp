@@ -30,6 +30,8 @@ bool InputClass::Initialize(HINSTANCE hinstance, HWND hwnd, int screenWidth, int
 	// Initialize the location of the mouse on the screen
 	m_mouseX = 0;
 	m_mouseY = 0;
+	m_mouseDeltaX = 0;
+	m_mouseDeltaY = 0;
 	
 	// Initialize the main direct input interface
 	result = DirectInput8Create(hinstance, DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&m_directInput, NULL);
@@ -95,17 +97,6 @@ bool InputClass::Initialize(HINSTANCE hinstance, HWND hwnd, int screenWidth, int
 	}
 
 	return true;
-
-	//int i;
-	//
-
-	//// Initialize all the keys to being released and not pressed.
-	//for(i=0; i<256; i++)
-	//{
-	//	m_keys[i] = false;
-	//}
-
-	//return;
 }
 
 void InputClass::Shutdown()
@@ -212,6 +203,9 @@ void InputClass::ProcessInput()
 	m_mouseX += m_mouseState.lX;
 	m_mouseY += m_mouseState.lY;
 
+	m_mouseDeltaX = m_mouseState.lX;
+	m_mouseDeltaY = m_mouseState.lY;
+
 	// Ensure the mouse location doesn't exceed the screen width or height.
 	if(m_mouseX < 0)  { m_mouseX = 0; }
 	if(m_mouseY < 0)  { m_mouseY = 0; }
@@ -282,10 +276,58 @@ bool InputClass::IsDownPressed()
 }
 
 
+bool InputClass::IsWPressed()
+{
+	// Do a bitwise and on the keyboard state to check if the key is currently being pressed.
+	if(m_keyboardState[DIK_W] & 0x80)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+
 bool InputClass::IsAPressed()
 {
 	// Do a bitwise and on the keyboard state to check if the key is currently being pressed.
 	if(m_keyboardState[DIK_A] & 0x80)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+
+bool InputClass::IsSPressed()
+{
+	// Do a bitwise and on the keyboard state to check if the key is currently being pressed.
+	if(m_keyboardState[DIK_S] & 0x80)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+
+bool InputClass::IsDPressed()
+{
+	// Do a bitwise and on the keyboard state to check if the key is currently being pressed.
+	if(m_keyboardState[DIK_D] & 0x80)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+
+bool InputClass::IsQPressed()
+{
+	// Do a bitwise and on the keyboard state to check if the key is currently being pressed.
+	if(m_keyboardState[DIK_Q] & 0x80)
 	{
 		return true;
 	}
@@ -334,4 +376,31 @@ void InputClass::GetMouseLocation(int& mouseX, int& mouseY)
 	mouseX = m_mouseX;
 	mouseY = m_mouseY;
 	return;
+}
+
+void InputClass::GetMouseDelta(int& mouseDeltaX, int& mouseDeltaY)
+{
+	mouseDeltaX = m_mouseDeltaX;
+	mouseDeltaY = m_mouseDeltaY;
+	return;
+}
+
+bool InputClass::IsMouseLeftPressed()
+{
+	if(m_mouseState.rgbButtons[0] & 0x80)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+bool InputClass::IsMouseRightPressed()
+{
+	if(m_mouseState.rgbButtons[1] & 0x80)
+	{
+		return true;
+	}
+
+	return false;
 }

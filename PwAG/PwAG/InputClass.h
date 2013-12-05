@@ -24,11 +24,18 @@ public:
 	bool IsRightPressed();
 	bool IsUpPressed();
 	bool IsDownPressed();
+	bool IsWPressed();
 	bool IsAPressed();
+	bool IsSPressed();
+	bool IsDPressed();
+	bool IsQPressed();
 	bool IsZPressed();
 	bool IsPgUpPressed();
 	bool IsPgDownPressed();
 	void GetMouseLocation(int&, int&);
+	void GetMouseDelta(int&, int&);
+	bool IsMouseLeftPressed();
+	bool IsMouseRightPressed();
 
 private:
 	bool ReadKeyboard();
@@ -45,6 +52,7 @@ private:
 
 	int m_screenWidth, m_screenHeight;
 	int m_mouseX, m_mouseY;
+	int m_mouseDeltaX, m_mouseDeltaY;
 };
 
 #endif
