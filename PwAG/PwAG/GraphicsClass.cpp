@@ -871,12 +871,16 @@ bool GraphicsClass::Render()
 		(*it)->Render(m_D3D->GetDeviceContext());
 
 		// Render the model using the specular map shader.
-		result = m_ShadowManager->RenderSpecMapShader(m_D3D->GetDeviceContext(), (*it)->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
+		result = m_ShaderManager->RenderSpecMapShader(m_D3D->GetDeviceContext(), (*it)->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
+				(*it)->GetTextureArray(), m_Light->GetDirection(), m_Light->GetDiffuseColor(),
 				m_Camera->GetPosition(), m_Light->GetSpecularColor(), m_Light->GetSpecularPower());
+
 		if(!result)
 		{
 			return false;
-		}		// Render the model using the shadow shader.
+		}		
+		
+		// Render the model using the shadow shader.
 		//result = m_ShadowManager->RenderSoftShadowShader(m_D3D->GetDeviceContext(), (*it)->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
 		//					m_Light->GetAmbientColor(), m_Light->GetDiffuseColor());
 		if(!result)
