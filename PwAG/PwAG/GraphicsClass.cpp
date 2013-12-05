@@ -554,7 +554,6 @@ bool GraphicsClass::DownSampleTexture()
 	D3DXMATRIX worldMatrix, baseViewMatrix, orthoMatrix;
 	bool result;
 
-
 	// Set the render target to be the render to texture.
 	m_DownSampleTexure->SetRenderTarget(m_D3D->GetDeviceContext());
 
@@ -795,6 +794,7 @@ bool GraphicsClass::Render()
 	D3DXMATRIX lightViewMatrix, lightProjectionMatrix;
 	bool result;
 	float posX, posY, posZ;
+	
 
 
 	// First render the scene to a texture.
@@ -841,12 +841,6 @@ bool GraphicsClass::Render()
 
 
 	//// Render the blurred up sampled render texture to the screen.
-	//result = Render2DTextureScene();
-	//if(!result)
-	//{
-	//	return false;
-	//}
-	//
 	// Clear the buffers to begin the scene.
 	m_D3D->BeginScene(0.0f, 0.0f, 0.0f, 1.0f);
 
@@ -862,7 +856,6 @@ bool GraphicsClass::Render()
 	m_D3D->GetProjectionMatrix(projectionMatrix);
 
 	// Get the light's view and projection matrices from the light object.
-	//m_Light->GetViewMatrix(lightViewMatrix);
 	//m_Light->GetProjectionMatrix(lightProjectionMatrix);
 
 	std::vector<ModelClass*>::iterator it;
@@ -878,14 +871,14 @@ bool GraphicsClass::Render()
 		(*it)->Render(m_D3D->GetDeviceContext());
 
 		// Render the model using the specular map shader.
-		//result = m_ShaderManager->RenderSpecMapShader(m_D3D->GetDeviceContext(), (*it)->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
-		//}
-
-		// Render the model using the shadow shader.
-		result = m_ShaderManager->RenderSoftShadowShader(m_D3D->GetDeviceContext(), (*it)->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
-							(*it)->GetTexture(), m_UpSampleTexure->GetShaderResourceView(), m_Light->GetPosition(), 
-							m_Light->GetAmbientColor(), m_Light->GetDiffuseColor());
-
+		result = m_ShadowManager->RenderSpecMapShader(m_D3D->GetDeviceContext(), (*it)->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
+				m_Camera->GetPosition(), m_Light->GetSpecularColor(), m_Light->GetSpecularPower());
+		if(!result)
+		{
+			return false;
+		}		// Render the model using the shadow shader.
+		//result = m_ShadowManager->RenderSoftShadowShader(m_D3D->GetDeviceContext(), (*it)->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
+		//					m_Light->GetAmbientColor(), m_Light->GetDiffuseColor());
 		if(!result)
 		{
 			return false;
