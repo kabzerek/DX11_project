@@ -17,7 +17,7 @@ private:
 		D3DXMATRIX projection;
 	};
 
-		struct ScreenSizeBufferType
+	struct ScreenSizeBufferType
 	{
 		float screenWidth;
 		D3DXVECTOR3 padding;

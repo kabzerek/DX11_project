@@ -5,6 +5,7 @@ GraphicsClass::GraphicsClass()
 {
 	m_D3D = 0;
 	m_Camera = 0;
+	//m_Model = 0;
 	m_Light = 0;	
 	m_RenderTexture = 0;
 	//m_DebugWindow = 0;
@@ -296,7 +297,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 
 
 void GraphicsClass::Shutdown()
-{
+{}
 	// Release the full screen ortho window object.
 	if(m_FullScreenWindow)
 	{
@@ -305,14 +306,6 @@ void GraphicsClass::Shutdown()
 		m_FullScreenWindow = 0;
 	}
 
-	// Release the small ortho window object.
-	if(m_SmallWindow)
-	{
-		m_SmallWindow->Shutdown();
-		delete m_SmallWindow;
-		m_SmallWindow = 0;
-	}
-	
 	// Release the up sample render to texture object.
 	if(m_UpSampleTexure)
 	{
@@ -344,7 +337,14 @@ void GraphicsClass::Shutdown()
 		delete m_DownSampleTexure;
 		m_DownSampleTexure = 0;
 	}
-	
+	}
+	// Release the black and white render to texture.
+	if(m_BlackWhiteRenderTexture)
+	{
+		m_BlackWhiteRenderTexture->Shutdown();
+		delete m_BlackWhiteRenderTexture; 
+		m_BlackWhiteRenderTexture = 0;
+	}
 	// Release the render to texture object.
 	if(m_RenderTexture)
 	{
@@ -353,20 +353,11 @@ void GraphicsClass::Shutdown()
 		m_RenderTexture = 0;
 	}
 
-	// Release the black and white render to texture.
-	if(m_BlackWhiteRenderTexture)
+	// Release the light object.
+	if(m_Light)
 	{
-		m_BlackWhiteRenderTexture->Shutdown();
-		delete m_BlackWhiteRenderTexture; 
-		m_BlackWhiteRenderTexture = 0;
-	}
-	
-	// Release the render to texture object.
-	if(m_RenderTexture)
-	{
-		m_RenderTexture->Shutdown();
-		delete m_RenderTexture;
-		m_RenderTexture = 0;
+		delete m_Light;
+		m_Light = 0;
 	}
 
 	// Release the model objects.
@@ -412,6 +403,7 @@ void GraphicsClass::Shutdown()
 bool GraphicsClass::Frame(float posX, float posY, float posZ, float rotX, float rotY, float rotZ)
 {
 	bool result;
+	static bool side = false;
 	static float lightPositionX = -5.0f;
 
 
@@ -420,14 +412,22 @@ bool GraphicsClass::Frame(float posX, float posY, float posZ, float rotX, float 
 	m_Camera->SetRotation(rotX, rotY, rotZ);
 
 	// Update the position of the light each frame.
-	lightPositionX += 0.05f;
-	if(lightPositionX > 5.0f)
-	{
-		lightPositionX = -5.0f;
-	}
+	if (side)
+			lightPositionX -= 0.05f;
+	else
+			lightPositionX += 0.05f;
 
+	
+	if(side && (lightPositionX <= -5.0f))
+	{
+		side = !side;
+	}
+	else if(!side && (lightPositionX >= 5.0f))
+	{
+		side = !side;
+	}
 	// Update the position of the light.
-	m_Light->SetPosition(lightPositionX, 8.0f, -5.0f);
+	m_Light->SetPosition(lightPositionX, 7.0f, -5.0f);
 	
 	// Render the graphics scene.
 	result = Render();
@@ -749,6 +749,46 @@ bool GraphicsClass::UpSampleTexture()
 	return true;
 }
 
+bool GraphicsClass::Render2DTextureScene()
+{
+	D3DXMATRIX worldMatrix, viewMatrix, orthoMatrix;
+	bool result;
+
+
+	// Clear the buffers to begin the scene.
+	m_D3D->BeginScene(1.0f, 0.0f, 0.0f, 0.0f);
+
+	// Generate the view matrix based on the camera's position.
+	m_Camera->Render();
+
+	// Get the world, view, and ortho matrices from the camera and d3d objects.
+	m_Camera->GetViewMatrix(viewMatrix);
+	m_D3D->GetWorldMatrix(worldMatrix);
+	m_D3D->GetOrthoMatrix(orthoMatrix);
+
+	// Turn off the Z buffer to begin all 2D rendering.
+	m_D3D->TurnZBufferOff();
+
+	// Put the full screen ortho window vertex and index buffers on the graphics pipeline to prepare them for drawing.
+	m_FullScreenWindow->Render(m_D3D->GetDeviceContext());
+
+	// Render the full screen ortho window using the texture shader and the full screen sized blurred render to texture resource.
+	result = m_TextureShader->Render(m_D3D->GetDeviceContext(), m_FullScreenWindow->GetIndexCount(), worldMatrix, viewMatrix, orthoMatrix, 
+					 m_UpSampleTexure->GetShaderResourceView());
+	if(!result)
+	{
+		return false;
+	}
+
+	// Turn the Z buffer back on now that all 2D rendering has completed.
+	m_D3D->TurnZBufferOn();
+	
+	// Present the rendered scene to the screen.
+	m_D3D->EndScene();
+
+	return true;
+}
+
 bool GraphicsClass::Render()
 {
 	D3DXMATRIX worldMatrix, viewMatrix, projectionMatrix, translateMatrix;
@@ -800,7 +840,13 @@ bool GraphicsClass::Render()
 	}
 
 
-
+	//// Render the blurred up sampled render texture to the screen.
+	//result = Render2DTextureScene();
+	//if(!result)
+	//{
+	//	return false;
+	//}
+	//
 	// Clear the buffers to begin the scene.
 	m_D3D->BeginScene(0.0f, 0.0f, 0.0f, 1.0f);
 
@@ -808,7 +854,7 @@ bool GraphicsClass::Render()
 	m_Camera->Render();
 
 	// Generate the light view matrix based on the light's position.
-	m_Light->GenerateViewMatrix();
+	//m_Light->GenerateViewMatrix();
 
 	// Get the world, view, and projection matrices from the camera and d3d objects.
 	m_Camera->GetViewMatrix(viewMatrix);
@@ -816,8 +862,8 @@ bool GraphicsClass::Render()
 	m_D3D->GetProjectionMatrix(projectionMatrix);
 
 	// Get the light's view and projection matrices from the light object.
-	m_Light->GetViewMatrix(lightViewMatrix);
-	m_Light->GetProjectionMatrix(lightProjectionMatrix);
+	//m_Light->GetViewMatrix(lightViewMatrix);
+	//m_Light->GetProjectionMatrix(lightProjectionMatrix);
 
 	std::vector<ModelClass*>::iterator it;
 	for(it = m_Models.begin(); it != m_Models.end(); ++it)
@@ -832,13 +878,7 @@ bool GraphicsClass::Render()
 		(*it)->Render(m_D3D->GetDeviceContext());
 
 		// Render the model using the specular map shader.
-		//result = m_SpecMapShader->Render(m_D3D->GetDeviceContext(), (*it)->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
-		//		(*it)->GetTextureArray(), m_Light->GetDirection(), m_Light->GetDiffuseColor(), 
-		//		m_Camera->GetPosition(), m_Light->GetSpecularColor(), m_Light->GetSpecularPower());
-		//
-		//if(!result)
-		//{
-		//	return false;
+		//result = m_ShaderManager->RenderSpecMapShader(m_D3D->GetDeviceContext(), (*it)->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
 		//}
 
 		// Render the model using the shadow shader.
@@ -846,18 +886,18 @@ bool GraphicsClass::Render()
 							(*it)->GetTexture(), m_UpSampleTexure->GetShaderResourceView(), m_Light->GetPosition(), 
 							m_Light->GetAmbientColor(), m_Light->GetDiffuseColor());
 
-		//if(!result)
-		//{
-		//	return false;
-		//}
+		if(!result)
+		{
+			return false;
+		}
 	
 	
 		// Reset the world matrix.
 		m_D3D->GetWorldMatrix(worldMatrix);
 	}
-
 	// Present the rendered scene to the screen.
 	m_D3D->EndScene();
+	
 
 	return true;
 }

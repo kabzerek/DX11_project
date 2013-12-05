@@ -7,11 +7,10 @@
 class OrthoWindowClass
 {
 private:
-
 	struct VertexType
 	{
 		D3DXVECTOR3 position;
-		D3DXVECTOR2 texture;
+	    D3DXVECTOR2 texture;
 	};
 
 public:
@@ -34,6 +33,5 @@ private:
 	ID3D11Buffer *m_vertexBuffer, *m_indexBuffer;
 	int m_vertexCount, m_indexCount;
 };
-
 
 #endif
