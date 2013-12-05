@@ -15,7 +15,11 @@
 #include "ShadowShaderClass.h"
 #include "DepthShaderClass.h"
 #include "DebugWindowClass.h"
-//#include "TextureShaderClass.h"
+#include "TextureShaderClass.h"
+#include "OrthoWindowClass.h"
+#include "HorizontalBlurShaderClass.h"
+#include "VerticalBlurShaderClass.h"
+#include "SoftShadowShaderClass.h"
 
 #include <vector>
 
@@ -41,21 +45,32 @@ private:
 	bool RenderSceneToTexture();
 	bool Render();
 
+	bool RenderBlackAndWhiteShadows();
+	bool DownSampleTexture();
+	bool RenderHorizontalBlurToTexture();
+	bool RenderVerticalBlurToTexture();
+	bool UpSampleTexture();
+
 	D3DClass* m_D3D;
 	CameraClass* m_Camera;
 	//ModelClass* m_Model;
 	std::vector<ModelClass*> m_Models;
-//	LightShaderClass* m_LightShader;
+	//	LightShaderClass* m_LightShader;
 	LightClass* m_Light;
-	//TextureShaderClass* m_TextureShader;
+	TextureShaderClass* m_TextureShader;
 	//MultiTextureShaderClass* m_MultiTextureShader;
 	//AlphaMapShaderClass* m_AlphaMapShader;
 	//BumpMapShaderClass* m_BumpMapShader;	
 	SpecMapShaderClass* m_SpecMapShader;
 	ShadowShaderClass* m_ShadowShader;
-	RenderTextureClass* m_RenderTexture;
+	RenderTextureClass *m_RenderTexture, *m_BlackWhiteRenderTexture, *m_DownSampleTexure;
+	RenderTextureClass *m_HorizontalBlurTexture, *m_VerticalBlurTexture, *m_UpSampleTexure;
 	DepthShaderClass* m_DepthShader;
 	//DebugWindowClass* m_DebugWindow;
+	OrthoWindowClass *m_SmallWindow, *m_FullScreenWindow;
+	HorizontalBlurShaderClass* m_HorizontalBlurShader;
+	VerticalBlurShaderClass* m_VerticalBlurShader;
+	SoftShadowShaderClass* m_SoftShadowShader;
 };
 
 #endif

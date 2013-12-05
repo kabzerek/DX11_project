@@ -74,6 +74,15 @@
     <ClCompile Include="SoftShadowShaderClass.cpp">
       <Filter>Classess</Filter>
     </ClCompile>
+    <ClCompile Include="VerticalBlurShaderClass.cpp">
+      <Filter>Classess</Filter>
+    </ClCompile>
+    <ClCompile Include="HorizontalBlurShaderClass.cpp">
+      <Filter>Classess</Filter>
+    </ClCompile>
+    <ClCompile Include="OrthoWindowClass.cpp">
+      <Filter>Classess</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraClass.h">
@@ -151,6 +160,15 @@
     <ClInclude Include="SoftShadowShaderClass.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="VerticalBlurShaderClass.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HorizontalBlurShaderClass.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="OrthoWindowClass.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Color.ps">
@@ -211,6 +229,18 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="SoftShadow.vs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="HorizontalBlur.ps">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="HorizontalBlur.vs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="VerticalBlur.ps">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="VerticalBlur.vs">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>
