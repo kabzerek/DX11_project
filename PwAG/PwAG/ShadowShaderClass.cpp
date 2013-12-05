@@ -38,6 +38,7 @@ bool ShadowShaderClass::Initialize(ID3D11Device* device, HWND hwnd)
 }
 
 
+
 void ShadowShaderClass::Shutdown()
 {
 	// Shutdown the vertex and pixel shaders as well as the related objects.

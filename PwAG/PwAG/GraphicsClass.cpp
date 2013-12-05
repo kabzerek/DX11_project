@@ -607,7 +607,7 @@ bool GraphicsClass::RenderSceneToTexture()
 	m_RenderTexture->SetRenderTarget(m_D3D->GetDeviceContext());
 
 	// Clear the render to texture.
-	m_RenderTexture->ClearRenderTarget(m_D3D->GetDeviceContext(), 0.0f, 0.0f, 0.0f, 1.0f);
+	m_RenderTexture->ClearRenderTarget(m_D3D->GetDeviceContext(), 0.0f, 0.0f, 0.5f, 1.0f);
 
 	// Generate the light view matrix based on the light's position.
 	m_Light->GenerateViewMatrix();
@@ -709,7 +709,6 @@ bool GraphicsClass::DownSampleTexture()
 {
 	D3DXMATRIX worldMatrix, baseViewMatrix, orthoMatrix;
 	bool result;
-
 
 	// Set the render target to be the render to texture.
 	m_DownSampleTexure->SetRenderTarget(m_D3D->GetDeviceContext());
@@ -951,6 +950,7 @@ bool GraphicsClass::Render()
 	D3DXMATRIX lightViewMatrix, lightProjectionMatrix;
 	bool result;
 	float posX, posY, posZ;
+	
 
 
 	// First render the scene to a texture.
@@ -997,12 +997,12 @@ bool GraphicsClass::Render()
 
 
 	//// Render the blurred up sampled render texture to the screen.
-	//result = Render2DTextureScene();
-	//if(!result)
-	//{
-	//	return false;
-	//}
-	//
+	result = Render2DTextureScene();
+	if(!result)
+	{
+		return false;
+	}
+	
 	// Clear the buffers to begin the scene.
 	m_D3D->BeginScene(0.0f, 0.0f, 0.0f, 1.0f);
 
@@ -1010,7 +1010,7 @@ bool GraphicsClass::Render()
 	m_Camera->Render();
 
 	// Generate the light view matrix based on the light's position.
-	//m_Light->GenerateViewMatrix();
+	m_Light->GenerateViewMatrix();
 
 	// Get the world, view, and projection matrices from the camera and d3d objects.
 	m_Camera->GetViewMatrix(viewMatrix);
@@ -1018,8 +1018,8 @@ bool GraphicsClass::Render()
 	m_D3D->GetProjectionMatrix(projectionMatrix);
 
 	// Get the light's view and projection matrices from the light object.
-	//m_Light->GetViewMatrix(lightViewMatrix);
-	//m_Light->GetProjectionMatrix(lightProjectionMatrix);
+	m_Light->GetViewMatrix(lightViewMatrix);
+	m_Light->GetProjectionMatrix(lightProjectionMatrix);
 
 	std::vector<ModelClass*>::iterator it;
 	for(it = m_Models.begin(); it != m_Models.end(); ++it)
@@ -1034,15 +1034,14 @@ bool GraphicsClass::Render()
 		(*it)->Render(m_D3D->GetDeviceContext());
 
 		// Render the model using the specular map shader.
-		result = m_SpecMapShader->Render(m_D3D->GetDeviceContext(), (*it)->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
-				(*it)->GetTextureArray(), m_Light->GetDirection(), m_Light->GetDiffuseColor(), 
-				m_Camera->GetPosition(), m_Light->GetSpecularColor(), m_Light->GetSpecularPower());
+		//result = m_SpecMapShader->Render(m_D3D->GetDeviceContext(), (*it)->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
+		//		(*it)->GetTextureArray(), m_Light->GetDirection(), m_Light->GetDiffuseColor(), 
+		//		m_Camera->GetPosition(), m_Light->GetSpecularColor(), m_Light->GetSpecularPower());
 		
-
 		// Render the model using the shadow shader.
-		//result = m_SoftShadowShader->Render(m_D3D->GetDeviceContext(), (*it)->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
-		//					(*it)->GetTexture(), m_UpSampleTexure->GetShaderResourceView(), m_Light->GetPosition(), 
-		//					m_Light->GetAmbientColor(), m_Light->GetDiffuseColor());
+		result = m_SoftShadowShader->Render(m_D3D->GetDeviceContext(), (*it)->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
+							(*it)->GetTexture(), m_UpSampleTexure->GetShaderResourceView(), m_Light->GetPosition(), 
+							m_Light->GetAmbientColor(), m_Light->GetDiffuseColor());
 
 		if(!result)
 		{
