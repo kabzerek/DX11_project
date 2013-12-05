@@ -5,29 +5,19 @@ GraphicsClass::GraphicsClass()
 {
 	m_D3D = 0;
 	m_Camera = 0;
-	//m_Model = 0;
-	//m_LightShader = 0;
 	m_Light = 0;	
-	//m_MultiTextureShader = 0;
-	//m_AlphaMapShader = 0;
-	//m_BumpMapShader = 0;
-	m_SpecMapShader = 0;
 	m_RenderTexture = 0;
 	//m_DebugWindow = 0;
-	m_TextureShader = 0;
-	m_DepthShader = 0;	
-	m_ShadowShader = 0;
+
+	m_ShaderManager = 0;
 
 	m_BlackWhiteRenderTexture = 0;
 	m_DownSampleTexure = 0;
 	m_SmallWindow = 0;
 	m_HorizontalBlurTexture = 0;
-	m_HorizontalBlurShader = 0;
 	m_VerticalBlurTexture = 0;
-	m_VerticalBlurShader = 0;
 	m_UpSampleTexure = 0;
 	m_FullScreenWindow = 0;
-	m_SoftShadowShader = 0;
 }
 
 
@@ -58,6 +48,21 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	if(!result)
 	{
 		MessageBox(hwnd, L"Could not initialize Direct3D.", L"Error", MB_OK);
+		return false;
+	}
+
+	// Create the shader manager object.
+	m_ShaderManager = new ShaderManagerClass;
+	if(!m_ShaderManager)
+	{
+		return false;
+	}
+
+	// Initialize the shader manager object.
+	result = m_ShaderManager->Initialize(m_D3D->GetDevice(), hwnd);
+	if(!result)
+	{
+		MessageBox(hwnd, L"Could not initialize the shader manager object.", L"Error", MB_OK);
 		return false;
 	}
 
@@ -144,22 +149,6 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 
 	m_Models.push_back(grnd);
 
-	// Create the specular map shader object.
-	m_SpecMapShader = new SpecMapShaderClass;
-	if(!m_SpecMapShader)
-	{
-		return false;
-	}
-	// Initialize the specular map shader object.
-	result = m_SpecMapShader->Initialize(m_D3D->GetDevice(), hwnd);
-	if(!result)
-	{
-		MessageBox(hwnd, L"Could not initialize the specular map shader object.", L"Error", MB_OK);
-		return false;
-	}
-	
-
-
 	//Create the light object.
 	m_Light = new LightClass;
 	if(!m_Light)
@@ -193,21 +182,6 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 		return false;
 	}
 
-	// Create the depth shader object.
-	m_DepthShader = new DepthShaderClass;
-	if(!m_DepthShader)
-	{
-		return false;
-	}
-
-	// Initialize the depth shader object.
-	result = m_DepthShader->Initialize(m_D3D->GetDevice(), hwnd);
-	if(!result)
-	{
-		MessageBox(hwnd, L"Could not initialize the depth shader object.", L"Error", MB_OK);
-		return false;
-	}
-
 	// Create the black and white render to texture object.
 	m_BlackWhiteRenderTexture = new RenderTextureClass;
 	if(!m_BlackWhiteRenderTexture)
@@ -220,21 +194,6 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	if(!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the black and white render to texture object.", L"Error", MB_OK);
-		return false;
-	}
-
-	// Create the shadow shader object.
-	m_ShadowShader = new ShadowShaderClass;
-	if(!m_ShadowShader)
-	{
-		return false;
-	}
-
-	// Initialize the shadow shader object.
-	result = m_ShadowShader->Initialize(m_D3D->GetDevice(), hwnd);
-	if(!result)
-	{
-		MessageBox(hwnd, L"Could not initialize the shadow shader object.", L"Error", MB_OK);
 		return false;
 	}
 
@@ -272,21 +231,6 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 		return false;
 	}
 
-	// Create the texture shader object.
-	m_TextureShader = new TextureShaderClass;
-	if(!m_TextureShader)
-	{
-		return false;
-	}
-
-	// Initialize the texture shader object.
-	result = m_TextureShader->Initialize(m_D3D->GetDevice(), hwnd);
-	if(!result)
-	{
-		MessageBox(hwnd, L"Could not initialize the texture shader object.", L"Error", MB_OK);
-		return false;
-	}
-
 	// Create the horizontal blur render to texture object.
 	m_HorizontalBlurTexture = new RenderTextureClass;
 	if(!m_HorizontalBlurTexture)
@@ -302,21 +246,6 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 		return false;
 	}
 
-	// Create the horizontal blur shader object.
-	m_HorizontalBlurShader = new HorizontalBlurShaderClass;
-	if(!m_HorizontalBlurShader)
-	{
-		return false;
-	}
-
-	// Initialize the horizontal blur shader object.
-	result = m_HorizontalBlurShader->Initialize(m_D3D->GetDevice(), hwnd);
-	if(!result)
-	{
-		MessageBox(hwnd, L"Could not initialize the horizontal blur shader object.", L"Error", MB_OK);
-		return false;
-	}
-
 	// Create the vertical blur render to texture object.
 	m_VerticalBlurTexture = new RenderTextureClass;
 	if(!m_VerticalBlurTexture)
@@ -329,21 +258,6 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	if(!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the vertical blur render to texture object.", L"Error", MB_OK);
-		return false;
-	}
-
-	// Create the vertical blur shader object.
-	m_VerticalBlurShader = new VerticalBlurShaderClass;
-	if(!m_VerticalBlurShader)
-	{
-		return false;
-	}
-
-	// Initialize the vertical blur shader object.
-	result = m_VerticalBlurShader->Initialize(m_D3D->GetDevice(), hwnd);
-	if(!result)
-	{
-		MessageBox(hwnd, L"Could not initialize the vertical blur shader object.", L"Error", MB_OK);
 		return false;
 	}
 
@@ -377,50 +291,12 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 		return false;
 	}
 
-	// Create the soft shadow shader object.
-	m_SoftShadowShader = new SoftShadowShaderClass;
-	if(!m_SoftShadowShader)
-	{
-		return false;
-	}
-
-	// Initialize the soft shadow shader object.
-	result = m_SoftShadowShader->Initialize(m_D3D->GetDevice(), hwnd);
-	if(!result)
-	{
-		MessageBox(hwnd, L"Could not initialize the soft shadow shader object.", L"Error", MB_OK);
-		return false;
-	}
-
 	return true;
 }
 
 
 void GraphicsClass::Shutdown()
 {
-	// Release the specular map shader object.
-	if(m_SpecMapShader)
-	{
-		m_SpecMapShader->Shutdown();
-		delete m_SpecMapShader;
-		m_SpecMapShader = 0;
-	}
-		// Release the shadow shader object.
-	if(m_ShadowShader)
-	{
-		m_ShadowShader->Shutdown();
-		delete m_ShadowShader;
-		m_ShadowShader = 0;
-	}
-
-	// Release the depth shader object.
-	if(m_DepthShader)
-	{
-		m_DepthShader->Shutdown();
-		delete m_DepthShader;
-		m_DepthShader = 0;
-	}
-
 	// Release the full screen ortho window object.
 	if(m_FullScreenWindow)
 	{
@@ -476,22 +352,6 @@ void GraphicsClass::Shutdown()
 		delete m_RenderTexture;
 		m_RenderTexture = 0;
 	}
-	
-	// Release the vertical blur shader object.
-	if(m_VerticalBlurShader)
-	{
-		m_VerticalBlurShader->Shutdown();
-		delete m_VerticalBlurShader;
-		m_VerticalBlurShader = 0;
-	}
-
-	// Release the horizontal blur shader object.
-	if(m_HorizontalBlurShader)
-	{
-		m_HorizontalBlurShader->Shutdown();
-		delete m_HorizontalBlurShader;
-		m_HorizontalBlurShader = 0;
-	}
 
 	// Release the black and white render to texture.
 	if(m_BlackWhiteRenderTexture)
@@ -527,6 +387,14 @@ void GraphicsClass::Shutdown()
 	{
 		delete m_Camera;
 		m_Camera = 0;
+	}
+
+	// Release the shader manager object.
+	if(m_ShaderManager)
+	{
+		m_ShaderManager->Shutdown();
+		delete m_ShaderManager;
+		m_ShaderManager = 0;
 	}
 
 	// Release the D3D object.
@@ -604,7 +472,7 @@ bool GraphicsClass::RenderSceneToTexture()
 
 		// Render the model with the depth shader.
 		(*it)->Render(m_D3D->GetDeviceContext());
-		result = m_DepthShader->Render(m_D3D->GetDeviceContext(), (*it)->GetIndexCount(), worldMatrix, lightViewMatrix, lightProjectionMatrix);
+		result = m_ShaderManager->RenderDepthShader(m_D3D->GetDeviceContext(), (*it)->GetIndexCount(), worldMatrix, lightViewMatrix, lightProjectionMatrix);
 		if(!result)
 		{
 			return false;
@@ -661,7 +529,7 @@ bool GraphicsClass::RenderBlackAndWhiteShadows()
 
 		// Render the model with the depth shader.
 		(*it)->Render(m_D3D->GetDeviceContext());
-		result = m_ShadowShader->Render(m_D3D->GetDeviceContext(), (*it)->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix, lightViewMatrix,
+		result = m_ShaderManager->RenderShadowShader(m_D3D->GetDeviceContext(), (*it)->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix, lightViewMatrix,
 					lightProjectionMatrix, m_RenderTexture->GetShaderResourceView(), m_Light->GetPosition());
 		if(!result)
 		{
@@ -710,7 +578,7 @@ bool GraphicsClass::DownSampleTexture()
 	m_SmallWindow->Render(m_D3D->GetDeviceContext());
 
 	// Render the small ortho window using the texture shader and the render to texture of the scene as the texture resource.
-	result = m_TextureShader->Render(m_D3D->GetDeviceContext(), m_SmallWindow->GetIndexCount(), worldMatrix, baseViewMatrix, orthoMatrix, 
+	result = m_ShaderManager->RenderTextureShader(m_D3D->GetDeviceContext(), m_SmallWindow->GetIndexCount(), worldMatrix, baseViewMatrix, orthoMatrix, 
 									 m_BlackWhiteRenderTexture->GetShaderResourceView());
 	if(!result)
 	{
@@ -762,7 +630,7 @@ bool GraphicsClass::RenderHorizontalBlurToTexture()
 	m_SmallWindow->Render(m_D3D->GetDeviceContext());
 	
 	// Render the small ortho window using the horizontal blur shader and the down sampled render to texture resource.
-	result = m_HorizontalBlurShader->Render(m_D3D->GetDeviceContext(), m_SmallWindow->GetIndexCount(), worldMatrix, baseViewMatrix, orthoMatrix,
+	result = m_ShaderManager->RenderHorizontalBlurShader(m_D3D->GetDeviceContext(), m_SmallWindow->GetIndexCount(), worldMatrix, baseViewMatrix, orthoMatrix,
 						m_DownSampleTexure->GetShaderResourceView(), screenSizeX);
 	if(!result)
 	{
@@ -814,7 +682,7 @@ bool GraphicsClass::RenderVerticalBlurToTexture()
 	m_SmallWindow->Render(m_D3D->GetDeviceContext());
 	
 	// Render the small ortho window using the vertical blur shader and the horizontal blurred render to texture resource.
-	result = m_VerticalBlurShader->Render(m_D3D->GetDeviceContext(), m_SmallWindow->GetIndexCount(), worldMatrix, baseViewMatrix, orthoMatrix,
+	result = m_ShaderManager->RenderVerticalBlurShader(m_D3D->GetDeviceContext(), m_SmallWindow->GetIndexCount(), worldMatrix, baseViewMatrix, orthoMatrix,
 					      m_HorizontalBlurTexture->GetShaderResourceView(), screenSizeY);
 	if(!result)
 	{
@@ -862,7 +730,7 @@ bool GraphicsClass::UpSampleTexture()
 	m_FullScreenWindow->Render(m_D3D->GetDeviceContext());
 
 	// Render the full screen ortho window using the texture shader and the small sized final blurred render to texture resource.
-	result = m_TextureShader->Render(m_D3D->GetDeviceContext(), m_FullScreenWindow->GetIndexCount(), worldMatrix, baseViewMatrix, orthoMatrix,
+	result = m_ShaderManager->RenderTextureShader(m_D3D->GetDeviceContext(), m_FullScreenWindow->GetIndexCount(), worldMatrix, baseViewMatrix, orthoMatrix,
 					 m_VerticalBlurTexture->GetShaderResourceView());
 	if(!result)
 	{
@@ -974,7 +842,7 @@ bool GraphicsClass::Render()
 		//}
 
 		// Render the model using the shadow shader.
-		result = m_SoftShadowShader->Render(m_D3D->GetDeviceContext(), (*it)->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
+		result = m_ShaderManager->RenderSoftShadowShader(m_D3D->GetDeviceContext(), (*it)->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
 							(*it)->GetTexture(), m_UpSampleTexure->GetShaderResourceView(), m_Light->GetPosition(), 
 							m_Light->GetAmbientColor(), m_Light->GetDiffuseColor());
 

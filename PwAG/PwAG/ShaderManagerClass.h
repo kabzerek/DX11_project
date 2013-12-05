@@ -7,12 +7,15 @@
 #include "AlphaMapShaderClass.h"
 #include "BumpMapShaderClass.h"
 #include "DepthShaderClass.h"
+#include "HorizontalBlurShaderClass.h"
 #include "LightShaderClass.h"
 #include "MultiTextureShaderClass.h"
 #include "ShadowShaderClass.h"
 #include "SoftShadowShaderClass.h"
 #include "SpecMapShaderClass.h"
 #include "TextureShaderClass.h"
+#include "VerticalBlurShaderClass.h"
+
 
 class ShaderManagerClass
 {
@@ -45,6 +48,14 @@ public:
 						   D3DXMATRIX, 
 						   D3DXMATRIX, 
 						   D3DXMATRIX);
+
+	bool RenderHorizontalBlurShader(ID3D11DeviceContext*, 
+									int, 
+									D3DXMATRIX, 
+									D3DXMATRIX, 
+									D3DXMATRIX, 
+									ID3D11ShaderResourceView*, 
+									float);
 
 	bool RenderLightShader(ID3D11DeviceContext*, 
 						   int, 
@@ -106,16 +117,26 @@ public:
 							 D3DXMATRIX, 
 							 ID3D11ShaderResourceView*);
 
+	bool RenderVerticalBlurShader(ID3D11DeviceContext*, 
+								  int, 
+								  D3DXMATRIX, 
+								  D3DXMATRIX, 
+								  D3DXMATRIX, 
+								  ID3D11ShaderResourceView*, 
+								  float);
+
 private:
-	AlphaMapShaderClass* m_AlphaMapShader;
-	BumpMapShaderClass* m_BumpMapShader;
-	DepthShaderClass* m_DepthShader;
-	LightShaderClass* m_LightShader;
-	MultiTextureShaderClass* m_MultiTextureShader;
-	ShadowShaderClass* m_ShadowShader;
-	SoftShadowShaderClass* m_SoftShadowShader;
-	SpecMapShaderClass* m_SpecMapShader;
-	TextureShaderClass* m_TextureShader;
+	AlphaMapShaderClass*		m_AlphaMapShader;
+	BumpMapShaderClass*			m_BumpMapShader;
+	DepthShaderClass*			m_DepthShader;
+	HorizontalBlurShaderClass*	m_HorizontalBlurShader;
+	LightShaderClass*			m_LightShader;
+	MultiTextureShaderClass*	m_MultiTextureShader;
+	ShadowShaderClass*			m_ShadowShader;
+	SoftShadowShaderClass*		m_SoftShadowShader;
+	SpecMapShaderClass*			m_SpecMapShader;
+	TextureShaderClass*			m_TextureShader;
+	VerticalBlurShaderClass*	m_VerticalBlurShader;
 };
 
 #endif

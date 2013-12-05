@@ -6,12 +6,14 @@ ShaderManagerClass::ShaderManagerClass(void)
 	m_AlphaMapShader = 0;
 	m_BumpMapShader = 0;
 	m_DepthShader = 0;
+	m_HorizontalBlurShader = 0;
 	m_LightShader = 0;
 	m_MultiTextureShader = 0;
 	m_ShadowShader = 0;
 	m_SoftShadowShader = 0;
 	m_SpecMapShader = 0;
 	m_TextureShader = 0;
+	m_VerticalBlurShader = 0;
 }
 
 ShaderManagerClass::ShaderManagerClass(const ShaderManagerClass& other)
@@ -78,6 +80,24 @@ bool ShaderManagerClass::Initialize(ID3D11Device* device, HWND hwnd)
 	if(!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the DepthShader object.", L"Error", MB_OK);
+		return false;
+	}
+
+	//////////////////////////
+	// HorizontalBlurShader //
+	//////////////////////////
+	// Create HorizontalBlurShader object.
+	m_HorizontalBlurShader = new HorizontalBlurShaderClass;
+	if(!m_HorizontalBlurShader)
+	{
+		return false;
+	}
+
+	// Initialize the HorizontalBlurShader object.
+	result = m_HorizontalBlurShader->Initialize(device, hwnd);
+	if(!result)
+	{
+		MessageBox(hwnd, L"Could not initialize the HorizontalBlurShader object.", L"Error", MB_OK);
 		return false;
 	}
 
@@ -188,6 +208,24 @@ bool ShaderManagerClass::Initialize(ID3D11Device* device, HWND hwnd)
 		MessageBox(hwnd, L"Could not initialize the TextureShader object.", L"Error", MB_OK);
 		return false;
 	}
+
+	////////////////////////
+	// VerticalBlurShader //
+	////////////////////////
+	// Create VerticalBlurShader object.
+	m_VerticalBlurShader = new VerticalBlurShaderClass;
+	if(!m_VerticalBlurShader)
+	{
+		return false;
+	}
+
+	// Initialize the VerticalBlurShader object.
+	result = m_VerticalBlurShader->Initialize(device, hwnd);
+	if(!result)
+	{
+		MessageBox(hwnd, L"Could not initialize the VerticalBlurShader object.", L"Error", MB_OK);
+		return false;
+	}
 }
 
 void ShaderManagerClass::Shutdown()
@@ -214,6 +252,14 @@ void ShaderManagerClass::Shutdown()
 		m_DepthShader->Shutdown();
 		delete m_DepthShader;
 		m_DepthShader = 0;
+	}
+
+	// Release the HorizontalBlurShader object.
+	if(m_HorizontalBlurShader)
+	{
+		m_HorizontalBlurShader->Shutdown();
+		delete m_HorizontalBlurShader;
+		m_HorizontalBlurShader = 0;
 	}
 
 	// Release the LightShader object.
@@ -262,6 +308,14 @@ void ShaderManagerClass::Shutdown()
 		m_TextureShader->Shutdown();
 		delete m_TextureShader;
 		m_TextureShader = 0;
+	}
+
+	// Release the VerticalBlurShader object.
+	if(m_VerticalBlurShader)
+	{
+		m_VerticalBlurShader->Shutdown();
+		delete m_VerticalBlurShader;
+		m_VerticalBlurShader = 0;
 	}
 
 	return;
@@ -333,6 +387,32 @@ bool ShaderManagerClass::RenderDepthShader(ID3D11DeviceContext* deviceContext,
 								   worldMatrix, 
 								   viewMatrix, 
 								   projectionMatrix);
+	if(!result)
+	{
+		return false;
+	}
+
+	return true;
+}
+
+bool ShaderManagerClass::RenderHorizontalBlurShader(ID3D11DeviceContext* deviceContext, 
+													int indexCount, 
+													D3DXMATRIX worldMatrix, 
+													D3DXMATRIX viewMatrix, 
+													D3DXMATRIX projectionMatrix, 
+													ID3D11ShaderResourceView* texture, 
+													float screenWidth)
+{
+	bool result;
+
+	// Render the model using HorizontalBlurShader.
+	result = m_HorizontalBlurShader->Render(deviceContext, 
+											indexCount, 
+											worldMatrix, 
+											viewMatrix, 
+											projectionMatrix,
+											texture,
+											screenWidth);
 	if(!result)
 	{
 		return false;
@@ -513,6 +593,32 @@ bool ShaderManagerClass::RenderTextureShader(ID3D11DeviceContext* deviceContext,
 									 viewMatrix, 
 									 projectionMatrix, 
 									 texture);
+	if(!result)
+	{
+		return false;
+	}
+
+	return true;
+}
+
+bool ShaderManagerClass::RenderVerticalBlurShader(ID3D11DeviceContext* deviceContext, 
+												  int indexCount, 
+												  D3DXMATRIX worldMatrix, 
+												  D3DXMATRIX viewMatrix, 
+												  D3DXMATRIX projectionMatrix, 
+												  ID3D11ShaderResourceView* texture, 
+												  float screenHeight)
+{
+	bool result;
+
+	// Render the model using VerticalBlurShader.
+	result = m_VerticalBlurShader->Render(deviceContext, 
+										  indexCount, 
+										  worldMatrix, 
+										  viewMatrix, 
+										  projectionMatrix,
+										  texture,
+										  screenHeight);
 	if(!result)
 	{
 		return false;
