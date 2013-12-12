@@ -122,15 +122,17 @@ void PositionClass::MoveForward(bool keydown)
 	//m_positionZ += cosf(radiansX) * m_forwardSpeed;
 
 	// Convert degrees to radians.
-	radiansY = m_rotationY * 0.0174532925f;
+	float rot = m_rotationY;
+	//rot += 90;
+	radiansY = rot * 0.0174532925f;
 
 	// Update the position.
-	m_positionX += cosf(radiansY) * m_forwardSpeed;
-	m_positionZ += sinf(radiansY) * m_forwardSpeed;
+	m_positionX += sinf(radiansY) * m_forwardSpeed;
+	m_positionZ += cosf(radiansY) * m_forwardSpeed;
 
 	radiansX = m_rotationX * 0.0174532925f;
 
-	m_positionY += cosf(radiansX) * m_forwardSpeed;
+	m_positionY += sinf(radiansX) * m_forwardSpeed;
 
 
 
@@ -208,8 +210,8 @@ void PositionClass::MoveLeftward(bool keydown)
 	radians = rot * 0.0174532925f;
 
 	// Update the position.
-	m_positionX += cosf(radians) * m_leftwardSpeed;
-	m_positionZ += sinf(radians) * m_leftwardSpeed;
+	m_positionX -= sinf(radians) * m_rightwardSpeed;
+	m_positionZ -= cosf(radians) * m_rightwardSpeed;
 
 	return;
 }
@@ -246,8 +248,8 @@ void PositionClass::MoveRightward(bool keydown)
 	radians = rot * 0.0174532925f;
 
 	// Update the position.
-	m_positionX -= cosf(radians) * m_rightwardSpeed;
-	m_positionZ -= sinf(radians) * m_rightwardSpeed;
+	m_positionX += sinf(radians) * m_rightwardSpeed;
+	m_positionZ += cosf(radians) * m_rightwardSpeed;
 
 	return;
 }
@@ -321,6 +323,11 @@ void PositionClass::Turn(bool keyDown, int deltaX, int deltaY)
 
 	m_rotationY += m_YTurnSpeed;
 	m_rotationX += m_XTurnSpeed;
+
+	if(m_rotationY < 0)
+		m_rotationY = 360 + m_rotationY;
+	if(m_rotationX < 0)
+		m_rotationX = 360 + m_rotationX;
 }
 
 //void PositionClass::TurnLeft(bool keydown)

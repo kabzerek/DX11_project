@@ -46,8 +46,8 @@ public:
 	void TurnZBufferOn();
 	void TurnZBufferOff();
 
-	//void TurnOnAlphaBlending();
-	//void TurnOffAlphaBlending();
+	void TurnOnAlphaBlending();
+	void TurnOffAlphaBlending();
 	
 	ID3D11DepthStencilView* GetDepthStencilView();
 	void SetBackBufferRenderTarget();
@@ -71,8 +71,8 @@ private:
 	D3D11_VIEWPORT m_viewport;
 
 	ID3D11DepthStencilState* m_depthDisabledStencilState;
-	//ID3D11BlendState* m_alphaEnableBlendingState;
-	//ID3D11BlendState* m_alphaDisableBlendingState;
+	ID3D11BlendState* m_alphaEnableBlendingState;
+	ID3D11BlendState* m_alphaDisableBlendingState;
 };
 
 #endif

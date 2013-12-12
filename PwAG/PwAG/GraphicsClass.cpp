@@ -19,6 +19,7 @@ GraphicsClass::GraphicsClass()
 	m_VerticalBlurTexture = 0;
 	m_UpSampleTexture = 0;
 	m_FullScreenWindow = 0;
+	m_Text = 0;
 }
 
 
@@ -35,6 +36,7 @@ GraphicsClass::~GraphicsClass()
 bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 {
 	bool result;
+	D3DXMATRIX baseViewMatrix;
 	int downSampleWidth, downSampleHeight;
 
 	// Create the Direct3D object.
@@ -74,8 +76,13 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 		return false;
 	}
 
+	// Initialize a base view matrix with the camera for 2D user interface rendering.
+	m_Camera->SetPosition(0.0f, 0.0f, -15.0f);
+	m_Camera->Render();
+	m_Camera->GetViewMatrix(baseViewMatrix);
+
 	// Set the initial position of the camera.
-	m_Camera->SetPosition(0.0f, 0.0f, -50.0f);
+	m_Camera->SetPosition(0.0f, 0.0f, -20.0f);
 	m_Camera->RenderBaseViewMatrix();
 	
 	// Create the model object.
@@ -293,12 +300,35 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 		return false;
 	}
 
+	// Create the text object.
+	m_Text = new TextClass;
+	if(!m_Text)
+	{
+		return false;
+	}
+
+	// Initialize the text object.
+	result = m_Text->Initialize(m_D3D->GetDevice(), m_D3D->GetDeviceContext(), hwnd, screenWidth, screenHeight, baseViewMatrix);
+	if(!result)
+	{
+		MessageBox(hwnd, L"Could not initialize the text object.", L"Error", MB_OK);
+		return false;
+	}
+
 	return true;
 }
 
 
 void GraphicsClass::Shutdown()
 {
+	// Release the text object.
+	if(m_Text)
+	{
+		m_Text->Shutdown();
+		delete m_Text;
+		m_Text = 0;
+	}
+
 	// Release the full screen ortho window object.
 	if(m_FullScreenWindow)
 	{
@@ -791,7 +821,7 @@ bool GraphicsClass::Render2DTextureScene()
 
 bool GraphicsClass::Render()
 {
-	D3DXMATRIX worldMatrix, viewMatrix, projectionMatrix, translateMatrix;
+	D3DXMATRIX worldMatrix, viewMatrix, projectionMatrix, translateMatrix, orthoMatrix;
 	D3DXMATRIX lightViewMatrix, lightProjectionMatrix;
 	bool result;
 	float posX, posY, posZ;
@@ -855,6 +885,7 @@ bool GraphicsClass::Render()
 	m_Camera->GetViewMatrix(viewMatrix);
 	m_D3D->GetWorldMatrix(worldMatrix);
 	m_D3D->GetProjectionMatrix(projectionMatrix);
+	m_D3D->GetOrthoMatrix(orthoMatrix);
 
 	// Get the light's view and projection matrices from the light object.
 	//m_Light->GetProjectionMatrix(lightProjectionMatrix);
@@ -871,24 +902,13 @@ bool GraphicsClass::Render()
 
 		(*it)->Render(m_D3D->GetDeviceContext());
 
-		// Render the model using the specular map shader.
-		//result = m_ShaderManager->RenderSpecMapShader(m_D3D->GetDeviceContext(), (*it)->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
-		//		(*it)->GetTextureArray(), m_Light->GetDirection(), m_Light->GetDiffuseColor(),
-		//		m_Camera->GetPosition(), m_Light->GetSpecularColor(), m_Light->GetSpecularPower());
-
-		//if(!result)
-		//{
-		//	return false;
-		//}
-		
-		// Render the model using the shadow shader.
-		//result = m_ShaderManager->RenderSoftShadowShader(m_D3D->GetDeviceContext(), (*it)->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix, 
-  //                                      (*it)->GetTexture(), m_UpSampleTexture->GetShaderResourceView(), m_Light->GetPosition(), 
-  //                                      m_Light->GetAmbientColor(), m_Light->GetDiffuseColor());
-
 		result = m_ShaderManager->RenderSoftShadowShader(m_D3D->GetDeviceContext(), (*it)->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix, 
                                         (*it)->GetTexture(), m_UpSampleTexture->GetShaderResourceView(), m_Light->GetPosition(), 
                                         m_Light->GetAmbientColor(), m_Light->GetDiffuseColor());
+		//result = m_ShaderManager->RenderLightShader(m_D3D->GetDeviceContext(), (*it)->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix, 
+        //                               (*it)->GetTexture(), m_Light->GetDirection(), m_Light->GetAmbientColor(), m_Light->GetDiffuseColor(), 
+        //                               m_Camera->GetPosition(), m_Light->GetSpecularColor(), m_Light->GetSpecularPower());
+
 		if(!result)
 		{
 			return false;
@@ -898,9 +918,28 @@ bool GraphicsClass::Render()
 		// Reset the world matrix.
 		m_D3D->GetWorldMatrix(worldMatrix);
 	}
+
+	// Turn off the Z buffer to begin all 2D rendering.
+	m_D3D->TurnZBufferOff();
+
+	// Turn on the alpha blending before rendering the text.
+	m_D3D->TurnOnAlphaBlending();
+
+	// Render the text strings.
+	result = m_Text->Render(m_D3D->GetDeviceContext(), worldMatrix, orthoMatrix);
+	if(!result)
+	{
+		return false;
+	}
+
+	// Turn off alpha blending after rendering the text.
+	m_D3D->TurnOffAlphaBlending();
+
+	// Turn the Z buffer back on now that all 2D rendering has completed.
+	m_D3D->TurnZBufferOn();
+
 	// Present the rendered scene to the screen.
 	m_D3D->EndScene();
 	
-
 	return true;
 }

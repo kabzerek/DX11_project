@@ -9,6 +9,7 @@
 #include "RenderTextureClass.h"
 #include "DebugWindowClass.h"
 #include "OrthoWindowClass.h"
+#include "TextClass.h"
 
 #include "ShaderManagerClass.h"
 
@@ -46,10 +47,9 @@ private:
 private:
 	D3DClass* m_D3D;
 	CameraClass* m_Camera;
-	//ModelClass* m_Model;
 	std::vector<ModelClass*> m_Models;
-	//	LightShaderClass* m_LightShader;
 	LightClass* m_Light;
+	TextClass* m_Text;
 
 	ShaderManagerClass* m_ShaderManager;
 

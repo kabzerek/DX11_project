@@ -87,6 +87,8 @@
     <ClCompile Include="CameraClass.cpp" />
     <ClCompile Include="DebugWindowClass.cpp" />
     <ClCompile Include="DepthShaderClass.cpp" />
+    <ClCompile Include="FontClass.cpp" />
+    <ClCompile Include="FontShaderClass.cpp" />
     <ClCompile Include="HorizontalBlurShaderClass.cpp" />
     <ClCompile Include="LightClass.cpp" />
     <ClCompile Include="LightShaderClass.cpp" />
@@ -105,6 +107,7 @@
     <ClCompile Include="SoftShadowShaderClass.cpp" />
     <ClCompile Include="SpecMapShaderClass.cpp" />
     <ClCompile Include="SystemClass.cpp" />
+    <ClCompile Include="TextClass.cpp" />
     <ClCompile Include="TextureArrayClass.cpp" />
     <ClCompile Include="TextureClass.cpp" />
     <ClCompile Include="TextureShaderClass.cpp" />
@@ -117,6 +120,8 @@
     <ClInclude Include="CameraClass.h" />
     <ClInclude Include="DebugWindowClass.h" />
     <ClInclude Include="DepthShaderClass.h" />
+    <ClInclude Include="FontClass.h" />
+    <ClInclude Include="FontShaderClass.h" />
     <ClInclude Include="HorizontalBlurShaderClass.h" />
     <ClInclude Include="LightClass.h" />
     <ClInclude Include="LightShaderClass.h" />
@@ -135,6 +140,7 @@
     <ClInclude Include="SoftShadowShaderClass.h" />
     <ClInclude Include="SpecMapShaderClass.h" />
     <ClInclude Include="SystemClass.h" />
+    <ClInclude Include="TextClass.h" />
     <ClInclude Include="TextureArrayClass.h" />
     <ClInclude Include="TextureClass.h" />
     <ClInclude Include="TextureShaderClass.h" />
@@ -150,6 +156,8 @@
     <None Include="Color.vs" />
     <None Include="Depth.ps" />
     <None Include="Depth.vs" />
+    <None Include="Font.ps" />
+    <None Include="Font.vs" />
     <None Include="HorizontalBlur.ps" />
     <None Include="HorizontalBlur.vs" />
     <None Include="Light.ps" />
