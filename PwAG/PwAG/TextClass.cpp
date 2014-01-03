@@ -6,8 +6,11 @@ TextClass::TextClass()
 	m_Font = 0;
 	m_FontShader = 0;
 
-	m_sentence1 = 0;
-	m_sentence2 = 0;
+	for (int i = 0; i < 10; ++i)
+	{
+		m_sentences.push_back(new SentenceType());
+		m_sentences_text.push_back("");
+	}
 }
 
 
@@ -63,32 +66,23 @@ bool TextClass::Initialize(ID3D11Device* device, ID3D11DeviceContext* deviceCont
 		return false;
 	}
 
-	// Initialize the first sentence.
-	result = InitializeSentence(&m_sentence1, 16, device);
-	if(!result)
+	for (int i = 0; i < 10; ++i)
 	{
-		return false;
-	}
+		// Initialize the sentence.
+		result = InitializeSentence(&m_sentences[i], 16, device);
 
-	// Now update the sentence vertex buffer with the new string information.
-	result = UpdateSentence(m_sentence1, "Hello", 100, 100, 1.0f, 1.0f, 1.0f, deviceContext);
-	if(!result)
-	{
-		return false;
-	}
+		if(!result)
+		{
+			return false;
+		}
 
-	// Initialize the first sentence.
-	result = InitializeSentence(&m_sentence2, 16, device);
-	if(!result)
-	{
-		return false;
-	}
+		// Now update the sentence vertex buffer with the new string information.
+		result = UpdateSentence(m_sentences[i],  (char *)m_sentences_text[i].c_str(), 10, 10 + (i * 20), 1.0f, 1.0f, 1.0f, deviceContext);
 
-	// Now update the sentence vertex buffer with the new string information.
-	result = UpdateSentence(m_sentence2, "Goodbye", 100, 200, 1.0f, 1.0f, 0.0f, deviceContext);
-	if(!result)
-	{
-		return false;
+		if(!result)
+		{
+			return false;
+		}
 	}
 
 	return true;
@@ -96,11 +90,9 @@ bool TextClass::Initialize(ID3D11Device* device, ID3D11DeviceContext* deviceCont
 
 void TextClass::Shutdown()
 {
-	// Release the first sentence.
-	ReleaseSentence(&m_sentence1);
-
-	// Release the second sentence.
-	ReleaseSentence(&m_sentence2);
+	std::vector<SentenceType*>::iterator it;
+	for (it = m_sentences.begin(); it != m_sentences.end(); ++it)
+		ReleaseSentence(&(*it));
 
 	// Release the font shader object.
 	if(m_FontShader)
@@ -125,19 +117,22 @@ bool TextClass::Render(ID3D11DeviceContext* deviceContext, D3DXMATRIX worldMatri
 {
 	bool result;
 
-
-	// Draw the first sentence.
-	result = RenderSentence(deviceContext, m_sentence1, worldMatrix, orthoMatrix);
-	if(!result)
+	for (int i = 0; i < 10; ++i)
 	{
-		return false;
-	}
+		// Now update the sentence vertex buffer with the new string information.
+		result = UpdateSentence(m_sentences[i],  (char *)m_sentences_text[i].c_str(), 10, 10 + (i * 20), 1.0f, 1.0f, 1.0f, deviceContext);
 
-	// Draw the second sentence.
-	result = RenderSentence(deviceContext, m_sentence2, worldMatrix, orthoMatrix);
-	if(!result)
-	{
-		return false;
+		if(!result)
+		{
+			return false;
+		}
+
+		result = RenderSentence(deviceContext, m_sentences[i], worldMatrix, orthoMatrix);
+
+		if(!result)
+		{
+			return false;
+		}
 	}
 
 	return true;
@@ -370,4 +365,12 @@ bool TextClass::RenderSentence(ID3D11DeviceContext* deviceContext, SentenceType*
 	}
 
 	return true;
+}
+
+void TextClass::SetSentence(int i, std::string text)
+{
+	if(i > 9)
+		return;
+
+	m_sentences_text[i] = text;
 }

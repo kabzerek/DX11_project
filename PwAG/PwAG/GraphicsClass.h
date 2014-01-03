@@ -32,7 +32,10 @@ public:
 	bool Initialize(int, int, HWND);
 	void Shutdown();
 	//bool Frame(int, int);
-	bool Frame(float posX, float posY, float posZ, float rotX, float rotY, float rotZ);
+	bool Frame(float, float, float, float, float, float);
+
+	void SetSentence(int, std::string);
+
 private:
 	bool RenderSceneToTexture();
 	bool Render();

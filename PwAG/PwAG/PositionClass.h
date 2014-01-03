@@ -27,6 +27,8 @@ public:
 	void GetPosition(float&, float&, float&);
 	void GetRotation(float&, float&, float&);
 
+	void GetSpeed(float&, float&, float&, float&);
+
 	void SetFrameTime(float);
 
 	void MoveForward(bool);

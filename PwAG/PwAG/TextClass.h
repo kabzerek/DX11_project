@@ -4,6 +4,9 @@
 #include "FontClass.h"
 #include "FontShaderClass.h"
 
+#include <vector>
+#include <string>
+
 class TextClass
 {
 private:
@@ -29,6 +32,8 @@ public:
 	void Shutdown();
 	bool Render(ID3D11DeviceContext*, D3DXMATRIX, D3DXMATRIX);
 
+	void SetSentence(int, std::string);
+
 private:
 	bool InitializeSentence(SentenceType**, int, ID3D11Device*);
 	bool UpdateSentence(SentenceType*, char*, int, int, float, float, float, ID3D11DeviceContext*);
@@ -41,8 +46,8 @@ private:
 	int m_screenWidth, m_screenHeight;
 	D3DXMATRIX m_baseViewMatrix;
 
-	SentenceType* m_sentence1;
-	SentenceType* m_sentence2;
+	std::vector<SentenceType*> m_sentences;
+	std::vector<std::string> m_sentences_text;
 };
 
 #endif

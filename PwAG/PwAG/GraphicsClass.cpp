@@ -166,7 +166,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	}
 
 	// Initialize the light object.
-	//m_Light->SetAmbientColor(0.15f, 0.15f, 0.15f, 1.0f);
+	//m_Light->SetAmbientColor(0.8f, 0.8f, 0.8f, 1.0f);
 	m_Light->SetDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
 	m_Light->SetDirection(0.0f, 0.0f, 1.0f);
 	m_Light->SetSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -942,4 +942,9 @@ bool GraphicsClass::Render()
 	m_D3D->EndScene();
 	
 	return true;
+}
+
+void GraphicsClass::SetSentence(int i, std::string text)
+{
+	m_Text->SetSentence(i, text);
 }

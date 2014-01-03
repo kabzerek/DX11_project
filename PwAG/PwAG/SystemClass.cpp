@@ -203,6 +203,24 @@ bool SystemClass::Frame()
 	m_Position->GetPosition(posX, posY, posZ);
 	m_Position->GetRotation(rotX, rotY, rotZ);
 
+	// Set sentences
+	//if (rotX > 360.0f)
+	//	rotX -= 360.0f;
+	//if (rotY > 360.0f)
+	//	rotY -= 360.0f;
+	//if (rotZ > 360.0f)
+	//	rotZ -= 360.0f;
+	m_Graphics->SetSentence(0, "rotX: " + std::to_string(rotX));
+	m_Graphics->SetSentence(1, "rotY: " + std::to_string(rotY));
+	m_Graphics->SetSentence(2, "rotZ: " + std::to_string(rotZ));
+
+	float fs, bs, ls, rs;
+	m_Position->GetSpeed(fs, bs, ls, rs);
+	m_Graphics->SetSentence(3, "fs: " + std::to_string(fs));
+	m_Graphics->SetSentence(4, "bs: " + std::to_string(bs));
+	m_Graphics->SetSentence(5, "ls: " + std::to_string(ls));
+	m_Graphics->SetSentence(6, "rs: " + std::to_string(rs));
+
 	// Do the frame processing for the graphics object.
 	result = m_Graphics->Frame(posX, posY, posZ, rotX, rotY, rotZ);
 	if(!result)
