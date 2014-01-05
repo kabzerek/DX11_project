@@ -221,6 +221,10 @@ bool SystemClass::Frame()
 	m_Graphics->SetSentence(5, "ls: " + std::to_string(ls));
 	m_Graphics->SetSentence(6, "rs: " + std::to_string(rs));
 
+	m_Graphics->SetSentence(7, "posX: " + std::to_string(posX));
+	m_Graphics->SetSentence(8, "posY: " + std::to_string(posY));
+	m_Graphics->SetSentence(9, "posZ: " + std::to_string(posZ));
+
 	// Do the frame processing for the graphics object.
 	result = m_Graphics->Frame(posX, posY, posZ, rotX, rotY, rotZ);
 	if(!result)
@@ -235,6 +239,7 @@ bool SystemClass::Frame()
 bool SystemClass::HandleInput(float frameTime)
 {
 	bool keyDown;
+	bool result = true;
 
 	/****************************************
 	 * W = UpArrow		=> MoveForward		*
@@ -275,7 +280,7 @@ bool SystemClass::HandleInput(float frameTime)
 
 	//keyDown = m_Input->IsPgDownPressed();
 	//m_Position->LookDownward(keyDown);
-
+	
 	keyDown = (m_Input->IsLeftPressed() || m_Input->IsAPressed());
 	m_Position->MoveLeftward(keyDown);
 
@@ -298,8 +303,11 @@ bool SystemClass::HandleInput(float frameTime)
 	int deltaX, deltaY;
 	m_Input->GetMouseDelta(deltaX, deltaY);
 	m_Position->Turn(keyDown, deltaX, deltaY);
+
+	if(m_Input->IsRPressed())
+		result = m_Graphics->SetWireframe();
 	
-	return true;
+	return result;
 }
 
 

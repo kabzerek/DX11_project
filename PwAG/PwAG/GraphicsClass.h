@@ -33,6 +33,7 @@ public:
 	void Shutdown();
 	//bool Frame(int, int);
 	bool Frame(float, float, float, float, float, float);
+	bool SetWireframe();
 
 	void SetSentence(int, std::string);
 

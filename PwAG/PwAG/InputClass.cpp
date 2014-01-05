@@ -347,6 +347,17 @@ bool InputClass::IsZPressed()
 	return false;
 }
 
+bool InputClass::IsRPressed()
+{
+	// Do a bitwise and on the keyboard state to check if the key is currently being pressed.
+	if(m_keyboardState[DIK_R] & 0x80)
+	{
+		return true;
+	}
+
+	return false;
+}
+
 
 bool InputClass::IsPgUpPressed()
 {
