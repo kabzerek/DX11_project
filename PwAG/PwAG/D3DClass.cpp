@@ -44,14 +44,14 @@ bool D3DClass::Initialize(int screenWidth, int screenHeight, bool vsync, HWND hw
 	D3D11_TEXTURE2D_DESC depthBufferDesc;
 	D3D11_DEPTH_STENCIL_DESC depthStencilDesc;
 	D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
-	D3D11_RASTERIZER_DESC rasterDesc;
+	D3D11_RASTERIZER_DESC normalRasterDesc, wireframeRasterDesc;
 	D3D11_VIEWPORT viewport;
 	float fieldOfView, screenAspect;
 	D3D11_DEPTH_STENCIL_DESC depthDisabledStencilDesc;
 	D3D11_BLEND_DESC blendStateDescription;
 
 	// Set wireframe off by default
-	wireframe = true;
+	wireframe = false;
 	
 	// Store the vsync setting.
 	m_vsync_enabled = vsync;
@@ -310,19 +310,31 @@ bool D3DClass::Initialize(int screenWidth, int screenHeight, bool vsync, HWND hw
 	m_deviceContext->OMSetRenderTargets(1, &m_renderTargetView, m_depthStencilView);
 
 	// Setup the raster description which will determine how and what polygons will be drawn.
-	rasterDesc.AntialiasedLineEnable = false;
-	rasterDesc.CullMode = D3D11_CULL_BACK;
-	rasterDesc.DepthBias = 0;
-	rasterDesc.DepthBiasClamp = 0.0f;
-	rasterDesc.DepthClipEnable = true;
-	rasterDesc.FillMode = (wireframe ? D3D11_FILL_WIREFRAME : D3D11_FILL_SOLID);
-	rasterDesc.FrontCounterClockwise = false;
-	rasterDesc.MultisampleEnable = false;
-	rasterDesc.ScissorEnable = false;
-	rasterDesc.SlopeScaledDepthBias = 0.0f;
+	ZeroMemory(&normalRasterDesc, sizeof(D3D11_RASTERIZER_DESC));
+	normalRasterDesc.AntialiasedLineEnable = false;
+	normalRasterDesc.CullMode = D3D11_CULL_BACK;
+	normalRasterDesc.DepthBias = 0;
+	normalRasterDesc.DepthBiasClamp = 0.0f;
+	normalRasterDesc.DepthClipEnable = true;
+	normalRasterDesc.FillMode = D3D11_FILL_SOLID;
+	normalRasterDesc.FrontCounterClockwise = false;
+	normalRasterDesc.MultisampleEnable = false;
+	normalRasterDesc.ScissorEnable = false;
+	normalRasterDesc.SlopeScaledDepthBias = 0.0f;
+
+	ZeroMemory(&wireframeRasterDesc, sizeof(D3D11_RASTERIZER_DESC));
+	wireframeRasterDesc.CullMode = D3D11_CULL_NONE;
+	wireframeRasterDesc.FillMode = D3D11_FILL_WIREFRAME;
+	wireframeRasterDesc.DepthClipEnable = true;
 
 	// Create the rasterizer state from the description we just filled out.
-	result = m_device->CreateRasterizerState(&rasterDesc, &m_rasterState);
+	//result = m_device->CreateRasterizerState((wireframe ? &wireframeRasterDesc : &normalRasterDesc), &m_rasterState);
+
+	//TODO!
+	//result = m_device->CreateRasterizerState(&normalRasterDesc, &m_rasterState);
+	result = m_device->CreateRasterizerState(&wireframeRasterDesc, &m_rasterState);
+	///////
+
 	if(FAILED(result))
 	{
 		return false;

@@ -332,7 +332,8 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 			vertices[ver].normal = aiVector3DtoD3DXVector3(m_model->mMeshes[m]->mNormals[v]);
 			vertices[ver].texture = aiVector3DtoD3DXVector2(m_model->mMeshes[m]->mTextureCoords[0][v]); 
 			vertices[ver].tangent = aiVector3DtoD3DXVector3(m_model->mMeshes[m]->mTangents[v]); 
-			vertices[ver].binormal = aiVector3DtoD3DXVector3(m_model->mMeshes[m]->mBitangents[v]); 
+			vertices[ver].binormal = aiVector3DtoD3DXVector3(m_model->mMeshes[m]->mBitangents[v]);
+			vertices[ver].color = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
 			
 			ver++;
 		}
