@@ -10,7 +10,6 @@
 #include "TimerClass.h"
 #include "PositionClass.h"
 
-
 class SystemClass
 {
 public:
@@ -39,6 +38,10 @@ private:
 	GraphicsClass* m_Graphics;
 	TimerClass* m_Timer;
 	PositionClass* m_Position;
+
+	float m_TimeElapsed;
+	float m_MaxInputTestTime;
+	bool m_WFPressed;
 };
 
 static LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);

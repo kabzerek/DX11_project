@@ -7,6 +7,9 @@ SystemClass::SystemClass()
 	m_Graphics = 0;
 	m_Timer = 0;
 	m_Position = 0;
+	m_TimeElapsed = 0.0f;
+	m_MaxInputTestTime = 1.0f;
+	m_WFPressed = false;
 }
 
 
@@ -85,7 +88,8 @@ bool SystemClass::Initialize()
 	}
 
 	// Set the initial position of the viewer to the same as the initial camera position.
-	m_Position->SetPosition(0.0f, 0.0f, -20.0f);
+	m_Position->SetPosition(-20.0f, 20.0f, -30.0f);
+	m_Position->SetRotation(40.0f, 35.0f, 0.0f);
 
 	return true;
 }
@@ -304,9 +308,23 @@ bool SystemClass::HandleInput(float frameTime)
 	m_Input->GetMouseDelta(deltaX, deltaY);
 	m_Position->Turn(keyDown, deltaX, deltaY);
 
-	if(m_Input->IsRPressed())
-		result = m_Graphics->SetWireframe();
-	
+	m_TimeElapsed += frameTime * 0.001f;
+	if(m_TimeElapsed >= (m_MaxInputTestTime * 0.1f))
+	{
+		if(m_Input->IsRPressed())
+		{
+			m_WFPressed = true;
+		}
+	}
+	if(m_TimeElapsed >= m_MaxInputTestTime)
+	{
+		if(m_WFPressed)
+			result = m_Graphics->SetWireframe();
+
+		m_TimeElapsed = 0.0f;
+		m_WFPressed = false;
+	}
+
 	return result;
 }
 
