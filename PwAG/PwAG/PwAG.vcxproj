@@ -53,6 +53,7 @@
       <Optimization>Disabled</Optimization>
       <CompileAsManaged>
       </CompileAsManaged>
+      <AdditionalIncludeDirectories>..\PwAG\BulletBuild\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -70,6 +71,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <CompileAsManaged>
       </CompileAsManaged>
+      <AdditionalIncludeDirectories>..\PwAG\BulletBuild\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -174,6 +176,17 @@
     <None Include="Texture.vs" />
     <None Include="VerticalBlur.ps" />
     <None Include="VerticalBlur.vs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BulletBuild\src\BulletCollision\BulletCollision.vcxproj">
+      <Project>{0885f281-b8ba-40a2-98b3-c5bdb75f875a}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\BulletBuild\src\BulletDynamics\BulletDynamics.vcxproj">
+      <Project>{a4b8bb18-cbe6-4271-8fe8-f35d7ae26fef}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\BulletBuild\src\LinearMath\LinearMath.vcxproj">
+      <Project>{2074b271-9188-4c0f-b5c3-998a4a1ad1b8}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

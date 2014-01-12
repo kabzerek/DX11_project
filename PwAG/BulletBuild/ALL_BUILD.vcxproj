@@ -1,0 +1,412 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|Win32">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|Win32">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGUID>{E3E5610F-AE49-480E-AA09-FDB3997E1DFA}</ProjectGUID>
+    <Keyword>Win32Proj</Keyword>
+    <Platform>Win32</Platform>
+    <ProjectName>ALL_BUILD</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+    <PropertyGroup>
+      <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+      <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+      <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+      <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+      <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Midl>
+      <AdditionalIncludeDirectories>C:/GitRepo/DX11_project/bullet-2.82-r2704/Glut;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Midl>
+      <AdditionalIncludeDirectories>C:/GitRepo/DX11_project/bullet-2.82-r2704/Glut;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">
+    <Midl>
+      <AdditionalIncludeDirectories>C:/GitRepo/DX11_project/bullet-2.82-r2704/Glut;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">
+    <Midl>
+      <AdditionalIncludeDirectories>C:/GitRepo/DX11_project/bullet-2.82-r2704/Glut;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\GitRepo\DX11_project\bullet-2.82-r2704\CMakeLists.txt">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Building Custom Rule C:/GitRepo/DX11_project/bullet-2.82-r2704/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
+"C:\Utils\CMake 2.8\bin\cmake.exe" -HC:/GitRepo/DX11_project/bullet-2.82-r2704 -BC:/GitRepo/DX11_project/PwAG/BulletBuild --check-stamp-file C:\GitRepo\DX11_project\PwAG\BulletBuild\CMakeFiles\generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:/GitRepo/DX11_project/bullet-2.82-r2704/CMakeLists.txt;C:\GitRepo\DX11_project\bullet-2.82-r2704\CMakeLists.txt;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeVS11FindMake.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineSystem.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeSystem.cmake.in;C:\GitRepo\DX11_project\PwAG\BulletBuild\CMakeFiles\2.8.12.1\CMakeSystem.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCCompiler.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCompiler.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCompilerId.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CompilerId\VS-10.vcxproj.in;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeClDeps.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeFindBinUtils.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeCCompiler.cmake.in;C:\GitRepo\DX11_project\PwAG\BulletBuild\CMakeFiles\2.8.12.1\CMakeCCompiler.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCXXCompiler.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCompiler.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows-CXX.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCompilerId.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CompilerId\VS-10.vcxproj.in;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeClDeps.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeFindBinUtils.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeCXXCompiler.cmake.in;C:\GitRepo\DX11_project\PwAG\BulletBuild\CMakeFiles\2.8.12.1\CMakeCXXCompiler.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeSystemSpecificInformation.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeGenericSystem.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\Platform\WindowsPaths.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeCInformation.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows-MSVC-C.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows-MSVC.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineRCCompiler.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeRCCompiler.cmake.in;C:\GitRepo\DX11_project\PwAG\BulletBuild\CMakeFiles\2.8.12.1\CMakeRCCompiler.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeRCInformation.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeTestRCCompiler.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeCommonLanguageInclude.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeTestCCompiler.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeTestCompilerCommon.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCompilerABI.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeParseImplicitLinkInfo.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeCCompilerABI.c;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeCCompiler.cmake.in;C:\GitRepo\DX11_project\PwAG\BulletBuild\CMakeFiles\2.8.12.1\CMakeCCompiler.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeCXXInformation.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows-MSVC.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeCommonLanguageInclude.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeTestCXXCompiler.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeTestCompilerCommon.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCompilerABI.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeParseImplicitLinkInfo.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeCXXCompilerABI.cpp;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeCXXCompiler.cmake.in;C:\GitRepo\DX11_project\PwAG\BulletBuild\CMakeFiles\2.8.12.1\CMakeCXXCompiler.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\FindOpenGL.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\FindPackageHandleStandardArgs.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\FindPackageMessage.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeParseArguments.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\FindGLU.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\FindOpenGL.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\FindPackageHandleStandardArgs.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\FindPackageMessage.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeParseArguments.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\FindGLUT.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\FindPackageHandleStandardArgs.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\FindPackageMessage.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeParseArguments.cmake;C:\GitRepo\DX11_project\bullet-2.82-r2704\BulletConfig.cmake.in;C:\GitRepo\DX11_project\bullet-2.82-r2704\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\GitRepo\DX11_project\PwAG\BulletBuild\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Building Custom Rule C:/GitRepo/DX11_project/bullet-2.82-r2704/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
+"C:\Utils\CMake 2.8\bin\cmake.exe" -HC:/GitRepo/DX11_project/bullet-2.82-r2704 -BC:/GitRepo/DX11_project/PwAG/BulletBuild --check-stamp-file C:\GitRepo\DX11_project\PwAG\BulletBuild\CMakeFiles\generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:/GitRepo/DX11_project/bullet-2.82-r2704/CMakeLists.txt;C:\GitRepo\DX11_project\bullet-2.82-r2704\CMakeLists.txt;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeVS11FindMake.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineSystem.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeSystem.cmake.in;C:\GitRepo\DX11_project\PwAG\BulletBuild\CMakeFiles\2.8.12.1\CMakeSystem.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCCompiler.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCompiler.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCompilerId.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CompilerId\VS-10.vcxproj.in;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeClDeps.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeFindBinUtils.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeCCompiler.cmake.in;C:\GitRepo\DX11_project\PwAG\BulletBuild\CMakeFiles\2.8.12.1\CMakeCCompiler.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCXXCompiler.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCompiler.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows-CXX.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCompilerId.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CompilerId\VS-10.vcxproj.in;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeClDeps.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeFindBinUtils.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeCXXCompiler.cmake.in;C:\GitRepo\DX11_project\PwAG\BulletBuild\CMakeFiles\2.8.12.1\CMakeCXXCompiler.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeSystemSpecificInformation.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeGenericSystem.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\Platform\WindowsPaths.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeCInformation.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows-MSVC-C.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows-MSVC.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineRCCompiler.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeRCCompiler.cmake.in;C:\GitRepo\DX11_project\PwAG\BulletBuild\CMakeFiles\2.8.12.1\CMakeRCCompiler.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeRCInformation.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeTestRCCompiler.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeCommonLanguageInclude.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeTestCCompiler.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeTestCompilerCommon.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCompilerABI.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeParseImplicitLinkInfo.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeCCompilerABI.c;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeCCompiler.cmake.in;C:\GitRepo\DX11_project\PwAG\BulletBuild\CMakeFiles\2.8.12.1\CMakeCCompiler.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeCXXInformation.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows-MSVC.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeCommonLanguageInclude.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeTestCXXCompiler.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeTestCompilerCommon.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCompilerABI.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeParseImplicitLinkInfo.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeCXXCompilerABI.cpp;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeCXXCompiler.cmake.in;C:\GitRepo\DX11_project\PwAG\BulletBuild\CMakeFiles\2.8.12.1\CMakeCXXCompiler.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\FindOpenGL.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\FindPackageHandleStandardArgs.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\FindPackageMessage.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeParseArguments.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\FindGLU.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\FindOpenGL.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\FindPackageHandleStandardArgs.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\FindPackageMessage.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeParseArguments.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\FindGLUT.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\FindPackageHandleStandardArgs.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\FindPackageMessage.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeParseArguments.cmake;C:\GitRepo\DX11_project\bullet-2.82-r2704\BulletConfig.cmake.in;C:\GitRepo\DX11_project\bullet-2.82-r2704\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\GitRepo\DX11_project\PwAG\BulletBuild\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Building Custom Rule C:/GitRepo/DX11_project/bullet-2.82-r2704/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
+"C:\Utils\CMake 2.8\bin\cmake.exe" -HC:/GitRepo/DX11_project/bullet-2.82-r2704 -BC:/GitRepo/DX11_project/PwAG/BulletBuild --check-stamp-file C:\GitRepo\DX11_project\PwAG\BulletBuild\CMakeFiles\generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">C:/GitRepo/DX11_project/bullet-2.82-r2704/CMakeLists.txt;C:\GitRepo\DX11_project\bullet-2.82-r2704\CMakeLists.txt;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeVS11FindMake.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineSystem.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeSystem.cmake.in;C:\GitRepo\DX11_project\PwAG\BulletBuild\CMakeFiles\2.8.12.1\CMakeSystem.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCCompiler.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCompiler.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCompilerId.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CompilerId\VS-10.vcxproj.in;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeClDeps.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeFindBinUtils.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeCCompiler.cmake.in;C:\GitRepo\DX11_project\PwAG\BulletBuild\CMakeFiles\2.8.12.1\CMakeCCompiler.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCXXCompiler.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCompiler.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows-CXX.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCompilerId.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CompilerId\VS-10.vcxproj.in;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeClDeps.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeFindBinUtils.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeCXXCompiler.cmake.in;C:\GitRepo\DX11_project\PwAG\BulletBuild\CMakeFiles\2.8.12.1\CMakeCXXCompiler.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeSystemSpecificInformation.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeGenericSystem.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\Platform\WindowsPaths.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeCInformation.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows-MSVC-C.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows-MSVC.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineRCCompiler.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeRCCompiler.cmake.in;C:\GitRepo\DX11_project\PwAG\BulletBuild\CMakeFiles\2.8.12.1\CMakeRCCompiler.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeRCInformation.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeTestRCCompiler.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeCommonLanguageInclude.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeTestCCompiler.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeTestCompilerCommon.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCompilerABI.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeParseImplicitLinkInfo.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeCCompilerABI.c;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeCCompiler.cmake.in;C:\GitRepo\DX11_project\PwAG\BulletBuild\CMakeFiles\2.8.12.1\CMakeCCompiler.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeCXXInformation.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows-MSVC.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeCommonLanguageInclude.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeTestCXXCompiler.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeTestCompilerCommon.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCompilerABI.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeParseImplicitLinkInfo.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeCXXCompilerABI.cpp;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeCXXCompiler.cmake.in;C:\GitRepo\DX11_project\PwAG\BulletBuild\CMakeFiles\2.8.12.1\CMakeCXXCompiler.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\FindOpenGL.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\FindPackageHandleStandardArgs.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\FindPackageMessage.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeParseArguments.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\FindGLU.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\FindOpenGL.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\FindPackageHandleStandardArgs.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\FindPackageMessage.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeParseArguments.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\FindGLUT.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\FindPackageHandleStandardArgs.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\FindPackageMessage.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeParseArguments.cmake;C:\GitRepo\DX11_project\bullet-2.82-r2704\BulletConfig.cmake.in;C:\GitRepo\DX11_project\bullet-2.82-r2704\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">C:\GitRepo\DX11_project\PwAG\BulletBuild\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Building Custom Rule C:/GitRepo/DX11_project/bullet-2.82-r2704/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
+"C:\Utils\CMake 2.8\bin\cmake.exe" -HC:/GitRepo/DX11_project/bullet-2.82-r2704 -BC:/GitRepo/DX11_project/PwAG/BulletBuild --check-stamp-file C:\GitRepo\DX11_project\PwAG\BulletBuild\CMakeFiles\generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">C:/GitRepo/DX11_project/bullet-2.82-r2704/CMakeLists.txt;C:\GitRepo\DX11_project\bullet-2.82-r2704\CMakeLists.txt;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeVS11FindMake.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineSystem.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeSystem.cmake.in;C:\GitRepo\DX11_project\PwAG\BulletBuild\CMakeFiles\2.8.12.1\CMakeSystem.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCCompiler.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCompiler.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCompilerId.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CompilerId\VS-10.vcxproj.in;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeClDeps.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeFindBinUtils.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeCCompiler.cmake.in;C:\GitRepo\DX11_project\PwAG\BulletBuild\CMakeFiles\2.8.12.1\CMakeCCompiler.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCXXCompiler.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCompiler.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows-CXX.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCompilerId.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CompilerId\VS-10.vcxproj.in;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeClDeps.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeFindBinUtils.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeCXXCompiler.cmake.in;C:\GitRepo\DX11_project\PwAG\BulletBuild\CMakeFiles\2.8.12.1\CMakeCXXCompiler.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeSystemSpecificInformation.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeGenericSystem.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\Platform\WindowsPaths.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeCInformation.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows-MSVC-C.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows-MSVC.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineRCCompiler.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeRCCompiler.cmake.in;C:\GitRepo\DX11_project\PwAG\BulletBuild\CMakeFiles\2.8.12.1\CMakeRCCompiler.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeRCInformation.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeTestRCCompiler.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeCommonLanguageInclude.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeTestCCompiler.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeTestCompilerCommon.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCompilerABI.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeParseImplicitLinkInfo.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeCCompilerABI.c;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeCCompiler.cmake.in;C:\GitRepo\DX11_project\PwAG\BulletBuild\CMakeFiles\2.8.12.1\CMakeCCompiler.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeCXXInformation.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows-MSVC.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeCommonLanguageInclude.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeTestCXXCompiler.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeTestCompilerCommon.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCompilerABI.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeParseImplicitLinkInfo.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeCXXCompilerABI.cpp;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeCXXCompiler.cmake.in;C:\GitRepo\DX11_project\PwAG\BulletBuild\CMakeFiles\2.8.12.1\CMakeCXXCompiler.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\FindOpenGL.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\FindPackageHandleStandardArgs.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\FindPackageMessage.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeParseArguments.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\FindGLU.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\FindOpenGL.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\FindPackageHandleStandardArgs.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\FindPackageMessage.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeParseArguments.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\FindGLUT.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\FindPackageHandleStandardArgs.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\FindPackageMessage.cmake;C:\Utils\CMake 2.8\share\cmake-2.8\Modules\CMakeParseArguments.cmake;C:\GitRepo\DX11_project\bullet-2.82-r2704\BulletConfig.cmake.in;C:\GitRepo\DX11_project\bullet-2.82-r2704\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">C:\GitRepo\DX11_project\PwAG\BulletBuild\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="CMakeFiles\728e9f4b43af2edabe993dce9a99dd81\ALL_BUILD.rule">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Build all projects</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:/GitRepo/DX11_project/PwAG/BulletBuild/CMakeFiles/728e9f4b43af2edabe993dce9a99dd81/ALL_BUILD.rule;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\GitRepo\DX11_project\PwAG\BulletBuild\CMakeFiles\ALL_BUILD</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Build all projects</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:/GitRepo/DX11_project/PwAG/BulletBuild/CMakeFiles/728e9f4b43af2edabe993dce9a99dd81/ALL_BUILD.rule;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\GitRepo\DX11_project\PwAG\BulletBuild\CMakeFiles\ALL_BUILD</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Build all projects</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">C:/GitRepo/DX11_project/PwAG/BulletBuild/CMakeFiles/728e9f4b43af2edabe993dce9a99dd81/ALL_BUILD.rule;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">C:\GitRepo\DX11_project\PwAG\BulletBuild\CMakeFiles\ALL_BUILD</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Build all projects</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">C:/GitRepo/DX11_project/PwAG/BulletBuild/CMakeFiles/728e9f4b43af2edabe993dce9a99dd81/ALL_BUILD.rule;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">C:\GitRepo\DX11_project\PwAG\BulletBuild\CMakeFiles\ALL_BUILD</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CMakeFiles\ALL_BUILD" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/Demos/AllBulletDemos/AppAllBulletDemos.vcxproj">
+      <Project>E7C75B03-6ADC-413D-8207-C80CC5C4DF6D</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/Demos/BasicDemo/AppBasicDemo.vcxproj">
+      <Project>3D8C92C2-8FD9-442C-8F07-C1BF409B4764</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/Demos/Benchmarks/AppBenchmarks.vcxproj">
+      <Project>C14D38BF-5475-4AB0-B000-2F879E5DF8F8</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/Demos/Box2dDemo/AppBox2dDemo.vcxproj">
+      <Project>9C7CDA30-72F0-4E67-BD48-7C23DE54F017</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/Demos/BspDemo/AppBspPhysicsDemo.vcxproj">
+      <Project>390CF5BF-2238-4A83-B730-FE29C02AFD23</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/Demos/BulletXmlImportDemo/AppBulletXmlImportDemo.vcxproj">
+      <Project>BB5942FF-B7C6-47EC-B5BA-C344AEC70560</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/Demos/CcdPhysicsDemo/AppCcdPhysicsDemo.vcxproj">
+      <Project>0FEEC689-132A-40CD-9D9C-033693BA9780</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/Demos/CharacterDemo/AppCharacterDemo.vcxproj">
+      <Project>136000E0-4BDA-427D-97A9-D82BB2424688</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/Demos/CollisionDemo/AppCollisionDemo.vcxproj">
+      <Project>024BB7DC-B787-4A4B-B8AB-27B3313DBC51</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/Demos/CollisionInterfaceDemo/AppCollisionInterfaceDemo.vcxproj">
+      <Project>03966C42-FF6A-46D2-9D15-96366E065DA2</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/Demos/ConcaveConvexcastDemo/AppConcaveConvexCastDemo.vcxproj">
+      <Project>4E1B20C2-6E2C-4954-9F01-4577EC0D9216</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/Demos/ConcaveDemo/AppConcaveDemo.vcxproj">
+      <Project>EA97D9A7-6671-4E9B-A2CE-AFAF56079507</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/Demos/ConcaveRaycastDemo/AppConcaveRayCastDemo.vcxproj">
+      <Project>3B930627-F2D7-43A1-B6DC-FBFC01FB6CE5</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/Demos/ConstraintDemo/AppConstraintDemo.vcxproj">
+      <Project>ADF03EC9-BEF7-4FEA-BB65-C84FAAD4CFB0</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/Demos/ContinuousConvexCollision/AppContinuousConvexCollisionDemo.vcxproj">
+      <Project>31C86FFE-CCB0-4327-84D3-5F01D175B0B8</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/Demos/ConvexDecompositionDemo/AppConvexDecompositionDemo.vcxproj">
+      <Project>9B72DC1D-D027-40CA-B536-65169391999B</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/Demos/ConvexHullDistance/AppConvexHullDistanceDemo.vcxproj">
+      <Project>92F9DD8E-AB87-4EA9-B987-BA9EC917509B</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/Demos/DX11ClothDemo/AppDX11ClothDemo.vcxproj">
+      <Project>342C01AC-AB93-4F9A-A1E5-29F22E3FF3CC</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/Demos/DoublePrecisionDemo/AppDoublePrecisionDemo.vcxproj">
+      <Project>D0C53148-256F-49ED-B2D6-811F5E8D49AC</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/Demos/FeatherstoneMultiBodyDemo/AppFeatherstoneMultiBodyDemo.vcxproj">
+      <Project>A4EC4191-1E99-44FA-B9A2-A50F412F479A</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/Demos/ForkLiftDemo/AppForkLiftDemo.vcxproj">
+      <Project>75D093A9-6606-46C8-BD51-FA036EB69292</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/Demos/FractureDemo/AppFractureDemo.vcxproj">
+      <Project>691996F2-75B9-4AA1-8326-7E9BF69D4120</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/Demos/GenericJointDemo/AppGenericJointDemo.vcxproj">
+      <Project>97384A7B-EC0F-45D2-9C96-C48279BAE653</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/Demos/GyroscopicDemo/AppGyroscopicDemo.vcxproj">
+      <Project>9559F12B-BC1A-42E1-8C5B-9794A32F0EBB</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/Demos/HelloWorld/AppHelloWorld.vcxproj">
+      <Project>609FD184-2B12-4C5B-8E24-EF92F814C633</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/Demos/InternalEdgeDemo/AppInternalEdgeDemo.vcxproj">
+      <Project>6D9E7EE6-8C1A-4400-A76F-9ACDED258F4D</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/Demos/GjkConvexCastDemo/AppLinearConvexCastDemo.vcxproj">
+      <Project>5040842B-EFA5-48A3-9883-4CE7990041EA</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/Demos/DynamicControlDemo/AppMotorDemo.vcxproj">
+      <Project>AB1A2524-1667-4201-8069-53785054DF05</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/Demos/MovingConcaveDemo/AppMovingConcaveDemo.vcxproj">
+      <Project>92CF886B-7872-4B47-9393-B3D199331CA5</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/Demos/MultiMaterialDemo/AppMultiMaterialDemo.vcxproj">
+      <Project>9AC86D3C-33C8-4188-AF78-7856BA983A60</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/Demos/MultiThreadedDemo/AppMultiThreadedDemo.vcxproj">
+      <Project>806077A9-F816-4425-96F7-29A41DCC7078</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/Demos/OpenCLClothDemo/MiniCL/AppOpenCLClothDemo_Mini.vcxproj">
+      <Project>189C4CB8-FCC8-41BC-86D9-2E04DC77F2BA</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/Demos/OpenCLClothDemo/NVidia/AppOpenCLClothDemo_NVidia.vcxproj">
+      <Project>A4707AE6-600B-41B9-8DF4-4CE78355BE65</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/Demos/RagdollDemo/AppRagdollDemo.vcxproj">
+      <Project>6A678937-D932-446D-B61F-344FEAB1CF77</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/Demos/RaytestDemo/AppRaytestDemo.vcxproj">
+      <Project>9244CFE2-F8C5-4A30-8DEB-A4AB80E2FA33</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/Demos/Raytracer/AppRaytracer.vcxproj">
+      <Project>C9FB2A58-4B4D-407D-9B48-99BDD0CB576E</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/Demos/RollingFrictionDemo/AppRollingFrictionDemo.vcxproj">
+      <Project>540D32CB-A729-41AB-BFCD-2C0682C6A1E4</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/Demos/SerializeDemo/AppSerializeDemo.vcxproj">
+      <Project>0BD4C75B-1F87-4B99-BBD9-3F47579654BE</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/Demos/SimplexDemo/AppSimplexDemo.vcxproj">
+      <Project>AC431BA6-6A8B-45D3-B40C-7FBD8541E3C2</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/Demos/SliderConstraintDemo/AppSliderConstraintDemo.vcxproj">
+      <Project>1876E9B7-0069-4490-AA63-5D1AAA03AFAF</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/Demos/SoftDemo/AppSoftBodyDemo.vcxproj">
+      <Project>EDF0BF0F-F04A-4D46-B285-22EDD750340C</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/Demos/ThreadingDemo/AppThreadingDemo.vcxproj">
+      <Project>F9F3D0D2-F3AA-4DD5-9790-B5C3B32D0270</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/Demos/UserCollisionAlgorithm/AppUserCollisionAlgorithm.vcxproj">
+      <Project>E64382DD-09E9-402B-A620-EC853A7C225B</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/Demos/VectorAdd_OpenCL/MiniCL/AppVectorAdd_Mini.vcxproj">
+      <Project>C6795C7B-2D4D-4C1D-A1A2-4EC60960B7E1</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/Demos/VectorAdd_OpenCL/NVidia/AppVectorAdd_NVidia.vcxproj">
+      <Project>86AC22F9-36BD-4F76-8EA8-3039BB355238</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/Demos/VehicleDemo/AppVehicleDemo.vcxproj">
+      <Project>6E490FB3-E379-4F49-B9C3-6E5471B0F578</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/Demos/VoronoiFractureDemo/AppVoronoiFractureDemo.vcxproj">
+      <Project>B57D3033-8DFE-4EF8-B894-5348DEDCA590</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/src/BulletCollision/BulletCollision.vcxproj">
+      <Project>0885F281-B8BA-40A2-98B3-C5BDB75F875A</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/src/BulletDynamics/BulletDynamics.vcxproj">
+      <Project>A4B8BB18-CBE6-4271-8FE8-F35D7AE26FEF</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/Extras/Serialize/BulletFileLoader/BulletFileLoader.vcxproj">
+      <Project>89C26680-A5AF-469C-9683-6061B203839E</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/src/BulletMultiThreaded/BulletMultiThreaded.vcxproj">
+      <Project>A500C828-9EBF-4D19-90A9-D27DD066C65B</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/src/BulletSoftBody/BulletSoftBody.vcxproj">
+      <Project>B720800A-F5F5-4820-A9A9-D6A03D95EE40</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/src/BulletMultiThreaded/GpuSoftBodySolvers/DX11/BulletSoftBodySolvers_DX11.vcxproj">
+      <Project>9237F496-650D-4D57-BC48-3428F3F6CA94</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/src/BulletMultiThreaded/GpuSoftBodySolvers/OpenCL/MiniCL/BulletSoftBodySolvers_OpenCL_Mini.vcxproj">
+      <Project>1F574448-A105-4144-8FFF-99A5EF493A38</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/src/BulletMultiThreaded/GpuSoftBodySolvers/OpenCL/NVidia/BulletSoftBodySolvers_OpenCL_NVidia.vcxproj">
+      <Project>B096BA2B-2D2B-4EC1-918B-81F09ACB17A9</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/Extras/Serialize/BulletWorldImporter/BulletWorldImporter.vcxproj">
+      <Project>397D383D-C7E4-42D2-B291-CB112E8EB65F</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/Extras/Serialize/BulletXmlWorldImporter/BulletXmlWorldImporter.vcxproj">
+      <Project>13E19AA1-8C70-441F-B365-CEE27C9AED88</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/Extras/ConvexDecomposition/ConvexDecomposition.vcxproj">
+      <Project>A9ABD516-01F3-40BE-AE1B-60D54D6770B2</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/Extras/GIMPACTUtils/GIMPACTUtils.vcxproj">
+      <Project>014ED593-1F66-4CBB-8D37-0B15CE1EBD74</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/Extras/glui/GLUI.vcxproj">
+      <Project>AFFFA3A9-7624-45A5-86C0-93E9E068A820</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/Extras/HACD/HACD.vcxproj">
+      <Project>FCA8FAE9-7F53-4E46-8AB2-C8C54689A17E</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/src/LinearMath/LinearMath.vcxproj">
+      <Project>2074B271-9188-4C0F-B5C3-998A4A1AD1B8</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/src/MiniCL/MiniCL.vcxproj">
+      <Project>C0B1D606-B4FD-40A9-9DD4-D269963203BA</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/Demos/OpenGL/OpenGLSupport.vcxproj">
+      <Project>53772ADD-7951-45EA-B859-A0DE6E35FB18</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/GitRepo/DX11_project/PwAG/BulletBuild/ZERO_CHECK.vcxproj">
+      <Project>16C7E0FF-83F0-4C47-9419-EA077086D7CE</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

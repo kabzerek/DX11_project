@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\GitRepo\DX11_project\bullet-2.82-r2704\src\BulletMultiThreaded\GpuSoftBodySolvers\DX11\btSoftBodySolver_DX11.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\GitRepo\DX11_project\bullet-2.82-r2704\src\BulletMultiThreaded\GpuSoftBodySolvers\DX11\btSoftBodySolver_DX11SIMDAware.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\GitRepo\DX11_project\bullet-2.82-r2704\src\BulletMultiThreaded\GpuSoftBodySolvers\DX11\btSoftBodySolver_DX11.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\GitRepo\DX11_project\bullet-2.82-r2704\src\BulletMultiThreaded\GpuSoftBodySolvers\DX11\btSoftBodySolver_DX11SIMDAware.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\GitRepo\DX11_project\bullet-2.82-r2704\src\BulletMultiThreaded\GpuSoftBodySolvers\Shared\btSoftBodySolverData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\GitRepo\DX11_project\bullet-2.82-r2704\src\BulletMultiThreaded\GpuSoftBodySolvers\DX11\btSoftBodySolverVertexData_DX11.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\GitRepo\DX11_project\bullet-2.82-r2704\src\BulletMultiThreaded\GpuSoftBodySolvers\DX11\btSoftBodySolverTriangleData_DX11.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\GitRepo\DX11_project\bullet-2.82-r2704\src\BulletMultiThreaded\GpuSoftBodySolvers\DX11\btSoftBodySolverLinkData_DX11.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\GitRepo\DX11_project\bullet-2.82-r2704\src\BulletMultiThreaded\GpuSoftBodySolvers\DX11\btSoftBodySolverLinkData_DX11SIMDAware.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\GitRepo\DX11_project\bullet-2.82-r2704\src\BulletMultiThreaded\GpuSoftBodySolvers\DX11\btSoftBodySolverBuffer_DX11.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\GitRepo\DX11_project\bullet-2.82-r2704\src\BulletMultiThreaded\GpuSoftBodySolvers\DX11\btSoftBodySolverVertexBuffer_DX11.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\GitRepo\DX11_project\bullet-2.82-r2704\src\BulletMultiThreaded\GpuSoftBodySolvers\DX11\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="C:\GitRepo\DX11_project\bullet-2.82-r2704\src\BulletMultiThreaded\GpuSoftBodySolvers\DX11\HLSL\OutputToVertexArray.hlsl" />
+    <None Include="C:\GitRepo\DX11_project\bullet-2.82-r2704\src\BulletMultiThreaded\GpuSoftBodySolvers\DX11\HLSL\UpdateNormals.hlsl" />
+    <None Include="C:\GitRepo\DX11_project\bullet-2.82-r2704\src\BulletMultiThreaded\GpuSoftBodySolvers\DX11\HLSL\Integrate.hlsl" />
+    <None Include="C:\GitRepo\DX11_project\bullet-2.82-r2704\src\BulletMultiThreaded\GpuSoftBodySolvers\DX11\HLSL\UpdatePositions.hlsl" />
+    <None Include="C:\GitRepo\DX11_project\bullet-2.82-r2704\src\BulletMultiThreaded\GpuSoftBodySolvers\DX11\HLSL\UpdateNodes.hlsl" />
+    <None Include="C:\GitRepo\DX11_project\bullet-2.82-r2704\src\BulletMultiThreaded\GpuSoftBodySolvers\DX11\HLSL\ComputeBounds.hlsl" />
+    <None Include="C:\GitRepo\DX11_project\bullet-2.82-r2704\src\BulletMultiThreaded\GpuSoftBodySolvers\DX11\HLSL\SolvePositions.hlsl" />
+    <None Include="C:\GitRepo\DX11_project\bullet-2.82-r2704\src\BulletMultiThreaded\GpuSoftBodySolvers\DX11\HLSL\SolvePositionsSIMDBatched.hlsl" />
+    <None Include="C:\GitRepo\DX11_project\bullet-2.82-r2704\src\BulletMultiThreaded\GpuSoftBodySolvers\DX11\HLSL\solveCollisionsAndUpdateVelocities.hlsl" />
+    <None Include="C:\GitRepo\DX11_project\bullet-2.82-r2704\src\BulletMultiThreaded\GpuSoftBodySolvers\DX11\HLSL\solveCollisionsAndUpdateVelocitiesSIMDBatched.hlsl" />
+    <None Include="C:\GitRepo\DX11_project\bullet-2.82-r2704\src\BulletMultiThreaded\GpuSoftBodySolvers\DX11\HLSL\UpdatePositionsFromVelocities.hlsl" />
+    <None Include="C:\GitRepo\DX11_project\bullet-2.82-r2704\src\BulletMultiThreaded\GpuSoftBodySolvers\DX11\HLSL\ApplyForces.hlsl" />
+    <None Include="C:\GitRepo\DX11_project\bullet-2.82-r2704\src\BulletMultiThreaded\GpuSoftBodySolvers\DX11\HLSL\PrepareLinks.hlsl" />
+    <None Include="C:\GitRepo\DX11_project\bullet-2.82-r2704\src\BulletMultiThreaded\GpuSoftBodySolvers\DX11\HLSL\VSolveLinks.hlsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{54B38FE4-A718-46C8-904B-BEF3F5FE3CEE}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{E8BE8168-2B8D-4B33-B309-6BFC4A229E46}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

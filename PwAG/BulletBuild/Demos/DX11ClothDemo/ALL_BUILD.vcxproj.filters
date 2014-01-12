@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\GitRepo\DX11_project\bullet-2.82-r2704\Demos\DX11ClothDemo\CMakeLists.txt" />
+    <CustomBuild Include="..\..\CMakeFiles\201804269a987688ed8cc54a0de97255\ALL_BUILD.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CMakeFiles\ALL_BUILD" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{F626FC25-7FA9-49EC-97FE-2CCF9F51DD2D}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\GitRepo\DX11_project\bullet-2.82-r2704\Demos\CcdPhysicsDemo\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\GitRepo\DX11_project\bullet-2.82-r2704\Demos\CcdPhysicsDemo\CcdPhysicsDemo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\GitRepo\DX11_project\bullet-2.82-r2704\Demos\CcdPhysicsDemo\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="C:\GitRepo\DX11_project\bullet-2.82-r2704\build\bullet.rc">
+      <Filter>Source Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{54B38FE4-A718-46C8-904B-BEF3F5FE3CEE}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

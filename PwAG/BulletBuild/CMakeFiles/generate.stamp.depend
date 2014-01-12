@@ -1,0 +1,68 @@
+# CMake generation dependency list for this directory.
+C:/GitRepo/DX11_project/bullet-2.82-r2704/CMakeLists.txt
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/CMakeVS11FindMake.cmake
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/CMakeDetermineSystem.cmake
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/CMakeSystem.cmake.in
+C:/GitRepo/DX11_project/PwAG/BulletBuild/CMakeFiles/2.8.12.1/CMakeSystem.cmake
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/CMakeDetermineCCompiler.cmake
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/CMakeDetermineCompiler.cmake
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/CMakeDetermineCompilerId.cmake
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/CompilerId/VS-10.vcxproj.in
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/CMakeClDeps.cmake
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/CMakeFindBinUtils.cmake
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/CMakeCCompiler.cmake.in
+C:/GitRepo/DX11_project/PwAG/BulletBuild/CMakeFiles/2.8.12.1/CMakeCCompiler.cmake
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/CMakeDetermineCXXCompiler.cmake
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/CMakeDetermineCompiler.cmake
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/Platform/Windows-CXX.cmake
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/CMakeDetermineCompilerId.cmake
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/CompilerId/VS-10.vcxproj.in
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/CMakeClDeps.cmake
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/CMakeFindBinUtils.cmake
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/CMakeCXXCompiler.cmake.in
+C:/GitRepo/DX11_project/PwAG/BulletBuild/CMakeFiles/2.8.12.1/CMakeCXXCompiler.cmake
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/CMakeSystemSpecificInformation.cmake
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/CMakeGenericSystem.cmake
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/Platform/Windows.cmake
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/Platform/WindowsPaths.cmake
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/CMakeCInformation.cmake
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/Platform/Windows-MSVC-C.cmake
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/Platform/Windows-MSVC.cmake
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/CMakeDetermineRCCompiler.cmake
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/CMakeRCCompiler.cmake.in
+C:/GitRepo/DX11_project/PwAG/BulletBuild/CMakeFiles/2.8.12.1/CMakeRCCompiler.cmake
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/CMakeRCInformation.cmake
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/CMakeTestRCCompiler.cmake
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/CMakeCommonLanguageInclude.cmake
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/CMakeTestCCompiler.cmake
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/CMakeTestCompilerCommon.cmake
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/CMakeDetermineCompilerABI.cmake
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/CMakeParseImplicitLinkInfo.cmake
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/CMakeCCompilerABI.c
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/CMakeCCompiler.cmake.in
+C:/GitRepo/DX11_project/PwAG/BulletBuild/CMakeFiles/2.8.12.1/CMakeCCompiler.cmake
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/CMakeCXXInformation.cmake
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/Platform/Windows-MSVC-CXX.cmake
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/Platform/Windows-MSVC.cmake
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/CMakeCommonLanguageInclude.cmake
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/CMakeTestCXXCompiler.cmake
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/CMakeTestCompilerCommon.cmake
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/CMakeDetermineCompilerABI.cmake
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/CMakeParseImplicitLinkInfo.cmake
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/CMakeCXXCompilerABI.cpp
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/CMakeCXXCompiler.cmake.in
+C:/GitRepo/DX11_project/PwAG/BulletBuild/CMakeFiles/2.8.12.1/CMakeCXXCompiler.cmake
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/FindOpenGL.cmake
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/FindPackageHandleStandardArgs.cmake
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/FindPackageMessage.cmake
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/CMakeParseArguments.cmake
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/FindGLU.cmake
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/FindOpenGL.cmake
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/FindPackageHandleStandardArgs.cmake
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/FindPackageMessage.cmake
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/CMakeParseArguments.cmake
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/FindGLUT.cmake
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/FindPackageHandleStandardArgs.cmake
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/FindPackageMessage.cmake
+C:/Utils/CMake 2.8/share/cmake-2.8/Modules/CMakeParseArguments.cmake
+C:/GitRepo/DX11_project/bullet-2.82-r2704/BulletConfig.cmake.in
