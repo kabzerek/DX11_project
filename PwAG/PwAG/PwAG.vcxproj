@@ -53,7 +53,7 @@
       <Optimization>Disabled</Optimization>
       <CompileAsManaged>
       </CompileAsManaged>
-      <AdditionalIncludeDirectories>..\PwAG\BulletBuild\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\bullet-2.82-r2704\src</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -71,7 +71,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <CompileAsManaged>
       </CompileAsManaged>
-      <AdditionalIncludeDirectories>..\PwAG\BulletBuild\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\bullet-2.82-r2704\src</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -85,10 +85,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AlphaMapShaderClass.cpp" />
+    <ClCompile Include="BulletClass.cpp" />
     <ClCompile Include="BumpMapShaderClass.cpp" />
     <ClCompile Include="CameraClass.cpp" />
     <ClCompile Include="DebugWindowClass.cpp" />
     <ClCompile Include="DepthShaderClass.cpp" />
+    <ClCompile Include="EngineObjectClass.cpp" />
     <ClCompile Include="FontClass.cpp" />
     <ClCompile Include="FontShaderClass.cpp" />
     <ClCompile Include="HorizontalBlurShaderClass.cpp" />
@@ -99,7 +101,6 @@
     <ClCompile Include="InputClass.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="ModelClass.cpp" />
-    <ClCompile Include="MoveLookController.cpp" />
     <ClCompile Include="MultiTextureShaderClass.cpp" />
     <ClCompile Include="OrthoWindowClass.cpp" />
     <ClCompile Include="PositionClass.cpp" />
@@ -118,10 +119,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AlphaMapShaderClass.h" />
+    <ClInclude Include="BulletClass.h" />
     <ClInclude Include="BumpMapShaderClass.h" />
     <ClInclude Include="CameraClass.h" />
     <ClInclude Include="DebugWindowClass.h" />
     <ClInclude Include="DepthShaderClass.h" />
+    <ClInclude Include="EngineObjectClass.h" />
     <ClInclude Include="FontClass.h" />
     <ClInclude Include="FontShaderClass.h" />
     <ClInclude Include="HorizontalBlurShaderClass.h" />
@@ -132,7 +135,6 @@
     <ClInclude Include="InputClass.h" />
     <ClInclude Include="LogClass.hpp" />
     <ClInclude Include="ModelClass.h" />
-    <ClInclude Include="MoveLookController.h" />
     <ClInclude Include="MultiTextureShaderClass.h" />
     <ClInclude Include="OrthoWindowClass.h" />
     <ClInclude Include="PositionClass.h" />

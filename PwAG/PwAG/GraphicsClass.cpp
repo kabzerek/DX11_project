@@ -20,6 +20,8 @@ GraphicsClass::GraphicsClass()
 	m_UpSampleTexture = 0;
 	m_FullScreenWindow = 0;
 	m_Text = 0;
+
+	m_Bullet = 0;
 }
 
 
@@ -85,8 +87,11 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	m_Camera->SetPosition(0.0f, 0.0f, -20.0f);
 	m_Camera->RenderBaseViewMatrix();
 	
+	// Create physics world
+	m_Bullet->Initialize();
+
 	// Create the model object.
-	ModelClass* box1 = new ModelClass;
+	EngineObjectClass* box1 = new EngineObjectClass;
 	if(!box1)
 	{
 		return false;
@@ -94,7 +99,10 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	// Initialize the model object.
 	result = box1->Initialize(m_D3D->GetDevice(), "../PwAG/data/cube.DAE", L"../PwAG/data/stone02.dds", 
 												  L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
-												  aiVector3D(-4.0f, 0.0f, 0.0f));
+												  aiVector3D(-4.0f, 0.0f, 0.0f), "Box", 
+												  1.0f, 1.0f, 1.0f,  //size
+												  1.0f,				 //mass
+												  1.0f, 1.0f, 1.0f); //inertia
 	
 	if(!result)
 	{
@@ -102,9 +110,10 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 		return false;
 	}
 
-	m_Models.push_back(box1);
+	m_Bullet->m_dynamicsWorld->addRigidBody(box1->m_rigidBody);
+	m_EngineObjects.push_back(box1);
 
-	ModelClass* box2 = new ModelClass;
+	EngineObjectClass* box2 = new EngineObjectClass;
 	if(!box2)
 	{
 		return false;
@@ -112,7 +121,10 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	// Initialize the model object.
 	result = box2->Initialize(m_D3D->GetDevice(), "../PwAG/data/sphere.DAE", L"../PwAG/data/stone02.dds", 
 												  L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
-												  aiVector3D(1.25f, 0.50f, 0.5f));
+												  aiVector3D(1.25f, 0.50f, 0.5f), "Box", 
+												  1.0f, 1.0f, 1.0f,  //size
+												  1.0f,				 //mass
+												  1.0f, 1.0f, 1.0f); //inertia
 	
 	if(!result)
 	{
@@ -120,9 +132,10 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 		return false;
 	}
 
-	m_Models.push_back(box2);
+	m_Bullet->m_dynamicsWorld->addRigidBody(box2->m_rigidBody);
+	m_EngineObjects.push_back(box2);
 
-	ModelClass* box3 = new ModelClass;
+	EngineObjectClass* box3 = new EngineObjectClass;
 	if(!box3)
 	{
 		return false;
@@ -130,7 +143,10 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	// Initialize the model object.
 	result = box3->Initialize(m_D3D->GetDevice(), "../PwAG/data/cube.DAE", L"../PwAG/data/stone02.dds", 
 												  L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
-												  aiVector3D(0.0f, 0.0f, 0.0f));
+												  aiVector3D(0.0f, 0.0f, 0.0f), "Box", 
+												  1.0f, 1.0f, 1.0f,  //size
+												  1.0f,				 //mass
+												  1.0f, 1.0f, 1.0f); //inertia
 	
 	if(!result)
 	{
@@ -138,9 +154,10 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 		return false;
 	}
 
-	m_Models.push_back(box3);
+	m_Bullet->m_dynamicsWorld->addRigidBody(box3->m_rigidBody);
+	m_EngineObjects.push_back(box3);
 
-	ModelClass* grnd = new ModelClass;
+	EngineObjectClass* grnd = new EngineObjectClass;
 	if(!grnd)
 	{
 		return false;
@@ -148,7 +165,9 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	// Initialize the model object.
 	result = grnd->Initialize(m_D3D->GetDevice(), "../PwAG/data/scene1.DAE", L"../PwAG/data/stone01.dds", 
 												  L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
-												  aiVector3D(0.0f, 0.0f, 0.0f));
+												  aiVector3D(0.0f, 0.0f, 0.0f), "StaticPlane",
+												  0.0f, 1.0f, 0.0f,
+												  0.0f);
 	
 	if(!result)
 	{
@@ -156,7 +175,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 		return false;
 	}
 
-	m_Models.push_back(grnd);
+	m_EngineObjects.push_back(grnd);
 
 	//Create the light object.
 	m_Light = new LightClass;
@@ -392,8 +411,8 @@ void GraphicsClass::Shutdown()
 	}
 
 	// Release the model objects.
-	std::vector<ModelClass*>::iterator it;
-	for(it = m_Models.begin(); it != m_Models.end(); ++it)
+	std::vector<EngineObjectClass*>::iterator it;
+	for(it = m_EngineObjects.begin(); it != m_EngineObjects.end(); ++it)
 	{
 		if((*it))
 		{
@@ -402,7 +421,7 @@ void GraphicsClass::Shutdown()
 			(*it) = 0;
 		}
 	}
-	m_Models.clear();
+	m_EngineObjects.clear();
 
 	// Release the camera object.
 	if(m_Camera)
@@ -499,16 +518,16 @@ bool GraphicsClass::RenderSceneToTexture()
 	m_Light->GetViewMatrix(lightViewMatrix);
 	m_Light->GetProjectionMatrix(lightProjectionMatrix);
 
-	std::vector<ModelClass*>::iterator it;
-	for(it = m_Models.begin(); it != m_Models.end(); ++it)
+	std::vector<EngineObjectClass*>::iterator it;
+	for(it = m_EngineObjects.begin(); it != m_EngineObjects.end(); ++it)
 	{
 		// Setup the translation matrix for the cube model.
-		(*it)->GetPosition(posX, posY, posZ);
+		(*it)->m_model->GetPosition(posX, posY, posZ);
 		D3DXMatrixTranslation(&worldMatrix, posX, posY, posZ);
 
 		// Render the model with the depth shader.
-		(*it)->Render(m_D3D->GetDeviceContext());
-		result = m_ShaderManager->RenderDepthShader(m_D3D->GetDeviceContext(), (*it)->GetIndexCount(), worldMatrix, lightViewMatrix, lightProjectionMatrix);
+		(*it)->m_model->Render(m_D3D->GetDeviceContext());
+		result = m_ShaderManager->RenderDepthShader(m_D3D->GetDeviceContext(), (*it)->m_model->GetIndexCount(), worldMatrix, lightViewMatrix, lightProjectionMatrix);
 		if(!result)
 		{
 			return false;
@@ -556,16 +575,16 @@ bool GraphicsClass::RenderBlackAndWhiteShadows()
 	m_Light->GetViewMatrix(lightViewMatrix);
 	m_Light->GetProjectionMatrix(lightProjectionMatrix);
 	
-	std::vector<ModelClass*>::iterator it;
-	for(it = m_Models.begin(); it != m_Models.end(); ++it)
+	std::vector<EngineObjectClass*>::iterator it;
+	for(it = m_EngineObjects.begin(); it != m_EngineObjects.end(); ++it)
 	{
 		// Setup the translation matrix for the cube model.
-		(*it)->GetPosition(posX, posY, posZ);
+		(*it)->m_model->GetPosition(posX, posY, posZ);
 		D3DXMatrixTranslation(&worldMatrix, posX, posY, posZ);
 
 		// Render the model with the depth shader.
-		(*it)->Render(m_D3D->GetDeviceContext());
-		result = m_ShaderManager->RenderShadowShader(m_D3D->GetDeviceContext(), (*it)->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix, lightViewMatrix,
+		(*it)->m_model->Render(m_D3D->GetDeviceContext());
+		result = m_ShaderManager->RenderShadowShader(m_D3D->GetDeviceContext(), (*it)->m_model->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix, lightViewMatrix,
 					lightProjectionMatrix, m_RenderTexture->GetShaderResourceView(), m_Light->GetPosition());
 		if(!result)
 		{
@@ -895,20 +914,20 @@ bool GraphicsClass::Render()
 	// Get the light's view and projection matrices from the light object.
 	//m_Light->GetProjectionMatrix(lightProjectionMatrix);
 
-	std::vector<ModelClass*>::iterator it;
-	for(it = m_Models.begin(); it != m_Models.end(); ++it)
+	std::vector<EngineObjectClass*>::iterator it;
+	for(it = m_EngineObjects.begin(); it != m_EngineObjects.end(); ++it)
 	{
 		// Setup the translation matrix for the cube model.
-		(*it)->GetPosition(posX, posY, posZ);
+		(*it)->m_model->GetPosition(posX, posY, posZ);
 		D3DXMatrixTranslation(&worldMatrix, posX, posY, posZ);
 	
 		// Put the cube model vertex and index buffers on the graphics pipeline to prepare them for drawing.
 		//m_Model->Render(m_D3D->GetDeviceContext());
 
-		(*it)->Render(m_D3D->GetDeviceContext());
+		(*it)->m_model->Render(m_D3D->GetDeviceContext());
 
-		result = m_ShaderManager->RenderSoftShadowShader(m_D3D->GetDeviceContext(), (*it)->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix, 
-                                        (*it)->GetTexture(), m_UpSampleTexture->GetShaderResourceView(), m_Light->GetPosition(), 
+		result = m_ShaderManager->RenderSoftShadowShader(m_D3D->GetDeviceContext(), (*it)->m_model->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix, 
+                                        (*it)->m_model->GetTexture(), m_UpSampleTexture->GetShaderResourceView(), m_Light->GetPosition(), 
                                         m_Light->GetAmbientColor(), m_Light->GetDiffuseColor());
 		//result = m_ShaderManager->RenderLightShader(m_D3D->GetDeviceContext(), (*it)->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix, 
         //                               (*it)->GetTexture(), m_Light->GetDirection(), m_Light->GetAmbientColor(), m_Light->GetDiffuseColor(), 

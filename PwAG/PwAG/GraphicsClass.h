@@ -11,6 +11,9 @@
 #include "OrthoWindowClass.h"
 #include "TextClass.h"
 
+#include "EngineObjectClass.h"
+#include "BulletClass.h"
+
 #include "ShaderManagerClass.h"
 
 #include <vector>
@@ -51,9 +54,10 @@ private:
 private:
 	D3DClass* m_D3D;
 	CameraClass* m_Camera;
-	std::vector<ModelClass*> m_Models;
+	std::vector<EngineObjectClass*> m_EngineObjects;
 	LightClass* m_Light;
 	TextClass* m_Text;
+	BulletClass* m_Bullet;
 
 	ShaderManagerClass* m_ShaderManager;
 

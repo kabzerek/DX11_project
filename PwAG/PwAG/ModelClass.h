@@ -23,12 +23,12 @@ private:
 		D3DXVECTOR3 binormal;
 	};
 
-	struct TempVertexType
-	{
-		float x, y, z;
-		float tu, tv;
-		float nx, ny, nz;
-	};
+	//struct TempVertexType
+	//{
+	//	float x, y, z;
+	//	float tu, tv;
+	//	float nx, ny, nz;
+	//};
 
 	struct VectorType
 	{
@@ -53,6 +53,7 @@ public:
 
 	void SetInitialPosition(aiVector3D);
 	void SetPosition(D3DXVECTOR3);
+	void Move(aiVector3D);
 
 private:
 	bool InitializeBuffers(ID3D11Device*);
