@@ -88,7 +88,7 @@ private:
 	TextureClass* m_Texture;
 	TextureArrayClass* m_TextureArray;
 	D3DXVECTOR3 m_Position;
-	D3DXVECTOR3 m_Rotation;
+	D3DXVECTOR3 m_Rotation; // pitch yaw roll
 
 	Assimp::Importer* m_importer;
 	const aiScene* m_model;
