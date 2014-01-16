@@ -237,7 +237,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	// Initialize the model object.
 	result = grnd->Initialize(m_D3D->GetDevice(), "../PwAG/data/scene1.DAE", L"../PwAG/data/stone01.dds", 
 												  L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
-												  aiVector3D(0.0f, 0.0f, 0.0f), aiVector3D(0.0f, 0.0f, 0.1f), 
+												  aiVector3D(0.0f, 0.0f, 0.0f), aiVector3D(0.0f, 0.0f, 0.0f), 
 												  "StaticPlane",
 												  0.0f, 1.0f, 0.0f,
 												  1.0f);
@@ -1007,6 +1007,7 @@ bool GraphicsClass::Render()
 		//rotationMatrix = worldMatrix;
 
 		(*it)->m_model->GetRotation(rotX, rotY, rotZ);
+		//(*it)->m_model->SetRotation(D3DXVECTOR3(rotX, rotY+0.01f, rotZ));
 		(*it)->m_model->GetPosition(posX, posY, posZ);
 		
 		//(*it)->m_model->SetRotation(D3DXVECTOR3(rotX, rotY+0.01f, rotZ));
@@ -1016,23 +1017,26 @@ bool GraphicsClass::Render()
 		// Setup the rotation matrix
 		//D3DXMatrixRotationYawPitchRoll(&rotationMatrix, rotY, rotX, rotZ); // y - yaw
 		//D3DXMatrixMultiply(&transformMatrix, &rotationMatrix, &translationMatrix);
-		D3DXMatrixTransformation(&transformMatrix, &(*it)->m_model->GetPosition(), &(*it)->m_model->GetRotationQuaternion(), &(*it)->m_model->GetScale(), &(*it)->m_model->GetPosition(), &(*it)->m_model->GetRotationQuaternion(), &(*it)->m_model->GetPosition());
+		//D3DXMatrixTransformation(&transformMatrix, &(*it)->m_model->GetPosition(), &(*it)->m_model->GetRotationQuaternion(), &(*it)->m_model->GetScale(), &(*it)->m_model->GetPosition(), &(*it)->m_model->GetRotationQuaternion(), &(*it)->m_model->GetPosition());
+		D3DXMatrixAffineTransformation(&transformMatrix, 1.0f, &(*it)->m_model->GetPosition(), &(*it)->m_model->GetRotationQuaternion(),  &(*it)->m_model->GetPosition());
 		m_D3D->GetProjectionMatrix(projectionMatrix);
 		m_D3D->GetOrthoMatrix(orthoMatrix);
+
+		//D3DXMatrixMultiply(&transformMatrix, &worldMatrix, &transformMatrix);
 
 		// Put the cube model vertex and index buffers on the graphics pipeline to prepare them for drawing.
 		//m_Model->Render(m_D3D->GetDeviceContext());
 
 		(*it)->m_model->Render(m_D3D->GetDeviceContext());
 
-		//result = m_ShaderManager->RenderSoftShadowShader(m_D3D->GetDeviceContext(), (*it)->m_model->GetIndexCount(), transformMatrix, viewMatrix, projectionMatrix, 
-        //                                (*it)->m_model->GetTexture(), m_UpSampleTexture->GetShaderResourceView(), m_Light->GetPosition(), 
-        //                                m_Light->GetAmbientColor(), m_Light->GetDiffuseColor());
+		result = m_ShaderManager->RenderSoftShadowShader(m_D3D->GetDeviceContext(), (*it)->m_model->GetIndexCount(), transformMatrix, viewMatrix, projectionMatrix, 
+                                        (*it)->m_model->GetTexture(), m_UpSampleTexture->GetShaderResourceView(), m_Light->GetPosition(), 
+                                        m_Light->GetAmbientColor(), m_Light->GetDiffuseColor());
 		//result = m_ShaderManager->RenderLightShader(m_D3D->GetDeviceContext(), (*it)->m_model->GetIndexCount(), transformMatrix, viewMatrix, projectionMatrix, 
         //                               (*it)->m_model->GetTexture(), m_Light->GetDirection(), m_Light->GetAmbientColor(), m_Light->GetDiffuseColor(), 
         //                               m_Camera->GetPosition(), m_Light->GetSpecularColor(), m_Light->GetSpecularPower());
-		result = m_ShaderManager->RenderTextureShader(m_D3D->GetDeviceContext(), (*it)->m_model->GetIndexCount(), transformMatrix, viewMatrix, projectionMatrix, 
-                                       (*it)->m_model->GetTexture());
+		//result = m_ShaderManager->RenderTextureShader(m_D3D->GetDeviceContext(), (*it)->m_model->GetIndexCount(), transformMatrix, viewMatrix, projectionMatrix, 
+        //                               (*it)->m_model->GetTexture());
 
 		if(!result)
 		{

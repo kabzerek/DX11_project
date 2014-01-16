@@ -150,12 +150,13 @@ void EngineObjectClass::Update(void)
 	float x = transform.getOrigin().getX();
 	float y = transform.getOrigin().getY();
 	float z = transform.getOrigin().getZ();
+	D3DXVECTOR3 pos(x,y,z);
 	//float rx = NULL;
 	//float ry = NULL;
 	//float rz = NULL;
 
 	//D3DXMATRIX matRotate, matTranslate;
-	//D3DXVECTOR3 pos(x,y,z);
+	//D3DXVECTOR4 posEnd(pos, 1.0f);
 	//
 	//D3DXQUATERNION q;
 	//q.x = transform.getRotation().getX();
@@ -169,6 +170,12 @@ void EngineObjectClass::Update(void)
 
 	//D3DXMatrixRotationYawPitchRoll(&matRotate, ry, rx, rz);
 	//D3DXMatrixTranslation(&matTranslate, x, y, z);
+	//D3DXMatrixMultiply(&matTranslate, &matTranslate, &matRotate);
+	////D3DXMatrixTransl
+	//D3DXVec3Transform(&posEnd, &pos, &matTranslate);
 
-	m_model->Move(aiVector3D(x, y, z));
+
+	m_model->SetRotation( D3DXQUATERNION(transform.getRotation().getX(), transform.getRotation().getY(), transform.getRotation().getZ(), transform.getRotation().getW()) );
+
+	m_model->Move(aiVector3D(pos.x, pos.y, pos.z));
 }

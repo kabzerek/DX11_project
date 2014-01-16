@@ -197,6 +197,15 @@ void ModelClass::SetRotation(D3DXVECTOR3 modelRotation)
 	m_Rotation = modelRotation;
 }
 
+void ModelClass::SetRotation(D3DXQUATERNION quat)
+{
+	D3DXQUATERNION quatnorm;
+	D3DXQuaternionNormalize(&quatnorm, &quat);
+	m_Rotation.x = quatnorm.x;
+	m_Rotation.y = quatnorm.y;
+	m_Rotation.z = quatnorm.z;
+}
+
 void ModelClass::Move(aiVector3D move)
 {
 	aiVector3D plus(move.x - m_Position.x, move.y - m_Position.y, move.z - m_Position.z);
