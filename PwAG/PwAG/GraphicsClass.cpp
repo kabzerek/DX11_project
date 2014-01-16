@@ -145,7 +145,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	// Initialize the model object.
 	result = box1c->Initialize(m_D3D->GetDevice(), "../PwAG/data/cube.DAE", L"../PwAG/data/stone02.dds", 
 												  L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
-												  aiVector3D(-7.0f, 5.0f, 0.0f), aiVector3D(0.0f, 0.0f, 0.0f), 
+												  aiVector3D(-7.0f, 5.0f, 0.0f), aiVector3D(0.0f, 0.5f, 0.0f), 
 												  "Box", 
 												  0.25f, 0.25f, 0.25f,  //size
 												  1.0f,				 //mass
@@ -931,7 +931,8 @@ bool GraphicsClass::Render2DTextureScene()
 
 bool GraphicsClass::Render()
 {
-	D3DXMATRIX worldMatrix, viewMatrix, projectionMatrix, translateMatrix, orthoMatrix;
+	D3DXMATRIX worldMatrix, viewMatrix, projectionMatrix, orthoMatrix;
+	D3DXMATRIX transformMatrix, translationMatrix, rotationMatrix;
 	D3DXMATRIX lightViewMatrix, lightProjectionMatrix;
 	bool result;
 	float posX, posY, posZ;
@@ -992,11 +993,6 @@ bool GraphicsClass::Render()
 	// Generate the light view matrix based on the light's position.
 	//m_Light->GenerateViewMatrix();
 
-	// Get the world, view, and projection matrices from the camera and d3d objects.
-	m_Camera->GetViewMatrix(viewMatrix);
-	m_D3D->GetWorldMatrix(worldMatrix);
-	m_D3D->GetProjectionMatrix(projectionMatrix);
-	m_D3D->GetOrthoMatrix(orthoMatrix);
 
 	// Get the light's view and projection matrices from the light object.
 	//m_Light->GetProjectionMatrix(lightProjectionMatrix);
@@ -1004,17 +1000,33 @@ bool GraphicsClass::Render()
 	std::vector<EngineObjectClass*>::iterator it;
 	for(it = m_EngineObjects.begin(); it != m_EngineObjects.end(); ++it)
 	{
-		// Setup the translation matrix for the cube model.
-		(*it)->m_model->GetPosition(posX, posY, posZ);
-		D3DXMatrixTranslation(&worldMatrix, posX, posY, posZ);
+		// Get the world, view, and projection matrices from the camera and d3d objects.
+		m_Camera->GetViewMatrix(viewMatrix);
+		m_D3D->GetWorldMatrix(worldMatrix);
+		translationMatrix = worldMatrix;
+		//rotationMatrix = worldMatrix;
+
 		(*it)->m_model->GetRotation(rotX, rotY, rotZ);
-		D3DXMatrixRotationYawPitchRoll(&worldMatrix, rotY, rotX, rotZ); // TO NIE JEST BLAD - yaw jest na y
+		(*it)->m_model->GetPosition(posX, posY, posZ);
+		
+		(*it)->m_model->SetRotation(D3DXVECTOR3(rotX, rotY+0.01f, rotZ));
+		
+		// Setup the translation matrix
+		D3DXMatrixTranslation(&translationMatrix, posX, posY, posZ);
+		// Setup the rotation matrix
+		D3DXMatrixRotationYawPitchRoll(&rotationMatrix, rotY, rotX, rotZ); // y - yaw
+		D3DXMatrixMultiply(&transformMatrix, &rotationMatrix, &translationMatrix);
+
+		
+		m_D3D->GetProjectionMatrix(projectionMatrix);
+		m_D3D->GetOrthoMatrix(orthoMatrix);
+
 		// Put the cube model vertex and index buffers on the graphics pipeline to prepare them for drawing.
 		//m_Model->Render(m_D3D->GetDeviceContext());
 
 		(*it)->m_model->Render(m_D3D->GetDeviceContext());
 
-		result = m_ShaderManager->RenderSoftShadowShader(m_D3D->GetDeviceContext(), (*it)->m_model->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix, 
+		result = m_ShaderManager->RenderSoftShadowShader(m_D3D->GetDeviceContext(), (*it)->m_model->GetIndexCount(), transformMatrix, viewMatrix, projectionMatrix, 
                                         (*it)->m_model->GetTexture(), m_UpSampleTexture->GetShaderResourceView(), m_Light->GetPosition(), 
                                         m_Light->GetAmbientColor(), m_Light->GetDiffuseColor());
 		//result = m_ShaderManager->RenderLightShader(m_D3D->GetDeviceContext(), (*it)->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix, 
