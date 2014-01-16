@@ -49,12 +49,9 @@ public:
 	ID3D11ShaderResourceView* GetTexture();
 	ID3D11ShaderResourceView* GetTexture(char);
 	D3DXVECTOR3 GetPosition();
-	D3DXVECTOR3 GetRotation();
+	D3DXQUATERNION GetRotation();
 	D3DXVECTOR3 GetScale();
 	void GetPosition(float&, float&, float&);
-	void GetRotation(float&, float&, float&);
-	void GetRotation(D3DXQUATERNION&);
-	D3DXQUATERNION GetRotationQuaternion();
 	void GetScale(float&, float&, float&);
 
 	void SetInitialPosition(aiVector3D);
@@ -86,7 +83,7 @@ private:
 	TextureClass* m_Texture;
 	TextureArrayClass* m_TextureArray;
 	D3DXVECTOR3 m_Position;
-	D3DXVECTOR3 m_Rotation; // roll yaw pitch
+	D3DXQUATERNION m_Rotation;
 	D3DXVECTOR3 m_Scale;
 
 	Assimp::Importer* m_importer;

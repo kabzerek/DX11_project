@@ -184,7 +184,8 @@ void ModelClass::SetInitialPosition(aiVector3D modelPosition)
 
 void ModelClass::SetInitialRotation(aiVector3D modelRotation)
 {
-	SetRotation(aiVector3DtoD3DXVector3(modelRotation));
+	D3DXQuaternionRotationYawPitchRoll(&m_Rotation, modelRotation.y, modelRotation.x, modelRotation.z);
+	D3DXQuaternionNormalize(&m_Rotation, &m_Rotation);
 }
 
 void ModelClass::SetPosition(D3DXVECTOR3 modelPosition)
@@ -194,34 +195,24 @@ void ModelClass::SetPosition(D3DXVECTOR3 modelPosition)
 
 void ModelClass::SetRotation(D3DXVECTOR3 modelRotation)
 {
-	m_Rotation = modelRotation;
+	D3DXQuaternionRotationYawPitchRoll(&m_Rotation, modelRotation.y, modelRotation.x, modelRotation.z);
+	D3DXQuaternionNormalize(&m_Rotation, &m_Rotation);
 }
 
 void ModelClass::SetRotation(D3DXQUATERNION quat)
 {
-	//D3DXQUATERNION quatnorm;
-	//D3DXQuaternionNormalize(&quatnorm, &quat);
-	//m_Rotation.x = quatnorm.x;
-	//m_Rotation.y = quatnorm.y;
-	//m_Rotation.z = quatnorm.z;
-	DirectX::XMVECTOR vec = {quat.x, quat.y, quat.z, quat.w};
-	DirectX::XMVECTOR rot = {m_Rotation.x, m_Rotation.y, m_Rotation.z};
-	rot = DirectX::XMVector3Rotate(rot, vec);
-	DirectX::XMVectorGetByIndexPtr(&m_Rotation.x, rot, 0);
-	DirectX::XMVectorGetByIndexPtr(&m_Rotation.y, rot, 1);
-	DirectX::XMVectorGetByIndexPtr(&m_Rotation.z, rot, 2);
+	m_Rotation = quat;
+	D3DXQuaternionNormalize(&m_Rotation, &m_Rotation);
 }
 
 void ModelClass::Move(aiVector3D move)
 {
 	aiVector3D plus(move.x - m_Position.x, move.y - m_Position.y, move.z - m_Position.z);
-
 	for(unsigned int m = 0; m < m_model->mNumMeshes; ++m)
 		for(unsigned int v = 0; v < m_model->mMeshes[m]->mNumVertices; ++v)
 			m_model->mMeshes[m]->mVertices[v] += plus;
 
 	m_Position += aiVector3DtoD3DXVector3(plus);
-	//quat * m_Position * conj(quat)
 }
 
 
@@ -230,16 +221,9 @@ D3DXVECTOR3 ModelClass::GetPosition()
 	return m_Position;
 }
 
-D3DXVECTOR3 ModelClass::GetRotation()
+D3DXQUATERNION ModelClass::GetRotation()
 {
 	return m_Rotation;
-}
-
-D3DXQUATERNION ModelClass::GetRotationQuaternion()
-{
-	D3DXQUATERNION q;
-	D3DXQuaternionRotationYawPitchRoll(&q, m_Rotation.y, m_Rotation.x, m_Rotation.z);
-	return q;
 }
 
 D3DXVECTOR3 ModelClass::GetScale()
@@ -252,13 +236,6 @@ void ModelClass::GetPosition(float& x, float& y, float& z)
 	x = m_Position.x;
 	y = m_Position.y;
 	z = m_Position.z;
-}
-
-void ModelClass::GetRotation(float& x, float&y, float&z)
-{
-	x = m_Rotation.x;
-	y = m_Rotation.y;
-	z = m_Rotation.z;
 }
 
 void ModelClass::GetScale(float& x, float&y, float&z)
