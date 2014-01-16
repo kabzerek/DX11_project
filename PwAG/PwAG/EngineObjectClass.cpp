@@ -176,6 +176,5 @@ void EngineObjectClass::Update(void)
 
 
 	m_model->SetRotation( D3DXQUATERNION(transform.getRotation().getX(), transform.getRotation().getY(), transform.getRotation().getZ(), transform.getRotation().getW()) );
-
 	m_model->Move(aiVector3D(pos.x, pos.y, pos.z));
 }

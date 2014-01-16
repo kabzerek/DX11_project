@@ -3,6 +3,7 @@
 
 #include <d3d11.h>
 #include <d3dx10math.h>
+#include <DirectXMath.h>
 
 #include <assimp\Importer.hpp>	//C++ importer
 #include <assimp\scene.h>		//Output data structures

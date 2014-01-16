@@ -199,11 +199,17 @@ void ModelClass::SetRotation(D3DXVECTOR3 modelRotation)
 
 void ModelClass::SetRotation(D3DXQUATERNION quat)
 {
-	D3DXQUATERNION quatnorm;
-	D3DXQuaternionNormalize(&quatnorm, &quat);
-	m_Rotation.x = quatnorm.x;
-	m_Rotation.y = quatnorm.y;
-	m_Rotation.z = quatnorm.z;
+	//D3DXQUATERNION quatnorm;
+	//D3DXQuaternionNormalize(&quatnorm, &quat);
+	//m_Rotation.x = quatnorm.x;
+	//m_Rotation.y = quatnorm.y;
+	//m_Rotation.z = quatnorm.z;
+	DirectX::XMVECTOR vec = {quat.x, quat.y, quat.z, quat.w};
+	DirectX::XMVECTOR rot = {m_Rotation.x, m_Rotation.y, m_Rotation.z};
+	rot = DirectX::XMVector3Rotate(rot, vec);
+	DirectX::XMVectorGetByIndexPtr(&m_Rotation.x, rot, 0);
+	DirectX::XMVectorGetByIndexPtr(&m_Rotation.y, rot, 1);
+	DirectX::XMVectorGetByIndexPtr(&m_Rotation.z, rot, 2);
 }
 
 void ModelClass::Move(aiVector3D move)
