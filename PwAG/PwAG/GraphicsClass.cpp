@@ -1247,6 +1247,8 @@ void GraphicsClass::drawLine(const btVector3 &from, const btVector3 &to, const b
 	delete [] indices;
 	indices = 0;
 	
+
+	////// wyci¹æ
 	unsigned int stride;
 	unsigned int offset;
 	

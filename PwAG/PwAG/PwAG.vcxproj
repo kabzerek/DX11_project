@@ -103,6 +103,7 @@
     <ClCompile Include="ModelClass.cpp" />
     <ClCompile Include="MultiTextureShaderClass.cpp" />
     <ClCompile Include="OrthoWindowClass.cpp" />
+    <ClCompile Include="PhysicsDebugObjectClass.cpp" />
     <ClCompile Include="PositionClass.cpp" />
     <ClCompile Include="RenderTextureClass.cpp" />
     <ClCompile Include="ShaderManagerClass.cpp" />
@@ -137,6 +138,7 @@
     <ClInclude Include="ModelClass.h" />
     <ClInclude Include="MultiTextureShaderClass.h" />
     <ClInclude Include="OrthoWindowClass.h" />
+    <ClInclude Include="PhysicsDebugObjectClass.h" />
     <ClInclude Include="PositionClass.h" />
     <ClInclude Include="RenderTextureClass.h" />
     <ClInclude Include="ShaderManagerClass.h" />
