@@ -19,12 +19,12 @@ public:
 	PhysicsDebugObjectClass(const PhysicsDebugObjectClass&);
 	~PhysicsDebugObjectClass(void);
 
-	bool Initialize(ID3D11Device*, D3DXVECTOR3, D3DXVECTOR3);
+	bool Initialize(ID3D11Device*, D3DXVECTOR3, D3DXVECTOR3, D3DXVECTOR3);
 	void Shutdown();
 	void Render(ID3D11DeviceContext*);
 
 private:
-	bool InitializeBuffers(ID3D11Device*);
+	bool InitializeBuffers(ID3D11Device*, D3DXVECTOR3, D3DXVECTOR3, D3DXVECTOR3);
 	void ShutdownBuffers();
 	void RenderBuffers(ID3D11DeviceContext*);
 

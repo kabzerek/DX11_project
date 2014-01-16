@@ -11,6 +11,7 @@
 #include "TextClass.h"
 
 #include "EngineObjectClass.h"
+#include "PhysicsDebugObjectClass.h"
 
 #include "ShaderManagerClass.h"
 
@@ -99,7 +100,7 @@ private:
 	int m_debugMode;
 	bool m_isDebug;
 
-	ID3D11Buffer* m_vertexBuffer, * m_indexBuffer;
+	std::vector<PhysicsDebugObjectClass*> m_DebugObjects;
 };
 
 #endif
