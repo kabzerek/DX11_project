@@ -15,11 +15,11 @@ EngineObjectClass::~EngineObjectClass(void)
 
 // for StaticPlane
 bool EngineObjectClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* textureFilename1, WCHAR* textureFilename2, 
-								   WCHAR* textureFilename3, aiVector3D modelPosition, std::string name, 
+								   WCHAR* textureFilename3, aiVector3D modelPosition, aiVector3D modelRotation, std::string name, 
 								   btScalar normalx, btScalar normaly, btScalar normalz, btScalar planeConstant)
 {
 	m_model = new ModelClass;
-	m_model->Initialize(device, modelFilename, textureFilename1, textureFilename2, textureFilename3, modelPosition);
+	m_model->Initialize(device, modelFilename, textureFilename1, textureFilename2, textureFilename3, modelPosition, modelRotation);
 
 	if(name == "StaticPlane")
 		m_collisionShape = new btStaticPlaneShape(btVector3(normalx, normaly, normalz), planeConstant);
@@ -29,16 +29,16 @@ bool EngineObjectClass::Initialize(ID3D11Device* device, char* modelFilename, WC
 	if(!m_collisionShape)
 		return false;
 
-	return Initialize(modelPosition, 0, 0, 0, 0);
+	return Initialize(modelPosition, modelRotation, 0, 0, 0, 0);
 }
 
 // for Sphere
 bool EngineObjectClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* textureFilename1, WCHAR* textureFilename2, 
-								   WCHAR* textureFilename3, aiVector3D modelPosition, std::string name, btScalar radius, 
+								   WCHAR* textureFilename3, aiVector3D modelPosition, aiVector3D modelRotation, std::string name, btScalar radius, 
 								   btScalar mass, btScalar inertiax, btScalar inertiay, btScalar inertiaz)
 {
 	m_model = new ModelClass;
-	m_model->Initialize(device, modelFilename, textureFilename1, textureFilename2, textureFilename3, modelPosition);
+	m_model->Initialize(device, modelFilename, textureFilename1, textureFilename2, textureFilename3, modelPosition, modelRotation);
 
 	if(name == "Sphere")
 		m_collisionShape = new btSphereShape(radius);
@@ -48,16 +48,16 @@ bool EngineObjectClass::Initialize(ID3D11Device* device, char* modelFilename, WC
 	if(!m_collisionShape)
 		return false;
 
-	return Initialize(modelPosition, mass, inertiax, inertiay, inertiaz);
+	return Initialize(modelPosition, modelRotation, mass, inertiax, inertiay, inertiaz);
 }
 
 // for Capsule (Capsule/CapsuleX/CapsuleZ) and Cone (Cone/ConeX/ConeZ)
 bool EngineObjectClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* textureFilename1, WCHAR* textureFilename2, 
-								   WCHAR* textureFilename3, aiVector3D modelPosition, std::string name, btScalar radius, btScalar height, 
+								   WCHAR* textureFilename3, aiVector3D modelPosition, aiVector3D modelRotation, std::string name, btScalar radius, btScalar height, 
 								   btScalar mass, btScalar inertiax, btScalar inertiay, btScalar inertiaz)
 {
 	m_model = new ModelClass;
-	m_model->Initialize(device, modelFilename, textureFilename1, textureFilename2, textureFilename3, modelPosition);
+	m_model->Initialize(device, modelFilename, textureFilename1, textureFilename2, textureFilename3, modelPosition, modelRotation);
 
 	if(name == "Capsule")
 		m_collisionShape = new btCapsuleShape(radius, height);
@@ -77,16 +77,16 @@ bool EngineObjectClass::Initialize(ID3D11Device* device, char* modelFilename, WC
 	if(!m_collisionShape)
 		return false;
 
-	return Initialize(modelPosition, mass, inertiax, inertiay, inertiaz);
+	return Initialize(modelPosition, modelRotation, mass, inertiax, inertiay, inertiaz);
 }
 
 // for Box and Cylinder (Cylinder/CylinderX/CylinderZ)
 bool EngineObjectClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* textureFilename1, WCHAR* textureFilename2, 
-								   WCHAR* textureFilename3, aiVector3D modelPosition, std::string name, btScalar x, btScalar y, btScalar z, 
+								   WCHAR* textureFilename3, aiVector3D modelPosition, aiVector3D modelRotation, std::string name, btScalar x, btScalar y, btScalar z, 
 								   btScalar mass, btScalar inertiax, btScalar inertiay, btScalar inertiaz)
 {
 	m_model = new ModelClass;
-	m_model->Initialize(device, modelFilename, textureFilename1, textureFilename2, textureFilename3, modelPosition);
+	m_model->Initialize(device, modelFilename, textureFilename1, textureFilename2, textureFilename3, modelPosition, modelRotation);
 
 	if(name == "Box")
 		m_collisionShape = new btBoxShape(btVector3(x, y, z));
@@ -102,12 +102,12 @@ bool EngineObjectClass::Initialize(ID3D11Device* device, char* modelFilename, WC
 	if(!m_collisionShape)
 		return false;
 
-	return Initialize(modelPosition, mass, inertiax, inertiay, inertiaz);
+	return Initialize(modelPosition, modelRotation, mass, inertiax, inertiay, inertiaz);
 }
 
-bool EngineObjectClass::Initialize(aiVector3D modelPosition, btScalar mass, btScalar inertiax, btScalar inertiay, btScalar inertiaz)
+bool EngineObjectClass::Initialize(aiVector3D modelPosition, aiVector3D modelRotation, btScalar mass, btScalar inertiax, btScalar inertiay, btScalar inertiaz)
 {
-	btDefaultMotionState* m_motionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1), btVector3(modelPosition.x, modelPosition.y, modelPosition.z)));
+	btDefaultMotionState* m_motionState = new btDefaultMotionState(btTransform(btQuaternion(modelRotation.y, modelRotation.x, modelRotation.z), btVector3(modelPosition.x, modelPosition.y, modelPosition.z)));
 	if(!m_motionState)
 		return false;
 	btScalar m_mass = mass;
@@ -149,6 +149,11 @@ void EngineObjectClass::Update(void)
 	float x = transform.getOrigin().getX();
 	float y = transform.getOrigin().getY();
 	float z = transform.getOrigin().getZ();
+
+	//float rx = transform.getRotation().getX(); // bedzie trzeba przesuwac o quaternion, tak
+	//float ry = transform.getRotation().getY();
+	//float rz = transform.getRotation().getZ();
+	//float rw = transform.getRotation().getW();
 
 	m_model->Move(aiVector3D(x, y, z));
 }

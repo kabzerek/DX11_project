@@ -99,7 +99,8 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	// Initialize the model object.
 	result = box1->Initialize(m_D3D->GetDevice(), "../PwAG/data/cube.DAE", L"../PwAG/data/stone02.dds", 
 												  L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
-												  aiVector3D(-4.0f, 5.0f, 0.0f), "Box", 
+												  aiVector3D(-4.0f, 5.0f, 0.0f), aiVector3D(0.0f,0.0f,0.0f),
+												  "Box", 
 												  0.25f, 0.25f, 0.25f,  //size
 												  1.0f,				 //mass
 												  0.1f, 0.1f, 0.1f); //inertia
@@ -121,7 +122,8 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	// Initialize the model object.
 	result = box1b->Initialize(m_D3D->GetDevice(), "../PwAG/data/cube.DAE", L"../PwAG/data/stone02.dds", 
 												  L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
-												  aiVector3D(-5.5f, 5.0f, 0.0f), "Box", 
+												  aiVector3D(-5.5f, 5.0f, 0.0f), aiVector3D(0.0f, 0.0f, 0.0f), 
+												  "Box", 
 												  0.25f, 0.25f, 0.25f,  //size
 												  1.0f,				 //mass
 												  0.1f, 0.1f, 0.1f); //inertia
@@ -143,7 +145,8 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	// Initialize the model object.
 	result = box1c->Initialize(m_D3D->GetDevice(), "../PwAG/data/cube.DAE", L"../PwAG/data/stone02.dds", 
 												  L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
-												  aiVector3D(-7.0f, 5.0f, 0.0f), "Box", 
+												  aiVector3D(-7.0f, 5.0f, 0.0f), aiVector3D(0.0f, 0.0f, 0.0f), 
+												  "Box", 
 												  0.25f, 0.25f, 0.25f,  //size
 												  1.0f,				 //mass
 												  0.1f, 0.1f, 0.1f); //inertia
@@ -165,7 +168,8 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	// Initialize the model object.
 	result = sphere->Initialize(m_D3D->GetDevice(), "../PwAG/data/sphere.DAE", L"../PwAG/data/stone02.dds", 
 												  L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
-												  aiVector3D(1.25f, 5.50f, 0.5f), "Sphere", 
+												  aiVector3D(1.25f, 5.50f, 0.5f), aiVector3D(0.0f, 0.0f, 0.0f), 
+												  "Sphere", 
 												  0.25f,				 //radius
 												  2.0f,				 //mass
 												  0.1f, 0.1f, 0.1f); //inertia
@@ -187,7 +191,8 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	// Initialize the model object.
 	result = box3->Initialize(m_D3D->GetDevice(), "../PwAG/data/cube.DAE", L"../PwAG/data/stone02.dds", 
 												  L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
-												  aiVector3D(0.0f, 5.0f, 0.0f), "Box", 
+												  aiVector3D(0.0f, 5.0f, 0.0f), aiVector3D(0.0f, 0.0f, 0.0f), 
+												  "Box", 
 												  0.25f, 0.25f, 0.25f,  //size
 												  10.0f,				 //mass
 												  0.1f, 0.1f, 0.1f); //inertia
@@ -209,7 +214,8 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	// Initialize the model object.
 	result = box4->Initialize(m_D3D->GetDevice(), "../PwAG/data/cube.DAE", L"../PwAG/data/stone02.dds", 
 												  L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
-												  aiVector3D(0.0f, 6.5f, 0.0f), "Box", 
+												  aiVector3D(0.0f, 6.5f, 0.0f), aiVector3D(0.0f, 0.0f, 0.0f), 
+												  "Box", 
 												  0.25f, 0.25f, 0.25f,  //size
 												  15.0f,				 //mass
 												  0.1f, 0.1f, 0.1f); //inertia
@@ -231,7 +237,8 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	// Initialize the model object.
 	result = grnd->Initialize(m_D3D->GetDevice(), "../PwAG/data/scene1.DAE", L"../PwAG/data/stone01.dds", 
 												  L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
-												  aiVector3D(0.0f, 0.0f, 0.0f), "StaticPlane",
+												  aiVector3D(0.0f, 0.0f, 0.0f), aiVector3D(-0.5f, 0.0f, 0.0f), 
+												  "StaticPlane",
 												  0.0f, 1.0f, 0.0f,
 												  1.0f);
 	
@@ -928,6 +935,7 @@ bool GraphicsClass::Render()
 	D3DXMATRIX lightViewMatrix, lightProjectionMatrix;
 	bool result;
 	float posX, posY, posZ;
+	float rotX, rotY, rotZ;
 	
 
 
@@ -999,7 +1007,8 @@ bool GraphicsClass::Render()
 		// Setup the translation matrix for the cube model.
 		(*it)->m_model->GetPosition(posX, posY, posZ);
 		D3DXMatrixTranslation(&worldMatrix, posX, posY, posZ);
-	
+		(*it)->m_model->GetRotation(rotX, rotY, rotZ);
+		D3DXMatrixRotationYawPitchRoll(&worldMatrix, rotY, rotX, rotZ); // TO NIE JEST BLAD - yaw jest na y
 		// Put the cube model vertex and index buffers on the graphics pipeline to prepare them for drawing.
 		//m_Model->Render(m_D3D->GetDeviceContext());
 

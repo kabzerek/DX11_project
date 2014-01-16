@@ -21,7 +21,7 @@ ModelClass::~ModelClass()
 }
 
 bool ModelClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* textureFilename1, WCHAR* textureFilename2, 
-							WCHAR* textureFilename3, aiVector3D modelPosition)
+							WCHAR* textureFilename3, aiVector3D modelPosition, aiVector3D modelRotation)
 {
 	bool result;
 
@@ -34,6 +34,8 @@ bool ModelClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* te
 
 	// Set position of the model
 	SetInitialPosition(modelPosition);
+	// Set rotation of the model
+	SetInitialRotation(modelRotation);
 
 	// Initialize the vertex and index buffers.
 	result = InitializeBuffers(device);
@@ -179,9 +181,19 @@ void ModelClass::SetInitialPosition(aiVector3D modelPosition)
 	SetPosition(aiVector3DtoD3DXVector3(modelPosition));
 }
 
+void ModelClass::SetInitialRotation(aiVector3D modelRotation)
+{
+	SetRotation(aiVector3DtoD3DXVector3(modelRotation));
+}
+
 void ModelClass::SetPosition(D3DXVECTOR3 modelPosition)
 {
 	m_Position = modelPosition;
+}
+
+void ModelClass::SetRotation(D3DXVECTOR3 modelRotation)
+{
+	m_Rotation = modelRotation;
 }
 
 void ModelClass::Move(aiVector3D move)
@@ -195,9 +207,15 @@ void ModelClass::Move(aiVector3D move)
 	m_Position += aiVector3DtoD3DXVector3(plus);
 }
 
+
 D3DXVECTOR3 ModelClass::GetPosition()
 {
 	return m_Position;
+}
+
+D3DXVECTOR3 ModelClass::GetRotation()
+{
+	return m_Rotation;
 }
 
 void ModelClass::GetPosition(float& x, float& y, float& z)
@@ -205,6 +223,13 @@ void ModelClass::GetPosition(float& x, float& y, float& z)
 	x = m_Position.x;
 	y = m_Position.y;
 	z = m_Position.z;
+}
+
+void ModelClass::GetRotation(float& x, float&y, float&z)
+{
+	x = m_Rotation.x;
+	y = m_Rotation.y;
+	z = m_Rotation.z;
 }
 
 ID3D11ShaderResourceView* ModelClass::GetTexture()

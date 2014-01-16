@@ -23,6 +23,11 @@ private:
 		D3DXVECTOR3 binormal;
 	};
 
+	struct InstanceType
+	{
+		D3DXVECTOR3 position;
+		D3DXVECTOR3 rotation;
+	};
 	//struct TempVertexType
 	//{
 	//	float x, y, z;
@@ -40,7 +45,7 @@ public:
 	ModelClass(const ModelClass&);
 	~ModelClass();
 	
-	bool Initialize(ID3D11Device*, char*, WCHAR*, WCHAR*, WCHAR*, aiVector3D);
+	bool Initialize(ID3D11Device*, char*, WCHAR*, WCHAR*, WCHAR*, aiVector3D, aiVector3D);
 	void Shutdown();
 	void Render(ID3D11DeviceContext*);
 
@@ -49,10 +54,16 @@ public:
 	ID3D11ShaderResourceView* GetTexture();
 	ID3D11ShaderResourceView* GetTexture(char);
 	D3DXVECTOR3 GetPosition();
+	D3DXVECTOR3 GetRotation();
 	void GetPosition(float&, float&, float&);
+	void GetRotation(float&, float&, float&);
+	void GetRotation(D3DXQUATERNION&);
 
 	void SetInitialPosition(aiVector3D);
+	void SetInitialRotation(aiVector3D);
 	void SetPosition(D3DXVECTOR3);
+	void SetRotation(D3DXVECTOR3);
+	void SetRotation(D3DXQUATERNION);
 	void Move(aiVector3D);
 
 private:
@@ -77,6 +88,7 @@ private:
 	TextureClass* m_Texture;
 	TextureArrayClass* m_TextureArray;
 	D3DXVECTOR3 m_Position;
+	D3DXVECTOR3 m_Rotation;
 
 	Assimp::Importer* m_importer;
 	const aiScene* m_model;
