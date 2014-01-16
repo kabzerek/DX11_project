@@ -13,7 +13,7 @@
 
 class ModelClass
 {
-private:
+public:
 	struct VertexType
 	{
 		D3DXVECTOR3 position;
@@ -22,7 +22,7 @@ private:
 		D3DXVECTOR3 tangent;
 		D3DXVECTOR3 binormal;
 	};
-
+private:
 	struct InstanceType
 	{
 		D3DXVECTOR3 position;

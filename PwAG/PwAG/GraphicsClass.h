@@ -25,7 +25,7 @@ const float SCREEN_NEAR = 1.00f;
 const int SHADOWMAP_WIDTH = 1024;
 const int SHADOWMAP_HEIGHT = 1024;
 
-class GraphicsClass
+class GraphicsClass : btIDebugDraw
 {
 public:
 	GraphicsClass();
@@ -57,6 +57,11 @@ private:
 
 	bool InitializePhysics();
 	void ShutdownPhysics();
+
+	/////////////////
+	// dtDebugDraw //
+	/////////////////
+	void drawLine(const btVector3 &from, const btVector3 &to, const btVector3 &color);
 
 protected:
 	btDiscreteDynamicsWorld* m_dynamicsWorld;
