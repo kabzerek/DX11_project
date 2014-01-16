@@ -146,14 +146,29 @@ void EngineObjectClass::Update(void)
 	btTransform transform;
 	m_rigidBody->getMotionState()->getWorldTransform(transform);
 
+
 	float x = transform.getOrigin().getX();
 	float y = transform.getOrigin().getY();
 	float z = transform.getOrigin().getZ();
-	D3DXQUATERNION q;
-	q.x = transform.getRotation().getX();
-	q.y = transform.getRotation().getY();
-	q.z = transform.getRotation().getZ();
-	q.w = transform.getRotation().getW();
+	//float rx = NULL;
+	//float ry = NULL;
+	//float rz = NULL;
 
-	m_model->Move(aiVector3D(x, y, z), q);
+	//D3DXMATRIX matRotate, matTranslate;
+	//D3DXVECTOR3 pos(x,y,z);
+	//
+	//D3DXQUATERNION q;
+	//q.x = transform.getRotation().getX();
+	//q.y = transform.getRotation().getY();
+	//q.z = transform.getRotation().getZ();
+	//q.w = transform.getRotation().getW();
+
+	//D3DXQuaternionToAxisAngle(&q, &D3DXVECTOR3(1.0f, 0.0f, 0.0f), &rx);
+	//D3DXQuaternionToAxisAngle(&q, &D3DXVECTOR3(0.0f, 1.0f, 0.0f), &ry);
+	//D3DXQuaternionToAxisAngle(&q, &D3DXVECTOR3(0.0f, 0.0f, 1.0f), &rz);
+
+	//D3DXMatrixRotationYawPitchRoll(&matRotate, ry, rx, rz);
+	//D3DXMatrixTranslation(&matTranslate, x, y, z);
+
+	m_model->Move(aiVector3D(x, y, z));
 }

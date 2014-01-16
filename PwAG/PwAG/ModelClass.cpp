@@ -36,6 +36,7 @@ bool ModelClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* te
 	SetInitialPosition(modelPosition);
 	// Set rotation of the model
 	SetInitialRotation(modelRotation);
+	m_Scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
 
 	// Initialize the vertex and index buffers.
 	result = InitializeBuffers(device);
@@ -196,7 +197,7 @@ void ModelClass::SetRotation(D3DXVECTOR3 modelRotation)
 	m_Rotation = modelRotation;
 }
 
-void ModelClass::Move(aiVector3D move, D3DXQUATERNION quat)
+void ModelClass::Move(aiVector3D move)
 {
 	aiVector3D plus(move.x - m_Position.x, move.y - m_Position.y, move.z - m_Position.z);
 
@@ -219,6 +220,18 @@ D3DXVECTOR3 ModelClass::GetRotation()
 	return m_Rotation;
 }
 
+D3DXQUATERNION ModelClass::GetRotationQuaternion()
+{
+	D3DXQUATERNION q;
+	D3DXQuaternionRotationYawPitchRoll(&q, m_Rotation.y, m_Rotation.x, m_Rotation.z);
+	return q;
+}
+
+D3DXVECTOR3 ModelClass::GetScale()
+{
+	return m_Scale;
+}
+
 void ModelClass::GetPosition(float& x, float& y, float& z)
 {
 	x = m_Position.x;
@@ -231,6 +244,13 @@ void ModelClass::GetRotation(float& x, float&y, float&z)
 	x = m_Rotation.x;
 	y = m_Rotation.y;
 	z = m_Rotation.z;
+}
+
+void ModelClass::GetScale(float& x, float&y, float&z)
+{
+	x = m_Scale.x;
+	y = m_Scale.y;
+	z = m_Scale.z;
 }
 
 ID3D11ShaderResourceView* ModelClass::GetTexture()

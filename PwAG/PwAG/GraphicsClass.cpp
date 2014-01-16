@@ -99,7 +99,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	// Initialize the model object.
 	result = box1->Initialize(m_D3D->GetDevice(), "../PwAG/data/cube.DAE", L"../PwAG/data/stone02.dds", 
 												  L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
-												  aiVector3D(-4.0f, 5.0f, 0.0f), aiVector3D(0.0f,0.0f,0.0f),
+												  aiVector3D(-4.0f, 5.0f, 0.0f), aiVector3D(0.0f,0.5f,0.0f),
 												  "Box", 
 												  0.25f, 0.25f, 0.25f,  //size
 												  1.0f,				 //mass
@@ -237,7 +237,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	// Initialize the model object.
 	result = grnd->Initialize(m_D3D->GetDevice(), "../PwAG/data/scene1.DAE", L"../PwAG/data/stone01.dds", 
 												  L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
-												  aiVector3D(0.0f, 0.0f, 0.0f), aiVector3D(0.0f, 0.0f, 0.0f), 
+												  aiVector3D(0.0f, 0.0f, 0.0f), aiVector3D(0.0f, 0.0f, 0.1f), 
 												  "StaticPlane",
 												  0.0f, 1.0f, 0.0f,
 												  1.0f);
@@ -1012,12 +1012,11 @@ bool GraphicsClass::Render()
 		//(*it)->m_model->SetRotation(D3DXVECTOR3(rotX, rotY+0.01f, rotZ));
 		
 		// Setup the translation matrix
-		D3DXMatrixTranslation(&translationMatrix, posX, posY, posZ);
+		//D3DXMatrixTranslation(&translationMatrix, posX, posY, posZ);
 		// Setup the rotation matrix
-		D3DXMatrixRotationYawPitchRoll(&rotationMatrix, rotY, rotX, rotZ); // y - yaw
-		D3DXMatrixMultiply(&transformMatrix, &rotationMatrix, &translationMatrix);
-
-		
+		//D3DXMatrixRotationYawPitchRoll(&rotationMatrix, rotY, rotX, rotZ); // y - yaw
+		//D3DXMatrixMultiply(&transformMatrix, &rotationMatrix, &translationMatrix);
+		D3DXMatrixTransformation(&transformMatrix, &(*it)->m_model->GetPosition(), &(*it)->m_model->GetRotationQuaternion(), &(*it)->m_model->GetScale(), &(*it)->m_model->GetPosition(), &(*it)->m_model->GetRotationQuaternion(), &(*it)->m_model->GetPosition());
 		m_D3D->GetProjectionMatrix(projectionMatrix);
 		m_D3D->GetOrthoMatrix(orthoMatrix);
 
@@ -1026,12 +1025,14 @@ bool GraphicsClass::Render()
 
 		(*it)->m_model->Render(m_D3D->GetDeviceContext());
 
-		result = m_ShaderManager->RenderSoftShadowShader(m_D3D->GetDeviceContext(), (*it)->m_model->GetIndexCount(), transformMatrix, viewMatrix, projectionMatrix, 
-                                        (*it)->m_model->GetTexture(), m_UpSampleTexture->GetShaderResourceView(), m_Light->GetPosition(), 
-                                        m_Light->GetAmbientColor(), m_Light->GetDiffuseColor());
-		//result = m_ShaderManager->RenderLightShader(m_D3D->GetDeviceContext(), (*it)->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix, 
-        //                               (*it)->GetTexture(), m_Light->GetDirection(), m_Light->GetAmbientColor(), m_Light->GetDiffuseColor(), 
+		//result = m_ShaderManager->RenderSoftShadowShader(m_D3D->GetDeviceContext(), (*it)->m_model->GetIndexCount(), transformMatrix, viewMatrix, projectionMatrix, 
+        //                                (*it)->m_model->GetTexture(), m_UpSampleTexture->GetShaderResourceView(), m_Light->GetPosition(), 
+        //                                m_Light->GetAmbientColor(), m_Light->GetDiffuseColor());
+		//result = m_ShaderManager->RenderLightShader(m_D3D->GetDeviceContext(), (*it)->m_model->GetIndexCount(), transformMatrix, viewMatrix, projectionMatrix, 
+        //                               (*it)->m_model->GetTexture(), m_Light->GetDirection(), m_Light->GetAmbientColor(), m_Light->GetDiffuseColor(), 
         //                               m_Camera->GetPosition(), m_Light->GetSpecularColor(), m_Light->GetSpecularPower());
+		result = m_ShaderManager->RenderTextureShader(m_D3D->GetDeviceContext(), (*it)->m_model->GetIndexCount(), transformMatrix, viewMatrix, projectionMatrix, 
+                                       (*it)->m_model->GetTexture());
 
 		if(!result)
 		{
