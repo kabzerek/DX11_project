@@ -587,8 +587,9 @@ bool GraphicsClass::SetWireframe()
 
 bool GraphicsClass::RenderSceneToTexture()
 {
-	D3DXMATRIX worldMatrix, lightViewMatrix, lightProjectionMatrix, translateMatrix;
+	D3DXMATRIX worldMatrix, lightViewMatrix, lightProjectionMatrix, translateMatrix, transformMatrix;
 	float posX, posY, posZ;
+	float rotX, rotY, rotZ;
 	bool result;
 
 
@@ -611,13 +612,23 @@ bool GraphicsClass::RenderSceneToTexture()
 	std::vector<EngineObjectClass*>::iterator it;
 	for(it = m_EngineObjects.begin(); it != m_EngineObjects.end(); ++it)
 	{
+	
 		// Setup the translation matrix for the cube model.
+		//(*it)->m_model->GetPosition(posX, posY, posZ);
+		//D3DXMatrixTranslation(&worldMatrix, posX, posY, posZ);
+
+		//m_Camera->GetViewMatrix(viewMatrix);
+		m_D3D->GetWorldMatrix(worldMatrix);
+		transformMatrix = worldMatrix;
+
+		(*it)->m_model->GetRotation(rotX, rotY, rotZ);
 		(*it)->m_model->GetPosition(posX, posY, posZ);
-		D3DXMatrixTranslation(&worldMatrix, posX, posY, posZ);
+		D3DXMatrixAffineTransformation(&transformMatrix, 1.0f, &(*it)->m_model->GetPosition(), &(*it)->m_model->GetRotationQuaternion(),  &(*it)->m_model->GetPosition());
+		//m_D3D->GetProjectionMatrix(projectionMatrix);
 
 		// Render the model with the depth shader.
 		(*it)->m_model->Render(m_D3D->GetDeviceContext());
-		result = m_ShaderManager->RenderDepthShader(m_D3D->GetDeviceContext(), (*it)->m_model->GetIndexCount(), worldMatrix, lightViewMatrix, lightProjectionMatrix);
+		result = m_ShaderManager->RenderDepthShader(m_D3D->GetDeviceContext(), (*it)->m_model->GetIndexCount(), transformMatrix, lightViewMatrix, lightProjectionMatrix);
 		if(!result)
 		{
 			return false;
@@ -638,9 +649,10 @@ bool GraphicsClass::RenderSceneToTexture()
 
 bool GraphicsClass::RenderBlackAndWhiteShadows()
 {
-	D3DXMATRIX worldMatrix, viewMatrix, projectionMatrix, translateMatrix;
+	D3DXMATRIX worldMatrix, viewMatrix, projectionMatrix, translateMatrix, transformMatrix;
 	D3DXMATRIX lightViewMatrix, lightProjectionMatrix;
 	float posX, posY, posZ;
+	float rotX, rotY, rotZ;
 	bool result;
 
 
@@ -669,12 +681,21 @@ bool GraphicsClass::RenderBlackAndWhiteShadows()
 	for(it = m_EngineObjects.begin(); it != m_EngineObjects.end(); ++it)
 	{
 		// Setup the translation matrix for the cube model.
+		//(*it)->m_model->GetPosition(posX, posY, posZ);
+		//D3DXMatrixTranslation(&worldMatrix, posX, posY, posZ);
+
+		//m_Camera->GetViewMatrix(viewMatrix);
+		m_D3D->GetWorldMatrix(worldMatrix);
+		transformMatrix = worldMatrix;
+
+		(*it)->m_model->GetRotation(rotX, rotY, rotZ);
 		(*it)->m_model->GetPosition(posX, posY, posZ);
-		D3DXMatrixTranslation(&worldMatrix, posX, posY, posZ);
+		D3DXMatrixAffineTransformation(&transformMatrix, 1.0f, &(*it)->m_model->GetPosition(), &(*it)->m_model->GetRotationQuaternion(),  &(*it)->m_model->GetPosition());
+		//m_D3D->GetProjectionMatrix(projectionMatrix);
 
 		// Render the model with the depth shader.
 		(*it)->m_model->Render(m_D3D->GetDeviceContext());
-		result = m_ShaderManager->RenderShadowShader(m_D3D->GetDeviceContext(), (*it)->m_model->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix, lightViewMatrix,
+		result = m_ShaderManager->RenderShadowShader(m_D3D->GetDeviceContext(), (*it)->m_model->GetIndexCount(), transformMatrix, viewMatrix, projectionMatrix, lightViewMatrix,
 					lightProjectionMatrix, m_RenderTexture->GetShaderResourceView(), m_Light->GetPosition());
 		if(!result)
 		{
