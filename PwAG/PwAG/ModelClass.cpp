@@ -175,17 +175,17 @@ void ModelClass::ReleaseModel()
 
 void ModelClass::SetInitialPosition(aiVector3D modelPosition)
 {
-	for(unsigned int m = 0; m < m_model->mNumMeshes; ++m)
-			for(unsigned int v = 0; v < m_model->mMeshes[m]->mNumVertices; ++v)
-				m_model->mMeshes[m]->mVertices[v] += modelPosition;
+	//for(unsigned int m = 0; m < m_model->mNumMeshes; ++m)
+	//		for(unsigned int v = 0; v < m_model->mMeshes[m]->mNumVertices; ++v)
+	//			m_model->mMeshes[m]->mVertices[v] += modelPosition;
 
-	SetPosition(aiVector3DtoD3DXVector3(modelPosition));
+	m_Position = aiVector3DtoD3DXVector3(modelPosition);
 }
 
 void ModelClass::SetInitialRotation(aiVector3D modelRotation)
 {
 	D3DXQuaternionRotationYawPitchRoll(&m_Rotation, modelRotation.y, modelRotation.x, modelRotation.z);
-	D3DXQuaternionNormalize(&m_Rotation, &m_Rotation);
+	//D3DXQuaternionNormalize(&m_Rotation, &m_Rotation);
 }
 
 void ModelClass::SetPosition(D3DXVECTOR3 modelPosition)
@@ -196,13 +196,13 @@ void ModelClass::SetPosition(D3DXVECTOR3 modelPosition)
 void ModelClass::SetRotation(D3DXVECTOR3 modelRotation)
 {
 	D3DXQuaternionRotationYawPitchRoll(&m_Rotation, modelRotation.y, modelRotation.x, modelRotation.z);
-	D3DXQuaternionNormalize(&m_Rotation, &m_Rotation);
+	//D3DXQuaternionNormalize(&m_Rotation, &m_Rotation);
 }
 
 void ModelClass::SetRotation(D3DXQUATERNION quat)
 {
 	m_Rotation = quat;
-	D3DXQuaternionNormalize(&m_Rotation, &m_Rotation);
+	//D3DXQuaternionNormalize(&m_Rotation, &m_Rotation);
 }
 
 void ModelClass::Move(aiVector3D move)
