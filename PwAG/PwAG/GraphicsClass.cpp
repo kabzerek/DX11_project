@@ -148,7 +148,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	// Initialize the model object.
 	result = box1c->Initialize(m_D3D->GetDevice(), "../PwAG/data/cube.DAE", L"../PwAG/data/stone02.dds", 
 												  L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
-												  aiVector3D(-7.0f, 5.0f, 0.0f), aiVector3D(0.0f, 0.0f, 0.0f), 
+												  aiVector3D(-7.0f, 5.0f, 0.0f), aiVector3D(0.2f, 0.0f, 0.0f), 
 												  "Box", 
 												  0.25f, 0.25f, 0.25f,  //size
 												  1.0f,				 //mass
@@ -171,7 +171,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	// Initialize the model object.
 	result = sphere->Initialize(m_D3D->GetDevice(), "../PwAG/data/sphere.DAE", L"../PwAG/data/stone02.dds", 
 												  L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
-												  aiVector3D(1.25f, 5.50f, 0.5f), aiVector3D(0.0f, 0.0f, 0.0f), 
+												  aiVector3D(1.25f, 5.50f, 0.5f), aiVector3D(0.2f, 0.0f, 0.0f), 
 												  "Sphere", 
 												  0.25f,				 //radius
 												  2.0f,				 //mass
@@ -194,7 +194,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	// Initialize the model object.
 	result = box3->Initialize(m_D3D->GetDevice(), "../PwAG/data/cube.DAE", L"../PwAG/data/stone02.dds", 
 												  L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
-												  aiVector3D(0.0f, 5.0f, 0.0f), aiVector3D(0.0f, 0.0f, 0.0f), 
+												  aiVector3D(0.0f, 5.0f, 0.0f), aiVector3D(0.0f, 0.2f, 0.0f), 
 												  "Box", 
 												  0.25f, 0.25f, 0.25f,  //size
 												  10.0f,				 //mass
@@ -217,7 +217,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	// Initialize the model object.
 	result = box4->Initialize(m_D3D->GetDevice(), "../PwAG/data/cube.DAE", L"../PwAG/data/stone02.dds", 
 												  L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
-												  aiVector3D(0.0f, 6.5f, 0.0f), aiVector3D(0.0f, 0.0f, 0.0f), 
+												  aiVector3D(0.0f, 6.5f, 0.0f), aiVector3D(0.0f, 0.0f, 0.2f), 
 												  "Box", 
 												  0.25f, 0.25f, 0.25f,  //size
 												  15.0f,				 //mass
@@ -240,7 +240,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	// Initialize the model object.
 	result = grnd->Initialize(m_D3D->GetDevice(), "../PwAG/data/scene1.DAE", L"../PwAG/data/stone01.dds", 
 												  L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
-												  aiVector3D(0.0f, 0.0f, 0.0f), aiVector3D(0.0f, 0.0f, 0.0f), 
+												  aiVector3D(0.0f, 0.0f, 0.0f), aiVector3D(-0.1f, 0.0f, 0.0f), 
 												  "StaticPlane",
 												  0.0f, 1.0f, 0.0f,
 												  1.0f);
@@ -588,8 +588,6 @@ bool GraphicsClass::SetWireframe()
 bool GraphicsClass::RenderSceneToTexture()
 {
 	D3DXMATRIX worldMatrix, lightViewMatrix, lightProjectionMatrix, translateMatrix, transformMatrix;
-	float posX, posY, posZ;
-	float rotX, rotY, rotZ;
 	bool result;
 
 
@@ -621,9 +619,7 @@ bool GraphicsClass::RenderSceneToTexture()
 		m_D3D->GetWorldMatrix(worldMatrix);
 		transformMatrix = worldMatrix;
 
-		(*it)->m_model->GetRotation(rotX, rotY, rotZ);
-		(*it)->m_model->GetPosition(posX, posY, posZ);
-		D3DXMatrixAffineTransformation(&transformMatrix, 1.0f, &(*it)->m_model->GetPosition(), &(*it)->m_model->GetRotationQuaternion(),  &(*it)->m_model->GetPosition());
+		D3DXMatrixAffineTransformation(&transformMatrix, 1.0f, &(*it)->m_model->GetPosition(), &(*it)->m_model->GetRotation(),  &(*it)->m_model->GetPosition());
 		//m_D3D->GetProjectionMatrix(projectionMatrix);
 
 		// Render the model with the depth shader.
@@ -651,8 +647,6 @@ bool GraphicsClass::RenderBlackAndWhiteShadows()
 {
 	D3DXMATRIX worldMatrix, viewMatrix, projectionMatrix, translateMatrix, transformMatrix;
 	D3DXMATRIX lightViewMatrix, lightProjectionMatrix;
-	float posX, posY, posZ;
-	float rotX, rotY, rotZ;
 	bool result;
 
 
@@ -688,9 +682,7 @@ bool GraphicsClass::RenderBlackAndWhiteShadows()
 		m_D3D->GetWorldMatrix(worldMatrix);
 		transformMatrix = worldMatrix;
 
-		(*it)->m_model->GetRotation(rotX, rotY, rotZ);
-		(*it)->m_model->GetPosition(posX, posY, posZ);
-		D3DXMatrixAffineTransformation(&transformMatrix, 1.0f, &(*it)->m_model->GetPosition(), &(*it)->m_model->GetRotationQuaternion(),  &(*it)->m_model->GetPosition());
+		D3DXMatrixAffineTransformation(&transformMatrix, 1.0f, &(*it)->m_model->GetPosition(), &(*it)->m_model->GetRotation(),  &(*it)->m_model->GetPosition());
 		//m_D3D->GetProjectionMatrix(projectionMatrix);
 
 		// Render the model with the depth shader.
@@ -960,9 +952,6 @@ bool GraphicsClass::Render()
 	D3DXMATRIX transformMatrix, translationMatrix, rotationMatrix;
 	D3DXMATRIX lightViewMatrix, lightProjectionMatrix;
 	bool result;
-	float posX, posY, posZ;
-	float rotX, rotY, rotZ;
-	
 
 
 	// First render the scene to a texture.
@@ -1007,51 +996,26 @@ bool GraphicsClass::Render()
 		return false;
 	}
 
-
 	//// Render the blurred up sampled render texture to the screen.
 	// Clear the buffers to begin the scene.
 	m_D3D->BeginScene(0.3f, 0.3f, 0.3f, 1.0f);
 
 	// Generate the view matrix based on the camera's position.
 	m_Camera->Render();
-
-	// Generate the light view matrix based on the light's position.
-	//m_Light->GenerateViewMatrix();
-
-
-	// Get the light's view and projection matrices from the light object.
-	//m_Light->GetProjectionMatrix(lightProjectionMatrix);
-
+	
+	// Get the world, view, and projection matrices from the camera and d3d objects.
+	m_Camera->GetViewMatrix(viewMatrix);
+	m_D3D->GetWorldMatrix(worldMatrix);
+	m_D3D->GetProjectionMatrix(projectionMatrix);
+	m_D3D->GetOrthoMatrix(orthoMatrix);
+	
 	std::vector<EngineObjectClass*>::iterator it;
 	for(it = m_EngineObjects.begin(); it != m_EngineObjects.end(); ++it)
 	{
-		// Get the world, view, and projection matrices from the camera and d3d objects.
-		m_Camera->GetViewMatrix(viewMatrix);
-		m_D3D->GetWorldMatrix(worldMatrix);
-		translationMatrix = worldMatrix;
-		//rotationMatrix = worldMatrix;
-
-		(*it)->m_model->GetRotation(rotX, rotY, rotZ);
-		//(*it)->m_model->SetRotation(D3DXVECTOR3(rotX, rotY+0.01f, rotZ));
-		(*it)->m_model->GetPosition(posX, posY, posZ);
+		transformMatrix = worldMatrix;
+		D3DXMatrixAffineTransformation(&transformMatrix, 1.0f, &(*it)->m_model->GetPosition(), &(*it)->m_model->GetRotation(),  &(*it)->m_model->GetPosition());
 		
-		//(*it)->m_model->SetRotation(D3DXVECTOR3(rotX, rotY+0.01f, rotZ));
-		
-		// Setup the translation matrix
-		//D3DXMatrixTranslation(&translationMatrix, posX, posY, posZ);
-		// Setup the rotation matrix
-		//D3DXMatrixRotationYawPitchRoll(&rotationMatrix, rotY, rotX, rotZ); // y - yaw
-		//D3DXMatrixMultiply(&transformMatrix, &rotationMatrix, &translationMatrix);
-		//D3DXMatrixTransformation(&transformMatrix, &(*it)->m_model->GetPosition(), &(*it)->m_model->GetRotationQuaternion(), &(*it)->m_model->GetScale(), &(*it)->m_model->GetPosition(), &(*it)->m_model->GetRotationQuaternion(), &(*it)->m_model->GetPosition());
-		D3DXMatrixAffineTransformation(&transformMatrix, 1.0f, &(*it)->m_model->GetPosition(), &(*it)->m_model->GetRotationQuaternion(),  &(*it)->m_model->GetPosition());
-		m_D3D->GetProjectionMatrix(projectionMatrix);
-		m_D3D->GetOrthoMatrix(orthoMatrix);
-
-		//D3DXMatrixMultiply(&transformMatrix, &worldMatrix, &transformMatrix);
-
-		// Put the cube model vertex and index buffers on the graphics pipeline to prepare them for drawing.
-		//m_Model->Render(m_D3D->GetDeviceContext());
-
+		// Put the model vertex and index buffers on the graphics pipeline to prepare them for drawing.
 		(*it)->m_model->Render(m_D3D->GetDeviceContext());
 
 		result = m_ShaderManager->RenderSoftShadowShader(m_D3D->GetDeviceContext(), (*it)->m_model->GetIndexCount(), transformMatrix, viewMatrix, projectionMatrix, 
