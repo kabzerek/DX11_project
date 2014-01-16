@@ -21,7 +21,7 @@ GraphicsClass::GraphicsClass()
 	m_FullScreenWindow = 0;
 	m_Text = 0;
 
-	m_Bullet = 0;
+	m_dynamicsWorld = 0;
 }
 
 
@@ -88,7 +88,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	m_Camera->RenderBaseViewMatrix();
 	
 	// Create physics world
-	m_Bullet->Initialize();
+	InitializePhysics();
 
 	// Create the model object.
 	EngineObjectClass* box1 = new EngineObjectClass;
@@ -99,10 +99,10 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	// Initialize the model object.
 	result = box1->Initialize(m_D3D->GetDevice(), "../PwAG/data/cube.DAE", L"../PwAG/data/stone02.dds", 
 												  L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
-												  aiVector3D(-4.0f, 0.0f, 0.0f), "Box", 
-												  1.0f, 1.0f, 1.0f,  //size
+												  aiVector3D(-4.0f, 5.0f, 0.0f), "Box", 
+												  0.25f, 0.25f, 0.25f,  //size
 												  1.0f,				 //mass
-												  1.0f, 1.0f, 1.0f); //inertia
+												  0.1f, 0.1f, 0.1f); //inertia
 	
 	if(!result)
 	{
@@ -110,21 +110,21 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 		return false;
 	}
 
-	m_Bullet->m_dynamicsWorld->addRigidBody(box1->m_rigidBody);
+	m_dynamicsWorld->addRigidBody(box1->m_rigidBody);
 	m_EngineObjects.push_back(box1);
 
-	EngineObjectClass* box2 = new EngineObjectClass;
-	if(!box2)
+	EngineObjectClass* box1b = new EngineObjectClass;
+	if(!box1)
 	{
 		return false;
 	}
 	// Initialize the model object.
-	result = box2->Initialize(m_D3D->GetDevice(), "../PwAG/data/sphere.DAE", L"../PwAG/data/stone02.dds", 
+	result = box1b->Initialize(m_D3D->GetDevice(), "../PwAG/data/cube.DAE", L"../PwAG/data/stone02.dds", 
 												  L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
-												  aiVector3D(1.25f, 0.50f, 0.5f), "Box", 
-												  1.0f, 1.0f, 1.0f,  //size
+												  aiVector3D(-5.5f, 5.0f, 0.0f), "Box", 
+												  0.25f, 0.25f, 0.25f,  //size
 												  1.0f,				 //mass
-												  1.0f, 1.0f, 1.0f); //inertia
+												  0.1f, 0.1f, 0.1f); //inertia
 	
 	if(!result)
 	{
@@ -132,8 +132,52 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 		return false;
 	}
 
-	m_Bullet->m_dynamicsWorld->addRigidBody(box2->m_rigidBody);
-	m_EngineObjects.push_back(box2);
+	m_dynamicsWorld->addRigidBody(box1b->m_rigidBody);
+	m_EngineObjects.push_back(box1b);
+
+	EngineObjectClass* box1c = new EngineObjectClass;
+	if(!box1)
+	{
+		return false;
+	}
+	// Initialize the model object.
+	result = box1c->Initialize(m_D3D->GetDevice(), "../PwAG/data/cube.DAE", L"../PwAG/data/stone02.dds", 
+												  L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
+												  aiVector3D(-7.0f, 5.0f, 0.0f), "Box", 
+												  0.25f, 0.25f, 0.25f,  //size
+												  1.0f,				 //mass
+												  0.1f, 0.1f, 0.1f); //inertia
+	
+	if(!result)
+	{
+		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
+		return false;
+	}
+
+	m_dynamicsWorld->addRigidBody(box1c->m_rigidBody);
+	m_EngineObjects.push_back(box1c);
+
+	EngineObjectClass* sphere = new EngineObjectClass;
+	if(!sphere)
+	{
+		return false;
+	}
+	// Initialize the model object.
+	result = sphere->Initialize(m_D3D->GetDevice(), "../PwAG/data/sphere.DAE", L"../PwAG/data/stone02.dds", 
+												  L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
+												  aiVector3D(1.25f, 5.50f, 0.5f), "Sphere", 
+												  0.25f,				 //radius
+												  2.0f,				 //mass
+												  0.1f, 0.1f, 0.1f); //inertia
+	
+	if(!result)
+	{
+		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
+		return false;
+	}
+
+	m_dynamicsWorld->addRigidBody(sphere->m_rigidBody);
+	m_EngineObjects.push_back(sphere);
 
 	EngineObjectClass* box3 = new EngineObjectClass;
 	if(!box3)
@@ -143,10 +187,10 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	// Initialize the model object.
 	result = box3->Initialize(m_D3D->GetDevice(), "../PwAG/data/cube.DAE", L"../PwAG/data/stone02.dds", 
 												  L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
-												  aiVector3D(0.0f, 0.0f, 0.0f), "Box", 
-												  1.0f, 1.0f, 1.0f,  //size
-												  1.0f,				 //mass
-												  1.0f, 1.0f, 1.0f); //inertia
+												  aiVector3D(0.0f, 5.0f, 0.0f), "Box", 
+												  0.25f, 0.25f, 0.25f,  //size
+												  10.0f,				 //mass
+												  0.1f, 0.1f, 0.1f); //inertia
 	
 	if(!result)
 	{
@@ -154,8 +198,30 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 		return false;
 	}
 
-	m_Bullet->m_dynamicsWorld->addRigidBody(box3->m_rigidBody);
+	m_dynamicsWorld->addRigidBody(box3->m_rigidBody);
 	m_EngineObjects.push_back(box3);
+
+	EngineObjectClass* box4 = new EngineObjectClass;
+	if(!box3)
+	{
+		return false;
+	}
+	// Initialize the model object.
+	result = box4->Initialize(m_D3D->GetDevice(), "../PwAG/data/cube.DAE", L"../PwAG/data/stone02.dds", 
+												  L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
+												  aiVector3D(0.0f, 6.5f, 0.0f), "Box", 
+												  0.25f, 0.25f, 0.25f,  //size
+												  15.0f,				 //mass
+												  0.1f, 0.1f, 0.1f); //inertia
+	
+	if(!result)
+	{
+		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
+		return false;
+	}
+
+	m_dynamicsWorld->addRigidBody(box4->m_rigidBody);
+	m_EngineObjects.push_back(box4);
 
 	EngineObjectClass* grnd = new EngineObjectClass;
 	if(!grnd)
@@ -167,7 +233,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 												  L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
 												  aiVector3D(0.0f, 0.0f, 0.0f), "StaticPlane",
 												  0.0f, 1.0f, 0.0f,
-												  0.0f);
+												  1.0f);
 	
 	if(!result)
 	{
@@ -175,6 +241,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 		return false;
 	}
 
+	m_dynamicsWorld->addRigidBody(grnd->m_rigidBody);
 	m_EngineObjects.push_back(grnd);
 
 	//Create the light object.
@@ -340,6 +407,8 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 
 void GraphicsClass::Shutdown()
 {
+	ShutdownPhysics();
+
 	// Release the text object.
 	if(m_Text)
 	{
@@ -450,12 +519,22 @@ void GraphicsClass::Shutdown()
 }
 
 
-bool GraphicsClass::Frame(float posX, float posY, float posZ, float rotX, float rotY, float rotZ)
+bool GraphicsClass::Frame(float posX, float posY, float posZ, float rotX, float rotY, float rotZ, bool uptd)
 {
 	bool result;
 	static bool side = false;
 	static float lightPositionX = -5.0f;
 
+	if(uptd)
+	{
+		m_dynamicsWorld->stepSimulation(1/60.0f, 10);
+
+		std::vector<EngineObjectClass*>::iterator it;
+		for(it = m_EngineObjects.begin(); it != m_EngineObjects.end(); ++it)
+		{
+			(*it)->Update();
+		}
+	}
 
 	// Set the position of the camera.
 	m_Camera->SetPosition(posX, posY, posZ);
@@ -971,4 +1050,63 @@ bool GraphicsClass::Render()
 void GraphicsClass::SetSentence(int i, std::string text)
 {
 	m_Text->SetSentence(i, text);
+}
+
+bool GraphicsClass::InitializePhysics(void)
+{
+	///collision configuration contains default setup for memory, collision setup. Advanced users can create their own configuration.
+    btDefaultCollisionConfiguration* m_collisionConfiguration = new btDefaultCollisionConfiguration;
+	if(!m_collisionConfiguration)
+		return false;
+
+	///use the default collision dispatcher. For parallel processing you can use a diffent dispatcher (see Extras/BulletMultiThreaded)
+	btCollisionDispatcher* m_dispatcher = new	btCollisionDispatcher(m_collisionConfiguration);
+	if(!m_dispatcher)
+		return false;
+
+    ///btDbvtBroadphase is a good general purpose broadphase. You can also try out btAxis3Sweep.
+	btBroadphaseInterface* m_broadphase = new btDbvtBroadphase;
+    if(!m_broadphase)
+		return false;
+
+    ///the default constraint solver. For parallel processing you can use a different solver (see Extras/BulletMultiThreaded)
+    btSequentialImpulseConstraintSolver* m_solver = new btSequentialImpulseConstraintSolver;
+	if(!m_solver)
+		return false;
+
+    // The world.
+	m_dynamicsWorld = new btDiscreteDynamicsWorld(m_dispatcher, m_broadphase, m_solver, m_collisionConfiguration);
+	if(!m_dynamicsWorld)
+		return false;
+
+    m_dynamicsWorld->setGravity(btVector3(0,-10,0));
+
+	return true;
+}
+
+void GraphicsClass::ShutdownPhysics()
+{
+	if(m_dynamicsWorld)
+		delete m_dynamicsWorld;
+	m_dynamicsWorld = 0;
+}
+
+void GraphicsClass::GetPos(float& m_x, float& m_y, float& m_z, float& g_x, float& g_y, float& g_z, float& m_d_x, float& m_d_y, float& m_d_z)
+{
+	m_x = m_EngineObjects[0]->m_model->GetPosition().x;
+	m_y = m_EngineObjects[0]->m_model->GetPosition().y;
+	m_z = m_EngineObjects[0]->m_model->GetPosition().z;
+
+	g_x = m_EngineObjects[1]->m_model->GetPosition().x;
+	g_y = m_EngineObjects[1]->m_model->GetPosition().y;
+	g_z = m_EngineObjects[1]->m_model->GetPosition().z;
+
+	btTransform transform;
+	m_EngineObjects[2]->m_rigidBody->getMotionState()->getWorldTransform(transform);
+
+	m_d_z = m_EngineObjects[0]->m_collisionShape->getMargin();
+
+	m_d_x = transform.getOrigin().getX();
+	m_d_y = transform.getOrigin().getY();
+	//m_d_z = transform.getOrigin().getZ();
 }

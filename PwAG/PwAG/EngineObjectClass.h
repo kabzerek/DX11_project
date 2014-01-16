@@ -31,9 +31,7 @@ private:
 public:
 	ModelClass* m_model;
 	btRigidBody* m_rigidBody;
-
-private:
-	btCollisionShape* m_collisionShape;
+	btCollisionShape* m_collisionShape;	
 };
 
 #endif

@@ -186,11 +186,13 @@ void ModelClass::SetPosition(D3DXVECTOR3 modelPosition)
 
 void ModelClass::Move(aiVector3D move)
 {
+	aiVector3D plus(move.x - m_Position.x, move.y - m_Position.y, move.z - m_Position.z);
+
 	for(unsigned int m = 0; m < m_model->mNumMeshes; ++m)
 		for(unsigned int v = 0; v < m_model->mMeshes[m]->mNumVertices; ++v)
-			m_model->mMeshes[m]->mVertices[v] += move;
+			m_model->mMeshes[m]->mVertices[v] += plus;
 
-	m_Position += aiVector3DtoD3DXVector3(move);
+	m_Position += aiVector3DtoD3DXVector3(plus);
 }
 
 D3DXVECTOR3 ModelClass::GetPosition()
@@ -198,7 +200,7 @@ D3DXVECTOR3 ModelClass::GetPosition()
 	return m_Position;
 }
 
-void ModelClass::GetPosition(float& x, float&y, float& z)
+void ModelClass::GetPosition(float& x, float& y, float& z)
 {
 	x = m_Position.x;
 	y = m_Position.y;

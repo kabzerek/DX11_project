@@ -208,29 +208,31 @@ bool SystemClass::Frame()
 	m_Position->GetRotation(rotX, rotY, rotZ);
 
 	// Set sentences
-	//if (rotX > 360.0f)
-	//	rotX -= 360.0f;
-	//if (rotY > 360.0f)
-	//	rotY -= 360.0f;
-	//if (rotZ > 360.0f)
-	//	rotZ -= 360.0f;
-	m_Graphics->SetSentence(0, "rotX: " + std::to_string(rotX));
-	m_Graphics->SetSentence(1, "rotY: " + std::to_string(rotY));
-	m_Graphics->SetSentence(2, "rotZ: " + std::to_string(rotZ));
+	float m_x, m_y, m_z, g_x, g_y, g_z, d_x, d_y, d_z;
+	m_Graphics->GetPos(m_x, m_y, m_z, g_x, g_y, g_z, d_x, d_y, d_z);
 
-	float fs, bs, ls, rs;
-	m_Position->GetSpeed(fs, bs, ls, rs);
-	m_Graphics->SetSentence(3, "fs: " + std::to_string(fs));
-	m_Graphics->SetSentence(4, "bs: " + std::to_string(bs));
-	m_Graphics->SetSentence(5, "ls: " + std::to_string(ls));
-	m_Graphics->SetSentence(6, "rs: " + std::to_string(rs));
+	m_Graphics->SetSentence(0, "m_x: " + std::to_string(m_x));
+	m_Graphics->SetSentence(1, "m_y: " + std::to_string(m_y));
+	m_Graphics->SetSentence(2, "m_z: " + std::to_string(m_z));
 
-	m_Graphics->SetSentence(7, "posX: " + std::to_string(posX));
-	m_Graphics->SetSentence(8, "posY: " + std::to_string(posY));
-	m_Graphics->SetSentence(9, "posZ: " + std::to_string(posZ));
+	m_Graphics->SetSentence(3, "g_x: " + std::to_string(g_x));
+	m_Graphics->SetSentence(4, "g_y: " + std::to_string(g_y));
+	m_Graphics->SetSentence(5, "g_z: " + std::to_string(g_z));
+	m_Graphics->SetSentence(6, "");
+
+	m_Graphics->SetSentence(7, "d_x: " + std::to_string(d_x));
+	m_Graphics->SetSentence(8, "d_y: " + std::to_string(d_y));
+	m_Graphics->SetSentence(9, "d_z: " + std::to_string(d_z));
 
 	// Do the frame processing for the graphics object.
-	result = m_Graphics->Frame(posX, posY, posZ, rotX, rotY, rotZ);
+	bool uptd = false;
+	if(m_Input->IsUPressed() == true)
+	{
+		uptd = true;
+	}
+
+	result = m_Graphics->Frame(posX, posY, posZ, rotX, rotY, rotZ, uptd);
+	uptd = false;
 	if(!result)
 	{
 		return false;

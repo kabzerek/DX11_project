@@ -1,7 +1,6 @@
 #ifndef _GRAPHICSCLASS_H_
 #define _GRAPHICSCLASS_H_
 
-
 #include "D3DClass.h"
 #include "CameraClass.h"
 #include "ModelClass.h"
@@ -12,9 +11,10 @@
 #include "TextClass.h"
 
 #include "EngineObjectClass.h"
-#include "BulletClass.h"
 
 #include "ShaderManagerClass.h"
+
+#include <btBulletDynamicsCommon.h>
 
 #include <vector>
 
@@ -35,10 +35,14 @@ public:
 	bool Initialize(int, int, HWND);
 	void Shutdown();
 	//bool Frame(int, int);
-	bool Frame(float, float, float, float, float, float);
+	bool Frame(float, float, float, float, float, float, bool);
 	bool SetWireframe();
 
 	void SetSentence(int, std::string);
+
+	btDiscreteDynamicsWorld* GetDynamicsWorld() { return m_dynamicsWorld; }
+
+	void GetPos(float&, float&, float&, float&, float&, float&, float&, float&, float&);
 
 private:
 	bool RenderSceneToTexture();
@@ -51,13 +55,18 @@ private:
 	bool UpSampleTexture();
 	bool Render2DTextureScene();
 
+	bool InitializePhysics();
+	void ShutdownPhysics();
+
+protected:
+	btDiscreteDynamicsWorld* m_dynamicsWorld;
+
 private:
 	D3DClass* m_D3D;
 	CameraClass* m_Camera;
 	std::vector<EngineObjectClass*> m_EngineObjects;
 	LightClass* m_Light;
 	TextClass* m_Text;
-	BulletClass* m_Bullet;
 
 	ShaderManagerClass* m_ShaderManager;
 
