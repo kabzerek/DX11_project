@@ -83,6 +83,7 @@ private:
 	D3DClass* m_D3D;
 	CameraClass* m_Camera;
 	std::vector<EngineObjectClass*> m_EngineObjects;
+	EngineObjectClass* m_Ragdoll;
 	LightClass* m_Light;
 	TextClass* m_Text;
 

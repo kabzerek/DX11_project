@@ -13,6 +13,16 @@ EngineObjectClass::~EngineObjectClass(void)
 {
 }
 
+// for Ragdoll
+bool EngineObjectClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* textureFilename1, WCHAR* textureFilename2, 
+								   WCHAR* textureFilename3, aiVector3D modelPosition, aiVector3D modelRotation, std::string name)
+{
+	m_model = new ModelClass;
+	m_model->Initialize(device, modelFilename, textureFilename1, textureFilename2, textureFilename3, modelPosition, modelRotation);
+
+	return true;
+}
+
 // for StaticPlane
 bool EngineObjectClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* textureFilename1, WCHAR* textureFilename2, 
 								   WCHAR* textureFilename3, aiVector3D modelPosition, aiVector3D modelRotation, std::string name, 

@@ -94,165 +94,135 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	InitializePhysics();
 
 	// Create the model object.
-	EngineObjectClass* box1 = new EngineObjectClass;
-	if(!box1)
-	{
-		return false;
-	}
-	// Initialize the model object.
-	result = box1->Initialize(m_D3D->GetDevice(), "../PwAG/data/cube.DAE", L"../PwAG/data/stone02.dds", 
-												  L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
-												  aiVector3D(-4.0f, 5.0f, 0.0f), aiVector3D(0.0f,0.0f,0.0f),
-												  "Box", 
-												   1.f, 1.f, 1.f,  //size
-												  1.0f,				 //mass
-												  0.1f, 0.1f, 0.1f); //inertia
-	
+	// Box 1 //
+	m_EngineObjects.push_back(new EngineObjectClass);
+	result = m_EngineObjects.back()->Initialize(m_D3D->GetDevice(), "../PwAG/data/cube.DAE", L"../PwAG/data/stone02.dds", 
+																	L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
+																	aiVector3D(-10.0f, 2.0f, 10.0f), aiVector3D(0.0f, 0.0f, 0.0f),
+																	"Box", 
+																	1.f, 1.f, 1.f,			//size
+																	1.0f,					//mass
+																	0.1f, 0.1f, 0.1f);		//inertia
 	if(!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
 		return false;
 	}
 
-	m_dynamicsWorld->addRigidBody(box1->m_rigidBody);
-	m_EngineObjects.push_back(box1);
+	m_dynamicsWorld->addRigidBody(m_EngineObjects.back()->m_rigidBody);
 
-	EngineObjectClass* box1b = new EngineObjectClass;
-	if(!box1)
-	{
-		return false;
-	}
-	// Initialize the model object.
-	result = box1b->Initialize(m_D3D->GetDevice(), "../PwAG/data/cube.DAE", L"../PwAG/data/stone02.dds", 
-												  L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
-												  aiVector3D(-8.5f, 3.0f, 0.0f), aiVector3D(0.0f, 0.0f, 0.0f), 
-												  "Box", 
-												   1.f, 1.f, 1.f,  //size
-												  1.0f,				 //mass
-												  0.1f, 0.1f, 0.1f); //inertia
-	
+	// Box 2 //
+	m_EngineObjects.push_back(new EngineObjectClass);
+	result = m_EngineObjects.back()->Initialize(m_D3D->GetDevice(), "../PwAG/data/cube.DAE", L"../PwAG/data/stone02.dds", 
+																	L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
+																	aiVector3D(-10.0f, 5.5f, 10.0f), aiVector3D(0.0f, 0.0f, 0.0f),
+																	"Box", 
+																	1.f, 1.f, 1.f,			//size
+																	1.0f,					//mass
+																	0.1f, 0.1f, 0.1f);		//inertia
 	if(!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
 		return false;
 	}
 
-	m_dynamicsWorld->addRigidBody(box1b->m_rigidBody);
-	m_EngineObjects.push_back(box1b);
+	m_dynamicsWorld->addRigidBody(m_EngineObjects.back()->m_rigidBody);
 
-	EngineObjectClass* box1c = new EngineObjectClass;
-	if(!box1)
-	{
-		return false;
-	}
-	// Initialize the model object.
-	result = box1c->Initialize(m_D3D->GetDevice(), "../PwAG/data/cube.DAE", L"../PwAG/data/stone02.dds", 
-												  L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
-												  aiVector3D(-7.0f, 5.0f, 0.0f), aiVector3D(0.0f, 0.0f, 0.0f), 
-												  "Box", 
-												   1.f, 1.f, 1.f,  //size
-												  1.0f,				 //mass
-												  0.1f, 0.1f, 0.1f); //inertia
-	
+	// Box 3 //
+	m_EngineObjects.push_back(new EngineObjectClass);
+	result = m_EngineObjects.back()->Initialize(m_D3D->GetDevice(), "../PwAG/data/cube.DAE", L"../PwAG/data/stone02.dds", 
+																	L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
+																	aiVector3D(-8.0f, 2.0f, 4.0f), aiVector3D(0.0f, 0.0f, 0.0f),
+																	"Box", 
+																	1.f, 1.f, 1.f,			//size
+																	1.0f,					//mass
+																	0.1f, 0.1f, 0.1f);		//inertia
 	if(!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
 		return false;
 	}
 
-	m_dynamicsWorld->addRigidBody(box1c->m_rigidBody);
-	m_EngineObjects.push_back(box1c);
+	m_dynamicsWorld->addRigidBody(m_EngineObjects.back()->m_rigidBody);
 
-	EngineObjectClass* sphere = new EngineObjectClass;
-	if(!sphere)
-	{
-		return false;
-	}
-	// Initialize the model object.
-	result = sphere->Initialize(m_D3D->GetDevice(), "../PwAG/data/sphere.DAE", L"../PwAG/data/stone02.dds", 
-												  L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
-												  aiVector3D(1.8f, 5.50f, 0.5f), aiVector3D(0.0f, 0.0f, 0.0f), 
-												  "Sphere", 
-												  1.f,				 //radius
-												  2.0f,				 //mass
-												  0.1f, 0.1f, 0.1f); //inertia
-	
+	// Sphere 1 //
+	m_EngineObjects.push_back(new EngineObjectClass);
+	result = m_EngineObjects.back()->Initialize(m_D3D->GetDevice(), "../PwAG/data/sphere.DAE", L"../PwAG/data/stone02.dds", 
+																	L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
+																	aiVector3D(6.0f, 3.0f, 2.0f), aiVector3D(0.0f, 0.0f, 0.0f), 
+																	"Sphere", 
+																	1.f,					//radius
+																	2.0f,					//mass
+																	0.1f, 0.1f, 0.1f);		//inertia
 	if(!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
 		return false;
 	}
 
-	m_dynamicsWorld->addRigidBody(sphere->m_rigidBody);
-	m_EngineObjects.push_back(sphere);
+	m_dynamicsWorld->addRigidBody(m_EngineObjects.back()->m_rigidBody);
 
-	EngineObjectClass* box3 = new EngineObjectClass;
-	if(!box3)
-	{
-		return false;
-	}
-	// Initialize the model object.
-	result = box3->Initialize(m_D3D->GetDevice(), "../PwAG/data/cube.DAE", L"../PwAG/data/stone02.dds", 
-												  L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
-												  aiVector3D(0.0f, 5.0f, 0.0f), aiVector3D(0.0f, 0.0f, 0.0f), 
-												  "Box", 
-												  1.f, 1.f, 1.f,  //size
-												  10.0f,				 //mass
-												  0.1f, 0.1f, 0.1f); //inertia
-	
+	// Box 4 //
+	m_EngineObjects.push_back(new EngineObjectClass);
+	result = m_EngineObjects.back()->Initialize(m_D3D->GetDevice(), "../PwAG/data/cube.DAE", L"../PwAG/data/stone02.dds", 
+																	L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
+																	aiVector3D(7.0f, 3.0f, 7.0f), aiVector3D(0.0f, 0.0f, 0.0f),
+																	"Box", 
+																	1.f, 1.f, 1.f,			//size
+																	1.0f,					//mass
+																	0.1f, 0.1f, 0.1f);		//inertia
 	if(!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
 		return false;
 	}
 
-	m_dynamicsWorld->addRigidBody(box3->m_rigidBody);
-	m_EngineObjects.push_back(box3);
+	m_dynamicsWorld->addRigidBody(m_EngineObjects.back()->m_rigidBody);
 
-	EngineObjectClass* box4 = new EngineObjectClass;
-	if(!box3)
-	{
-		return false;
-	}
-	// Initialize the model object.
-	result = box4->Initialize(m_D3D->GetDevice(), "../PwAG/data/cube.DAE", L"../PwAG/data/stone02.dds", 
-												  L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
-												  aiVector3D(0.0f, 7.5f, 0.2f), aiVector3D(0.0f, 0.0f, 0.0f), 
-												  "Box", 
-												  1.f, 1.f, 1.f,  //size
-												  15.0f,				 //mass
-												  0.1f, 0.1f, 0.1f); //inertia
-	
+	// Box 5 //
+	m_EngineObjects.push_back(new EngineObjectClass);
+	result = m_EngineObjects.back()->Initialize(m_D3D->GetDevice(), "../PwAG/data/cube.DAE", L"../PwAG/data/stone02.dds", 
+																	L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
+																	aiVector3D(8.5f, 6.0f, 6.0f), aiVector3D(0.5f, 0.0f, 0.0f),
+																	"Box", 
+																	1.f, 1.f, 1.f,			//size
+																	1.0f,					//mass
+																	0.1f, 0.1f, 0.1f);		//inertia
 	if(!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
 		return false;
 	}
 
-	m_dynamicsWorld->addRigidBody(box4->m_rigidBody);
-	m_EngineObjects.push_back(box4);
+	m_dynamicsWorld->addRigidBody(m_EngineObjects.back()->m_rigidBody);
 
-	EngineObjectClass* grnd = new EngineObjectClass;
-	if(!grnd)
+	// Ragdoll //	
+	m_Ragdoll = new EngineObjectClass;
+	if(!m_Ragdoll)
 	{
 		return false;
 	}
 	// Initialize the model object.
-	result = grnd->Initialize(m_D3D->GetDevice(), "../PwAG/data/scene1.DAE", L"../PwAG/data/stone01.dds", 
-												  L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
-												  aiVector3D(0.0f, 0.0f, 0.0f), aiVector3D(0.0f, 0.2f, 0.2f), 
-												  "StaticPlane",
-												  0.0f, 1.0f, 0.0f,
-												  1.0f);
+	result = m_Ragdoll->Initialize(m_D3D->GetDevice(), "../PwAG/data/Wariat_001.dae", L"../PwAG/data/seafloor.dds", 
+													   L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
+													   aiVector3D(0.0f, 5.0f, 0.0f), aiVector3D(0.0f, 0.0f, 0.0f),
+													   "Ragdoll");
 	
+	// Ground //
+	m_EngineObjects.push_back(new EngineObjectClass);
+	result = m_EngineObjects.back()->Initialize(m_D3D->GetDevice(), "../PwAG/data/Plane.dae", L"../PwAG/data/dirt01.dds", 
+																	L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
+																	aiVector3D(0.0f, 0.0f, 0.0f), aiVector3D(0.0f, 0.0f, 0.0f), 
+																	"StaticPlane",
+																	0.0f, 1.0f, 0.0f,
+																	0.0f);
 	if(!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
 		return false;
 	}
 
-	m_dynamicsWorld->addRigidBody(grnd->m_rigidBody);
-	m_EngineObjects.push_back(grnd);
+	m_dynamicsWorld->addRigidBody(m_EngineObjects.back()->m_rigidBody);
 
 	//Create the light object.
 	m_Light = new LightClass;
@@ -1026,8 +996,8 @@ bool GraphicsClass::Render()
 		(*it)->m_model->Render(m_D3D->GetDeviceContext());
 
 		result = m_ShaderManager->RenderSoftShadowShader(m_D3D->GetDeviceContext(), (*it)->m_model->GetIndexCount(), transformMatrix, viewMatrix, projectionMatrix, 
-                                        (*it)->m_model->GetTexture(), m_UpSampleTexture->GetShaderResourceView(), m_Light->GetPosition(), 
-                                        m_Light->GetAmbientColor(), m_Light->GetDiffuseColor());
+														(*it)->m_model->GetTexture(), m_UpSampleTexture->GetShaderResourceView(), m_Light->GetPosition(), 
+														m_Light->GetAmbientColor(), m_Light->GetDiffuseColor());
 		//result = m_ShaderManager->RenderLightShader(m_D3D->GetDeviceContext(), (*it)->m_model->GetIndexCount(), transformMatrix, viewMatrix, projectionMatrix, 
         //                               (*it)->m_model->GetTexture(), m_Light->GetDirection(), m_Light->GetAmbientColor(), m_Light->GetDiffuseColor(), 
         //                               m_Camera->GetPosition(), m_Light->GetSpecularColor(), m_Light->GetSpecularPower());
@@ -1043,6 +1013,23 @@ bool GraphicsClass::Render()
 		// Reset the world matrix.
 		m_D3D->GetWorldMatrix(worldMatrix);
 	}
+
+	// Render Ragdoll
+	transformMatrix = worldMatrix;
+	D3DXMatrixAffineTransformation(&transformMatrix, 1.0f, &D3DXVECTOR3(0.0f,0.0f,0.0f), &m_Ragdoll->m_model->GetRotation(),  &m_Ragdoll->m_model->GetPosition());
+	// Put the model vertex and index buffers on the graphics pipeline to prepare them for drawing.
+	m_Ragdoll->m_model->Render(m_D3D->GetDeviceContext());
+
+	result = m_ShaderManager->RenderSoftShadowShader(m_D3D->GetDeviceContext(), m_Ragdoll->m_model->GetIndexCount(), transformMatrix, viewMatrix, projectionMatrix, 
+													m_Ragdoll->m_model->GetTexture(), m_UpSampleTexture->GetShaderResourceView(), m_Light->GetPosition(), 
+													m_Light->GetAmbientColor(), m_Light->GetDiffuseColor());
+	if(!result)
+	{
+		return false;
+	}
+
+	// Reset the world matrix.
+	m_D3D->GetWorldMatrix(worldMatrix);
 
 	std::vector<PhysicsDebugObjectClass*>::iterator dIt;
 	for(dIt = m_DebugObjects.begin(); dIt != m_DebugObjects.end(); ++dIt)
