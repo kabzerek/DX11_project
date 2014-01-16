@@ -1250,6 +1250,10 @@ void GraphicsClass::drawLine(const btVector3 &from, const btVector3 &to, const b
 
 	result = m_ShaderManager->RenderColorShader(deviceContext, 2, worldMatrix, viewMatrix, projectionMatrix);
 
+	
+	// Present the rendered scene to the screen.
+	m_D3D->EndScene();
+
 	return;
 }
 
