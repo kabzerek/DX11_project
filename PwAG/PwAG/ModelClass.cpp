@@ -31,11 +31,11 @@ bool ModelClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* te
 	{
 		return false;
 	}
-
+	
 	// Set position of the model
 	SetInitialPosition(modelPosition);
 	// Set rotation of the model
-	SetInitialRotation(modelRotation);
+	SetRotation( D3DXVECTOR3(modelRotation.x, modelRotation.y, modelRotation.z) );
 	m_Scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
 
 	// Initialize the vertex and index buffers.
