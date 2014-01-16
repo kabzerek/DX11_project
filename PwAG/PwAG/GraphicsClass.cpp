@@ -207,7 +207,8 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 													   L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
 													   aiVector3D(0.0f, 5.0f, 0.0f), aiVector3D(0.0f, 0.0f, 0.0f),
 													   "Ragdoll");
-	
+	m_EngineObjects.push_back(m_Ragdoll);
+
 	// Ground //
 	m_EngineObjects.push_back(new EngineObjectClass);
 	result = m_EngineObjects.back()->Initialize(m_D3D->GetDevice(), "../PwAG/data/Plane.dae", L"../PwAG/data/dirt01.dds", 
@@ -512,7 +513,8 @@ bool GraphicsClass::Frame(float posX, float posY, float posZ, float rotX, float 
 		std::vector<EngineObjectClass*>::iterator it;
 		for(it = m_EngineObjects.begin(); it != m_EngineObjects.end(); ++it)
 		{
-			(*it)->Update();
+			if((*it)->m_rigidBody)
+				(*it)->Update();
 		}
 	}
 
@@ -1013,23 +1015,6 @@ bool GraphicsClass::Render()
 		// Reset the world matrix.
 		m_D3D->GetWorldMatrix(worldMatrix);
 	}
-
-	// Render Ragdoll
-	transformMatrix = worldMatrix;
-	D3DXMatrixAffineTransformation(&transformMatrix, 1.0f, &D3DXVECTOR3(0.0f,0.0f,0.0f), &m_Ragdoll->m_model->GetRotation(),  &m_Ragdoll->m_model->GetPosition());
-	// Put the model vertex and index buffers on the graphics pipeline to prepare them for drawing.
-	m_Ragdoll->m_model->Render(m_D3D->GetDeviceContext());
-
-	result = m_ShaderManager->RenderSoftShadowShader(m_D3D->GetDeviceContext(), m_Ragdoll->m_model->GetIndexCount(), transformMatrix, viewMatrix, projectionMatrix, 
-													m_Ragdoll->m_model->GetTexture(), m_UpSampleTexture->GetShaderResourceView(), m_Light->GetPosition(), 
-													m_Light->GetAmbientColor(), m_Light->GetDiffuseColor());
-	if(!result)
-	{
-		return false;
-	}
-
-	// Reset the world matrix.
-	m_D3D->GetWorldMatrix(worldMatrix);
 
 	std::vector<PhysicsDebugObjectClass*>::iterator dIt;
 	for(dIt = m_DebugObjects.begin(); dIt != m_DebugObjects.end(); ++dIt)

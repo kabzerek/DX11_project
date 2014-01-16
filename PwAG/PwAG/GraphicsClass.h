@@ -63,6 +63,8 @@ private:
 	bool UpSampleTexture();
 	bool Render2DTextureScene();
 
+	//bool RenderShaders(
+
 	bool InitializePhysics();
 	void ShutdownPhysics();
 
