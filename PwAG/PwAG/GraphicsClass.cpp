@@ -568,13 +568,21 @@ bool GraphicsClass::Frame(float posX, float posY, float posZ, float rotX, float 
 	// Update the position of the light.
 	m_Light->SetPosition(lightPositionX, 7.0f, -5.0f);
 	
+
+	m_dynamicsWorld->debugDrawWorld();
 	// Render the graphics scene.
 	result = Render();
 	if(!result)
 	{
 		return false;
 	}
-	m_dynamicsWorld->debugDrawWorld();
+
+	std::vector<PhysicsDebugObjectClass*>::iterator dIt;
+	for(dIt = m_DebugObjects.begin(); dIt != m_DebugObjects.end(); ++dIt)
+	{
+		(*dIt)->Shutdown();
+	}
+	m_DebugObjects.clear();
 
 	return true;
 }
