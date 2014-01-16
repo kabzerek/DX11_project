@@ -64,7 +64,7 @@ public:
 	void SetPosition(D3DXVECTOR3);
 	void SetRotation(D3DXVECTOR3);
 	void SetRotation(D3DXQUATERNION);
-	void Move(aiVector3D);
+	void Move(aiVector3D, D3DXQUATERNION);
 
 private:
 	bool InitializeBuffers(ID3D11Device*);
@@ -88,7 +88,7 @@ private:
 	TextureClass* m_Texture;
 	TextureArrayClass* m_TextureArray;
 	D3DXVECTOR3 m_Position;
-	D3DXVECTOR3 m_Rotation; // pitch yaw roll
+	D3DXVECTOR3 m_Rotation; // roll yaw pitch
 
 	Assimp::Importer* m_importer;
 	const aiScene* m_model;

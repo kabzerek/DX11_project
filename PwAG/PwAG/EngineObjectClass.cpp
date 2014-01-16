@@ -149,11 +149,11 @@ void EngineObjectClass::Update(void)
 	float x = transform.getOrigin().getX();
 	float y = transform.getOrigin().getY();
 	float z = transform.getOrigin().getZ();
+	D3DXQUATERNION q;
+	q.x = transform.getRotation().getX();
+	q.y = transform.getRotation().getY();
+	q.z = transform.getRotation().getZ();
+	q.w = transform.getRotation().getW();
 
-	//float rx = transform.getRotation().getX(); // bedzie trzeba przesuwac o quaternion, tak
-	//float ry = transform.getRotation().getY();
-	//float rz = transform.getRotation().getZ();
-	//float rw = transform.getRotation().getW();
-
-	m_model->Move(aiVector3D(x, y, z));
+	m_model->Move(aiVector3D(x, y, z), q);
 }

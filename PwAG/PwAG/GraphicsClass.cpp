@@ -145,7 +145,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	// Initialize the model object.
 	result = box1c->Initialize(m_D3D->GetDevice(), "../PwAG/data/cube.DAE", L"../PwAG/data/stone02.dds", 
 												  L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
-												  aiVector3D(-7.0f, 5.0f, 0.0f), aiVector3D(0.0f, 0.5f, 0.0f), 
+												  aiVector3D(-7.0f, 5.0f, 0.0f), aiVector3D(0.0f, 0.0f, 0.0f), 
 												  "Box", 
 												  0.25f, 0.25f, 0.25f,  //size
 												  1.0f,				 //mass
@@ -237,7 +237,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	// Initialize the model object.
 	result = grnd->Initialize(m_D3D->GetDevice(), "../PwAG/data/scene1.DAE", L"../PwAG/data/stone01.dds", 
 												  L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
-												  aiVector3D(0.0f, 0.0f, 0.0f), aiVector3D(-0.5f, 0.0f, 0.0f), 
+												  aiVector3D(0.0f, 0.0f, 0.0f), aiVector3D(0.0f, 0.0f, 0.0f), 
 												  "StaticPlane",
 												  0.0f, 1.0f, 0.0f,
 												  1.0f);
@@ -1009,7 +1009,7 @@ bool GraphicsClass::Render()
 		(*it)->m_model->GetRotation(rotX, rotY, rotZ);
 		(*it)->m_model->GetPosition(posX, posY, posZ);
 		
-		(*it)->m_model->SetRotation(D3DXVECTOR3(rotX, rotY+0.01f, rotZ));
+		//(*it)->m_model->SetRotation(D3DXVECTOR3(rotX, rotY+0.01f, rotZ));
 		
 		// Setup the translation matrix
 		D3DXMatrixTranslation(&translationMatrix, posX, posY, posZ);

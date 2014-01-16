@@ -196,7 +196,7 @@ void ModelClass::SetRotation(D3DXVECTOR3 modelRotation)
 	m_Rotation = modelRotation;
 }
 
-void ModelClass::Move(aiVector3D move)
+void ModelClass::Move(aiVector3D move, D3DXQUATERNION quat)
 {
 	aiVector3D plus(move.x - m_Position.x, move.y - m_Position.y, move.z - m_Position.z);
 
@@ -205,6 +205,7 @@ void ModelClass::Move(aiVector3D move)
 			m_model->mMeshes[m]->mVertices[v] += plus;
 
 	m_Position += aiVector3DtoD3DXVector3(plus);
+	//quat * m_Position * conj(quat)
 }
 
 
