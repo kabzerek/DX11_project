@@ -627,7 +627,7 @@ bool GraphicsClass::RenderSceneToTexture()
 		m_D3D->GetWorldMatrix(worldMatrix);
 		transformMatrix = worldMatrix;
 
-		D3DXMatrixAffineTransformation(&transformMatrix, 1.0f, &(*it)->m_model->GetPosition(), &(*it)->m_model->GetRotation(),  &(*it)->m_model->GetPosition());
+		D3DXMatrixAffineTransformation(&transformMatrix, 1.0f, &D3DXVECTOR3(0.0f,0.0f,0.0f), &(*it)->m_model->GetRotation(),  &(*it)->m_model->GetPosition());
 		//m_D3D->GetProjectionMatrix(projectionMatrix);
 
 		// Render the model with the depth shader.
@@ -690,7 +690,7 @@ bool GraphicsClass::RenderBlackAndWhiteShadows()
 		m_D3D->GetWorldMatrix(worldMatrix);
 		transformMatrix = worldMatrix;
 
-		D3DXMatrixAffineTransformation(&transformMatrix, 1.0f, &(*it)->m_model->GetPosition(), &(*it)->m_model->GetRotation(),  &(*it)->m_model->GetPosition());
+		D3DXMatrixAffineTransformation(&transformMatrix, 1.0f, &D3DXVECTOR3(0.0f,0.0f,0.0f), &(*it)->m_model->GetRotation(),  &(*it)->m_model->GetPosition());
 		//m_D3D->GetProjectionMatrix(projectionMatrix);
 
 		// Render the model with the depth shader.
