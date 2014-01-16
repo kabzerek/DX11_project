@@ -27,6 +27,12 @@ const int SHADOWMAP_HEIGHT = 1024;
 
 class GraphicsClass : btIDebugDraw
 {
+private:
+	struct DebugVertexType
+		{
+			D3DXVECTOR3 position;
+			D3DXVECTOR3 color;
+		};
 public:
 	GraphicsClass();
 	GraphicsClass(const GraphicsClass&);
@@ -37,6 +43,7 @@ public:
 	//bool Frame(int, int);
 	bool Frame(float, float, float, float, float, float, bool);
 	bool SetWireframe();
+	void ToggleDebugMode();
 
 	void SetSentence(int, std::string);
 
@@ -62,6 +69,11 @@ private:
 	// dtDebugDraw //
 	/////////////////
 	void drawLine(const btVector3 &from, const btVector3 &to, const btVector3 &color);
+	void drawContactPoint(const btVector3& PointOnB, const btVector3& normalOnB, btScalar distance, int lifeTime, const btVector3& color) { return; }
+	void reportErrorWarning(const char* warningString) { return; }
+	void draw3dText(const btVector3& location, const char* textString) { return; }
+	void setDebugMode(int debugMode) { m_debugMode = debugMode; }
+	int  getDebugMode() const { return m_debugMode; }
 
 protected:
 	btDiscreteDynamicsWorld* m_dynamicsWorld;
@@ -80,6 +92,14 @@ private:
 
 	//DebugWindowClass* m_DebugWindow;
 	OrthoWindowClass *m_SmallWindow, *m_FullScreenWindow;
+
+	/////////////////
+	// dtDebugDraw //
+	/////////////////
+	int m_debugMode;
+	bool m_isDebug;
+
+	ID3D11Buffer* m_vertexBuffer, * m_indexBuffer;
 };
 
 #endif

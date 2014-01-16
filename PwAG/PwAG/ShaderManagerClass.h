@@ -15,6 +15,7 @@
 #include "SpecMapShaderClass.h"
 #include "TextureShaderClass.h"
 #include "VerticalBlurShaderClass.h"
+#include "ColorShaderClass.h"
 
 
 class ShaderManagerClass
@@ -26,6 +27,12 @@ public:
 
 	bool Initialize(ID3D11Device*, HWND);
 	void Shutdown();
+
+	bool RenderColorShader(ID3D11DeviceContext*, 
+						   int, 
+						   D3DXMATRIX, 
+						   D3DXMATRIX, 
+						   D3DXMATRIX);
 
 	bool RenderAlphaMapShader(ID3D11DeviceContext*, 
 							  int, 
@@ -126,6 +133,7 @@ public:
 								  float);
 
 private:
+	ColorShaderClass*			m_ColorShader;
 	AlphaMapShaderClass*		m_AlphaMapShader;
 	BumpMapShaderClass*			m_BumpMapShader;
 	DepthShaderClass*			m_DepthShader;

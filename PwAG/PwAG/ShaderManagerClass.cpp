@@ -3,6 +3,7 @@
 
 ShaderManagerClass::ShaderManagerClass(void)
 {
+	m_ColorShader = 0;
 	m_AlphaMapShader = 0;
 	m_BumpMapShader = 0;
 	m_DepthShader = 0;
@@ -28,6 +29,23 @@ ShaderManagerClass::~ShaderManagerClass(void)
 bool ShaderManagerClass::Initialize(ID3D11Device* device, HWND hwnd)
 {
 	bool result;
+
+	/////////////////
+	// ColorShader //
+	/////////////////
+	m_ColorShader = new ColorShaderClass;
+	if(!m_ColorShader)
+	{
+		return false;
+	}
+
+	// Initialize the ColorShader object.
+	result = m_ColorShader->Initialize(device, hwnd);
+	if(!result)
+	{
+		MessageBox(hwnd, L"Could not initialize the ColorShader object.", L"Error", MB_OK);
+		return false;
+	}
 
 	////////////////////
 	// AlphaMapShader //
@@ -232,6 +250,14 @@ bool ShaderManagerClass::Initialize(ID3D11Device* device, HWND hwnd)
 
 void ShaderManagerClass::Shutdown()
 {
+	// Release the ColorShader object.
+	if(m_ColorShader)
+	{
+		m_ColorShader->Shutdown();
+		delete m_ColorShader;
+		m_ColorShader = 0;
+	}
+
 	// Release the AlphaMapShader object.
 	if(m_AlphaMapShader)
 	{
@@ -321,6 +347,28 @@ void ShaderManagerClass::Shutdown()
 	}
 
 	return;
+}
+
+bool ShaderManagerClass::RenderColorShader(ID3D11DeviceContext* deviceContext, 
+										   int indexCount, 
+										   D3DXMATRIX worldMatrix, 
+										   D3DXMATRIX viewMatrix, 
+										   D3DXMATRIX projectionMatrix)
+{
+	bool result;
+
+	// Render the model using ColorShader.
+	result = m_ColorShader->Render(deviceContext, 
+								   indexCount, 
+								   worldMatrix, 
+								   viewMatrix, 
+								   projectionMatrix);
+	if(!result)
+	{
+		return false;
+	}
+
+	return true;
 }
 
 bool ShaderManagerClass::RenderAlphaMapShader(ID3D11DeviceContext* deviceContext, 

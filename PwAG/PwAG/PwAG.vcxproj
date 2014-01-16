@@ -87,6 +87,7 @@
     <ClCompile Include="AlphaMapShaderClass.cpp" />
     <ClCompile Include="BumpMapShaderClass.cpp" />
     <ClCompile Include="CameraClass.cpp" />
+    <ClCompile Include="ColorShaderClass.cpp" />
     <ClCompile Include="DebugWindowClass.cpp" />
     <ClCompile Include="DepthShaderClass.cpp" />
     <ClCompile Include="EngineObjectClass.cpp" />
@@ -120,6 +121,7 @@
     <ClInclude Include="AlphaMapShaderClass.h" />
     <ClInclude Include="BumpMapShaderClass.h" />
     <ClInclude Include="CameraClass.h" />
+    <ClInclude Include="ColorShaderClass.h" />
     <ClInclude Include="DebugWindowClass.h" />
     <ClInclude Include="DepthShaderClass.h" />
     <ClInclude Include="EngineObjectClass.h" />

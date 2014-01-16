@@ -42,6 +42,7 @@ private:
 	float m_TimeElapsed;
 	float m_MaxInputTestTime;
 	bool m_WFPressed;
+	bool m_WirePressed;
 };
 
 static LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);

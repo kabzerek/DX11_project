@@ -92,6 +92,9 @@
     <ClCompile Include="EngineObjectClass.cpp">
       <Filter>Classess</Filter>
     </ClCompile>
+    <ClCompile Include="ColorShaderClass.cpp">
+      <Filter>Classess</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraClass.h">
@@ -185,6 +188,9 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="EngineObjectClass.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="ColorShaderClass.h">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>

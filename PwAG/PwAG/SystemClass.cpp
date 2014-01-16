@@ -317,14 +317,21 @@ bool SystemClass::HandleInput(float frameTime)
 		{
 			m_WFPressed = true;
 		}
+		if(m_Input->IsTPressed())
+		{
+			m_WirePressed = true;
+		}
 	}
 	if(m_TimeElapsed >= m_MaxInputTestTime)
 	{
 		if(m_WFPressed)
 			result = m_Graphics->SetWireframe();
+		if(m_WirePressed)
+			m_Graphics->ToggleDebugMode();
 
 		m_TimeElapsed = 0.0f;
 		m_WFPressed = false;
+		m_WirePressed = false;
 	}
 
 	return result;
