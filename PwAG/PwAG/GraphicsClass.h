@@ -29,11 +29,14 @@ const int SHADOWMAP_HEIGHT = 1024;
 class GraphicsClass : btIDebugDraw
 {
 private:
-	struct DebugVertexType
-		{
-			D3DXVECTOR3 position;
-			D3DXVECTOR3 color;
-		};
+	enum shaders_types
+	{
+		AlphaMapShader		= 0,
+		BumpMapShader		= 1,
+		MultiTextureShader	= 2,
+		SoftShadowShader	= 3,
+		SpecMapShader		= 4
+	};
 public:
 	GraphicsClass();
 	GraphicsClass(const GraphicsClass&);
@@ -63,7 +66,7 @@ private:
 	bool UpSampleTexture();
 	bool Render2DTextureScene();
 
-	//bool RenderShaders(
+	bool RenderShaders(ID3D11DeviceContext* device, EngineObjectClass* engineObject, D3DXMATRIX transformMatrix, D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix);
 
 	bool InitializePhysics();
 	void ShutdownPhysics();

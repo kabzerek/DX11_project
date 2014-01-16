@@ -97,12 +97,13 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	// Box 1 //
 	m_EngineObjects.push_back(new EngineObjectClass);
 	result = m_EngineObjects.back()->Initialize(m_D3D->GetDevice(), "../PwAG/data/cube.DAE", L"../PwAG/data/stone02.dds", 
-																	L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
+																	L"../PwAG/data/dirt01.dds", L"../PwAG/data/spec02.dds",
 																	aiVector3D(-10.0f, 2.0f, 10.0f), aiVector3D(0.0f, 0.0f, 0.0f),
 																	"Box", 
 																	1.f, 1.f, 1.f,			//size
 																	1.0f,					//mass
-																	0.1f, 0.1f, 0.1f);		//inertia
+																	0.1f, 0.1f, 0.1f,		//inertia
+																	shaders_types::AlphaMapShader);
 	if(!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
@@ -114,12 +115,13 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	// Box 2 //
 	m_EngineObjects.push_back(new EngineObjectClass);
 	result = m_EngineObjects.back()->Initialize(m_D3D->GetDevice(), "../PwAG/data/cube.DAE", L"../PwAG/data/stone02.dds", 
-																	L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
+																	L"../PwAG/data/dirt01.dds", L"../PwAG/data/spec02.dds",
 																	aiVector3D(-10.0f, 5.5f, 10.0f), aiVector3D(0.0f, 0.0f, 0.0f),
 																	"Box", 
 																	1.f, 1.f, 1.f,			//size
 																	1.0f,					//mass
-																	0.1f, 0.1f, 0.1f);		//inertia
+																	0.1f, 0.1f, 0.1f,		//inertia
+																	shaders_types::MultiTextureShader);
 	if(!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
@@ -136,7 +138,8 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 																	"Box", 
 																	1.f, 1.f, 1.f,			//size
 																	1.0f,					//mass
-																	0.1f, 0.1f, 0.1f);		//inertia
+																	0.1f, 0.1f, 0.1f,		//inertia
+																	shaders_types::SoftShadowShader);
 	if(!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
@@ -153,7 +156,8 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 																	"Sphere", 
 																	1.f,					//radius
 																	2.0f,					//mass
-																	0.1f, 0.1f, 0.1f);		//inertia
+																	0.1f, 0.1f, 0.1f,		//inertia
+																	shaders_types::SoftShadowShader);
 	if(!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
@@ -170,7 +174,8 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 																	"Box", 
 																	1.f, 1.f, 1.f,			//size
 																	1.0f,					//mass
-																	0.1f, 0.1f, 0.1f);		//inertia
+																	0.1f, 0.1f, 0.1f,		//inertia
+																	shaders_types::SpecMapShader);
 	if(!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
@@ -187,7 +192,8 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 																	"Box", 
 																	1.f, 1.f, 1.f,			//size
 																	1.0f,					//mass
-																	0.1f, 0.1f, 0.1f);		//inertia
+																	0.1f, 0.1f, 0.1f,		//inertia
+																	shaders_types::SpecMapShader);
 	if(!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
@@ -206,7 +212,8 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	result = m_Ragdoll->Initialize(m_D3D->GetDevice(), "../PwAG/data/Wariat_001.dae", L"../PwAG/data/seafloor.dds", 
 													   L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
 													   aiVector3D(0.0f, 5.0f, 0.0f), aiVector3D(0.0f, 0.0f, 0.0f),
-													   "Ragdoll");
+													   "Ragdoll",
+													   shaders_types::SoftShadowShader);
 	m_EngineObjects.push_back(m_Ragdoll);
 
 	// Ground //
@@ -216,7 +223,8 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 																	aiVector3D(0.0f, 0.0f, 0.0f), aiVector3D(0.0f, 0.0f, 0.0f), 
 																	"StaticPlane",
 																	0.0f, 1.0f, 0.0f,
-																	0.0f);
+																	0.0f,
+																	shaders_types::SoftShadowShader);
 	if(!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
@@ -538,7 +546,7 @@ bool GraphicsClass::Frame(float posX, float posY, float posZ, float rotX, float 
 		side = !side;
 	}
 	// Update the position of the light.
-	m_Light->SetPosition(lightPositionX, 7.0f, -5.0f);
+	m_Light->SetPosition(lightPositionX, 14.0f, -5.0f);
 	
 
 	m_dynamicsWorld->debugDrawWorld();
@@ -997,14 +1005,16 @@ bool GraphicsClass::Render()
 		// Put the model vertex and index buffers on the graphics pipeline to prepare them for drawing.
 		(*it)->m_model->Render(m_D3D->GetDeviceContext());
 
-		result = m_ShaderManager->RenderSoftShadowShader(m_D3D->GetDeviceContext(), (*it)->m_model->GetIndexCount(), transformMatrix, viewMatrix, projectionMatrix, 
-														(*it)->m_model->GetTexture(), m_UpSampleTexture->GetShaderResourceView(), m_Light->GetPosition(), 
-														m_Light->GetAmbientColor(), m_Light->GetDiffuseColor());
+		result = RenderShaders(m_D3D->GetDeviceContext(), (*it), transformMatrix, viewMatrix, projectionMatrix);
+		//result = m_ShaderManager->RenderSoftShadowShader(m_D3D->GetDeviceContext(), (*it)->m_model->GetIndexCount(), transformMatrix, viewMatrix, projectionMatrix, 
+		//												(*it)->m_model->GetTexture(), m_UpSampleTexture->GetShaderResourceView(), m_Light->GetPosition(), 
+		//												m_Light->GetAmbientColor(), m_Light->GetDiffuseColor());
 		//result = m_ShaderManager->RenderLightShader(m_D3D->GetDeviceContext(), (*it)->m_model->GetIndexCount(), transformMatrix, viewMatrix, projectionMatrix, 
         //                               (*it)->m_model->GetTexture(), m_Light->GetDirection(), m_Light->GetAmbientColor(), m_Light->GetDiffuseColor(), 
         //                               m_Camera->GetPosition(), m_Light->GetSpecularColor(), m_Light->GetSpecularPower());
 		//result = m_ShaderManager->RenderTextureShader(m_D3D->GetDeviceContext(), (*it)->m_model->GetIndexCount(), transformMatrix, viewMatrix, projectionMatrix, 
         //                               (*it)->m_model->GetTexture());
+
 
 		if(!result)
 		{
@@ -1067,6 +1077,54 @@ void GraphicsClass::SetSentence(int i, std::string text)
 	m_Text->SetSentence(i, text);
 }
 
+bool GraphicsClass::RenderShaders(ID3D11DeviceContext* device, EngineObjectClass* engineObject, D3DXMATRIX transformMatrix, D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix)
+{
+	switch(engineObject->m_shaderType)
+	{
+	case shaders_types::AlphaMapShader:
+		{
+			return m_ShaderManager->RenderAlphaMapShader(device, engineObject->m_model->GetIndexCount(), transformMatrix, viewMatrix, projectionMatrix,
+														 engineObject->m_model->GetTextureArray());
+			break;
+		}
+	case shaders_types::BumpMapShader:
+		{
+			return m_ShaderManager->RenderBumpMapShader(device, engineObject->m_model->GetIndexCount(), transformMatrix, viewMatrix, projectionMatrix,
+														engineObject->m_model->GetTextureArray(), m_Light->GetDirection(), m_Light->GetDiffuseColor());
+			break;
+		}
+	case shaders_types::MultiTextureShader:
+		{
+			return m_ShaderManager->RenderMultiTextureShader(device, engineObject->m_model->GetIndexCount(), transformMatrix, viewMatrix, projectionMatrix,
+															 engineObject->m_model->GetTextureArray());
+			break;
+		}
+	case shaders_types::SoftShadowShader:
+		{
+			return m_ShaderManager->RenderSoftShadowShader(device, engineObject->m_model->GetIndexCount(), transformMatrix, viewMatrix, projectionMatrix, 
+														   engineObject->m_model->GetTexture(), m_UpSampleTexture->GetShaderResourceView(), m_Light->GetPosition(), 
+														   m_Light->GetAmbientColor(), m_Light->GetDiffuseColor());
+			break;
+		}
+	case shaders_types::SpecMapShader:
+		{
+			return m_ShaderManager->RenderSpecMapShader(device, engineObject->m_model->GetIndexCount(), transformMatrix, viewMatrix, projectionMatrix,
+														engineObject->m_model->GetTextureArray(), m_Light->GetDirection(), m_Light->GetDiffuseColor(),
+														m_Camera->GetPosition(), m_Light->GetSpecularColor(), m_Light->GetSpecularPower());
+			break;
+		}
+	default:
+		{
+			return m_ShaderManager->RenderSoftShadowShader(device, engineObject->m_model->GetIndexCount(), transformMatrix, viewMatrix, projectionMatrix, 
+														   engineObject->m_model->GetTexture(), m_UpSampleTexture->GetShaderResourceView(), m_Light->GetPosition(), 
+														   m_Light->GetAmbientColor(), m_Light->GetDiffuseColor());
+			break;
+		}
+	}
+
+	return true;
+}
+
 bool GraphicsClass::InitializePhysics(void)
 {
 	///collision configuration contains default setup for memory, collision setup. Advanced users can create their own configuration.
@@ -1075,7 +1133,7 @@ bool GraphicsClass::InitializePhysics(void)
 		return false;
 
 	///use the default collision dispatcher. For parallel processing you can use a diffent dispatcher (see Extras/BulletMultiThreaded)
-	btCollisionDispatcher* m_dispatcher = new	btCollisionDispatcher(m_collisionConfiguration);
+	btCollisionDispatcher* m_dispatcher = new btCollisionDispatcher(m_collisionConfiguration);
 	if(!m_dispatcher)
 		return false;
 
