@@ -240,7 +240,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	// Initialize the model object.
 	result = grnd->Initialize(m_D3D->GetDevice(), "../PwAG/data/scene1.DAE", L"../PwAG/data/stone01.dds", 
 												  L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
-												  aiVector3D(0.0f, 0.0f, -2.0f), aiVector3D(0.0f, 0.0f, 0.0f), 
+												  aiVector3D(0.0f, 0.0f, 0.0f), aiVector3D(0.0f, 0.2f, 0.2f), 
 												  "StaticPlane",
 												  0.0f, 1.0f, 0.0f,
 												  1.0f);
@@ -1021,7 +1021,7 @@ bool GraphicsClass::Render()
 	for(it = m_EngineObjects.begin(); it != m_EngineObjects.end(); ++it)
 	{
 		transformMatrix = worldMatrix;
-		D3DXMatrixAffineTransformation(&transformMatrix, 1.0f, &(*it)->m_model->GetPosition(), &(*it)->m_model->GetRotation(),  &(*it)->m_model->GetPosition());
+		D3DXMatrixAffineTransformation(&transformMatrix, 1.0f, &D3DXVECTOR3(0.0f,0.0f,0.0f), &(*it)->m_model->GetRotation(),  &(*it)->m_model->GetPosition());
 		// Put the model vertex and index buffers on the graphics pipeline to prepare them for drawing.
 		(*it)->m_model->Render(m_D3D->GetDeviceContext());
 
