@@ -3,6 +3,7 @@
 
 #include <d3d11.h>
 #include <d3dx10math.h>
+#include <DirectXMath.h>
 
 #include <assimp\Importer.hpp>	//C++ importer
 #include <assimp\scene.h>		//Output data structures
@@ -21,11 +22,6 @@ private:
 		D3DXVECTOR3 normal;
 		D3DXVECTOR3 tangent;
 		D3DXVECTOR3 binormal;
-	};
-	struct InstanceType
-	{
-		D3DXVECTOR3 position;
-		D3DXVECTOR3 rotation;
 	};
 	//struct TempVertexType
 	//{
@@ -54,9 +50,12 @@ public:
 	ID3D11ShaderResourceView* GetTexture(char);
 	D3DXVECTOR3 GetPosition();
 	D3DXVECTOR3 GetRotation();
+	D3DXVECTOR3 GetScale();
 	void GetPosition(float&, float&, float&);
 	void GetRotation(float&, float&, float&);
 	void GetRotation(D3DXQUATERNION&);
+	D3DXQUATERNION GetRotationQuaternion();
+	void GetScale(float&, float&, float&);
 
 	void SetInitialPosition(aiVector3D);
 	void SetInitialRotation(aiVector3D);
@@ -87,7 +86,8 @@ private:
 	TextureClass* m_Texture;
 	TextureArrayClass* m_TextureArray;
 	D3DXVECTOR3 m_Position;
-	D3DXVECTOR3 m_Rotation; // pitch yaw roll
+	D3DXVECTOR3 m_Rotation; // roll yaw pitch
+	D3DXVECTOR3 m_Scale;
 
 	Assimp::Importer* m_importer;
 	const aiScene* m_model;

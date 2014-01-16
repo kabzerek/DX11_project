@@ -36,6 +36,7 @@ bool ModelClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* te
 	SetInitialPosition(modelPosition);
 	// Set rotation of the model
 	SetInitialRotation(modelRotation);
+	m_Scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
 
 	// Initialize the vertex and index buffers.
 	result = InitializeBuffers(device);
@@ -196,6 +197,21 @@ void ModelClass::SetRotation(D3DXVECTOR3 modelRotation)
 	m_Rotation = modelRotation;
 }
 
+void ModelClass::SetRotation(D3DXQUATERNION quat)
+{
+	//D3DXQUATERNION quatnorm;
+	//D3DXQuaternionNormalize(&quatnorm, &quat);
+	//m_Rotation.x = quatnorm.x;
+	//m_Rotation.y = quatnorm.y;
+	//m_Rotation.z = quatnorm.z;
+	DirectX::XMVECTOR vec = {quat.x, quat.y, quat.z, quat.w};
+	DirectX::XMVECTOR rot = {m_Rotation.x, m_Rotation.y, m_Rotation.z};
+	rot = DirectX::XMVector3Rotate(rot, vec);
+	DirectX::XMVectorGetByIndexPtr(&m_Rotation.x, rot, 0);
+	DirectX::XMVectorGetByIndexPtr(&m_Rotation.y, rot, 1);
+	DirectX::XMVectorGetByIndexPtr(&m_Rotation.z, rot, 2);
+}
+
 void ModelClass::Move(aiVector3D move)
 {
 	aiVector3D plus(move.x - m_Position.x, move.y - m_Position.y, move.z - m_Position.z);
@@ -205,6 +221,7 @@ void ModelClass::Move(aiVector3D move)
 			m_model->mMeshes[m]->mVertices[v] += plus;
 
 	m_Position += aiVector3DtoD3DXVector3(plus);
+	//quat * m_Position * conj(quat)
 }
 
 
@@ -216,6 +233,18 @@ D3DXVECTOR3 ModelClass::GetPosition()
 D3DXVECTOR3 ModelClass::GetRotation()
 {
 	return m_Rotation;
+}
+
+D3DXQUATERNION ModelClass::GetRotationQuaternion()
+{
+	D3DXQUATERNION q;
+	D3DXQuaternionRotationYawPitchRoll(&q, m_Rotation.y, m_Rotation.x, m_Rotation.z);
+	return q;
+}
+
+D3DXVECTOR3 ModelClass::GetScale()
+{
+	return m_Scale;
 }
 
 void ModelClass::GetPosition(float& x, float& y, float& z)
@@ -230,6 +259,13 @@ void ModelClass::GetRotation(float& x, float&y, float&z)
 	x = m_Rotation.x;
 	y = m_Rotation.y;
 	z = m_Rotation.z;
+}
+
+void ModelClass::GetScale(float& x, float&y, float&z)
+{
+	x = m_Scale.x;
+	y = m_Scale.y;
+	z = m_Scale.z;
 }
 
 ID3D11ShaderResourceView* ModelClass::GetTexture()
