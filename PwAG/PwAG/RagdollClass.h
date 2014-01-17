@@ -55,9 +55,11 @@ private:
 	bool Initialize(aiVector3D, aiVector3D, btScalar, btScalar, btScalar, btScalar, int);
 
 	ModelClass* m_model;
-	btRigidBody*[] m_rigidBodys = btRigidBody*[num_bones];
+	btRigidBody*[] m_rigidBodys;
 	//std::vector<btRigidBody*> m_rigidBodys;
-	std::vector<btCollisionShape*> m_collisionShapes;
+	btCollisionShape*[] m_collisionShapes;
+	//std::vector<btCollisionShape*> m_collisionShapes;
+	"bone"*[] m_bones;
 
 	int m_shaderType;
 };

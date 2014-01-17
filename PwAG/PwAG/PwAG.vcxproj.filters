@@ -98,6 +98,9 @@
     <ClCompile Include="PhysicsDebugObjectClass.cpp">
       <Filter>Classess</Filter>
     </ClCompile>
+    <ClCompile Include="RagdollClass.cpp">
+      <Filter>Classess</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraClass.h">
@@ -197,6 +200,9 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="PhysicsDebugObjectClass.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="RagdollClass.h">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>
