@@ -77,6 +77,9 @@ private:
 	D3DXVECTOR3 aiVector3DtoD3DXVector3(aiVector3D aiVec);
 	D3DXVECTOR2 aiVector3DtoD3DXVector2(aiVector3D aiVec);
 
+public:
+	const aiScene* m_model;
+
 private:
 	ID3D11Buffer* m_vertexBuffer, * m_indexBuffer;
 	int m_vertexCount, m_indexCount;
@@ -87,7 +90,6 @@ private:
 	D3DXVECTOR3 m_Scale;
 
 	Assimp::Importer* m_importer;
-	const aiScene* m_model;
 };
 
 #endif

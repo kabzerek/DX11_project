@@ -105,6 +105,7 @@
     <ClCompile Include="OrthoWindowClass.cpp" />
     <ClCompile Include="PhysicsDebugObjectClass.cpp" />
     <ClCompile Include="PositionClass.cpp" />
+    <ClCompile Include="RagdollClass.cpp" />
     <ClCompile Include="RenderTextureClass.cpp" />
     <ClCompile Include="ShaderManagerClass.cpp" />
     <ClCompile Include="ShadowShaderClass.cpp" />
@@ -140,6 +141,7 @@
     <ClInclude Include="OrthoWindowClass.h" />
     <ClInclude Include="PhysicsDebugObjectClass.h" />
     <ClInclude Include="PositionClass.h" />
+    <ClInclude Include="RagdollClass.h" />
     <ClInclude Include="RenderTextureClass.h" />
     <ClInclude Include="ShaderManagerClass.h" />
     <ClInclude Include="ShadowShaderClass.h" />

@@ -8,6 +8,9 @@ EngineObjectClass::EngineObjectClass(void)
 	m_collisionShape = 0;
 }
 
+EngineObjectClass::EngineObjectClass(const EngineObjectClass& other)
+{
+}
 
 EngineObjectClass::~EngineObjectClass(void)
 {
@@ -165,5 +168,4 @@ void EngineObjectClass::Update(void)
 	D3DXQUATERNION quat( transform.getRotation().x(), transform.getRotation().y(), transform.getRotation().z(), transform.getRotation().w() );
 	m_model->SetPosition(pos);
 	m_model->SetRotation(quat);
-	//m_model->Move(aiVector3D(pos.x, pos.y, pos.z));
 }

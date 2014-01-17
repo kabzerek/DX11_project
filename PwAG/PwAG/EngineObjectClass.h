@@ -11,10 +11,9 @@ class EngineObjectClass
 {
 public:
 	EngineObjectClass(void);
+	EngineObjectClass(const EngineObjectClass&);
 	~EngineObjectClass(void);
 
-	// for Ragdoll
-	bool Initialize(ID3D11Device*, char*, WCHAR*, WCHAR*, WCHAR*, aiVector3D, aiVector3D, std::string, int);
 	// for StaticPlane
 	bool Initialize(ID3D11Device*, char*, WCHAR*, WCHAR*, WCHAR*, aiVector3D, aiVector3D, std::string, btScalar, btScalar, btScalar, btScalar, int);
 	// for Sphere
