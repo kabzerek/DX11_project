@@ -138,7 +138,7 @@ bool RagdollClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* 
 	btVector3 he(0.5f, 0.5f, 0.5f);
 	float mass = 1.0;
 	btVector3 in(1.0f, 1.0f, 1.0f);
-
+	m_collisionShapes[0] = new btBoxShape(he);
 	for(int i = 0; i < num_bones; ++i)
 		Initialize(i, he.x(), he.y(), he.z(), modelPosition, modelRotation, mass, in.x(), in.y(), in.z());
 
@@ -149,8 +149,8 @@ bool RagdollClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* 
 	//he = btVector3(1.0f, 1.0f, 1.0f);
 	//mass = 1.0;
 	//in = btVector3(1.0f, 1.0f, 1.0f);
-
-	Initialize(bones::Spine0, he.x(), he.y(), he.z(), modelPosition, modelRotation, mass, in.x(), in.y(), in.z());
+	
+	//Initialize(bones::Spine0, he.x(), he.y(), he.z(), modelPosition, modelRotation, mass, in.x(), in.y(), in.z());
 
 	return true;
 }
@@ -196,7 +196,7 @@ void RagdollClass::Update()
 
 bool RagdollClass::Initialize(int bone, btScalar size_x, btScalar size_y, btScalar size_z, aiVector3D position, aiVector3D rotation, btScalar mass, btScalar inertia_x, btScalar inertia_y, btScalar inertia_z)
 {
-	m_collisionShapes[bone] = new btBoxShape(btVector3(size_x, size_y, size_z));
+	
 
 	aiMatrix4x4 rotationMatrix;
 	aiMatrix4x4 translationMatrix;
@@ -205,7 +205,7 @@ bool RagdollClass::Initialize(int bone, btScalar size_x, btScalar size_y, btScal
 	aiMatrix4x4 boneMatrix = m_bones[bone]->mOffsetMatrix;
 	aiMatrix4x4 rootMatrix = m_model->m_model->mRootNode->mTransformation;
 	//aiMatrix4x4 boneWorldMatrix = translationMatrix	* rotationMatrix	* rootMatrix		* boneMatrix;
-	//aiMatrix4x4 boneWorldMatrix = translationMatrix	* rotationMatrix	* boneMatrix		* rootMatrix;
+	aiMatrix4x4 boneWorldMatrix = translationMatrix	* rotationMatrix	* boneMatrix		* rootMatrix;
 	//aiMatrix4x4 boneWorldMatrix = translationMatrix	* rootMatrix		* rotationMatrix	* boneMatrix;
 	//aiMatrix4x4 boneWorldMatrix = translationMatrix	* rootMatrix		* boneMatrix		* rotationMatrix;
 	//aiMatrix4x4 boneWorldMatrix = translationMatrix	* boneMatrix		* rotationMatrix	* rootMatrix;
@@ -229,7 +229,7 @@ bool RagdollClass::Initialize(int bone, btScalar size_x, btScalar size_y, btScal
 	//aiMatrix4x4 boneWorldMatrix = boneMatrix		* rootMatrix		* translationMatrix * rotationMatrix;
 	//aiMatrix4x4 boneWorldMatrix = boneMatrix		* rootMatrix		* rotationMatrix	* translationMatrix;
 
-	aiMatrix4x4 boneWorldMatrix = translationMatrix * rotationMatrix;
+	//aiMatrix4x4 boneWorldMatrix = translationMatrix * rotationMatrix;
 
 	aiVector3D bonePosition;
 	aiQuaternion boneRotation;
@@ -240,9 +240,9 @@ bool RagdollClass::Initialize(int bone, btScalar size_x, btScalar size_y, btScal
 		return false;
 	btVector3 m_inertia(inertia_x, inertia_y, inertia_z);
 	if(mass > 0.0f)		
-		m_collisionShapes[bone]->calculateLocalInertia(mass, m_inertia);
+		m_collisionShapes[0]->calculateLocalInertia(mass, m_inertia);
 
-	btRigidBody::btRigidBodyConstructionInfo rigidBodyCI(mass, m_motionState, m_collisionShapes[bone], m_inertia);
+	btRigidBody::btRigidBodyConstructionInfo rigidBodyCI(mass, m_motionState, m_collisionShapes[0], m_inertia);
 	m_rigidBodys[bone] = new btRigidBody(rigidBodyCI);
 	if(!m_rigidBodys[bone])
 		return false;

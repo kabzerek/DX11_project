@@ -208,21 +208,21 @@ bool SystemClass::Frame()
 	m_Position->GetRotation(rotX, rotY, rotZ);
 
 	// Set sentences
-	float m_x, m_y, m_z, g_x, g_y, g_z, d_x, d_y, d_z;
-	m_Graphics->GetPos(m_x, m_y, m_z, g_x, g_y, g_z, d_x, d_y, d_z);
+	//float m_x, m_y, m_z, g_x, g_y, g_z, d_x, d_y, d_z;
+	//m_Graphics->GetPos(m_x, m_y, m_z, g_x, g_y, g_z, d_x, d_y, d_z);
 
-	m_Graphics->SetSentence(0, "m_x: " + std::to_string(m_x));
-	m_Graphics->SetSentence(1, "m_y: " + std::to_string(m_y));
-	m_Graphics->SetSentence(2, "m_z: " + std::to_string(m_z));
+	m_Graphics->SetSentence(0, "");
+	m_Graphics->SetSentence(1, "");
+	m_Graphics->SetSentence(2, "");
 
-	m_Graphics->SetSentence(3, "g_x: " + std::to_string(g_x));
-	m_Graphics->SetSentence(4, "g_y: " + std::to_string(g_y));
-	m_Graphics->SetSentence(5, "g_z: " + std::to_string(g_z));
+	m_Graphics->SetSentence(3, "");
+	m_Graphics->SetSentence(4, "");
+	m_Graphics->SetSentence(5, "");
 	m_Graphics->SetSentence(6, "");
 
-	m_Graphics->SetSentence(7, "d_x: " + std::to_string(d_x));
-	m_Graphics->SetSentence(8, "d_y: " + std::to_string(d_y));
-	m_Graphics->SetSentence(9, "d_z: " + std::to_string(d_z));
+	m_Graphics->SetSentence(7, "");
+	m_Graphics->SetSentence(8, "");
+	m_Graphics->SetSentence(9, "");
 
 	// Do the frame processing for the graphics object.
 	bool uptd = false;

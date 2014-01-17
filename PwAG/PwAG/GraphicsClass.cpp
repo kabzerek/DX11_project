@@ -93,114 +93,114 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	// Create physics world
 	InitializePhysics();
 
-	// Create the model object.
-	// Box 1 //
-	m_EngineObjects.push_back(new EngineObjectClass);
-	result = m_EngineObjects.back()->Initialize(m_D3D->GetDevice(), "../PwAG/data/cube.DAE", L"../PwAG/data/stone02.dds", 
-																	L"../PwAG/data/dirt01.dds", L"../PwAG/data/spec02.dds",
-																	aiVector3D(-10.0f, 2.0f, 10.0f), aiVector3D(0.0f, 0.0f, 0.0f),
-																	"Box", 
-																	1.f, 1.f, 1.f,			//size
-																	1.0f,					//mass
-																	0.1f, 0.1f, 0.1f,		//inertia
-																	shaders_types::AlphaMapShader);
-	if(!result)
-	{
-		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
-		return false;
-	}
+	//// Create the model object.
+	//// Box 1 //
+	//m_EngineObjects.push_back(new EngineObjectClass);
+	//result = m_EngineObjects.back()->Initialize(m_D3D->GetDevice(), "../PwAG/data/cube.DAE", L"../PwAG/data/stone02.dds", 
+	//																L"../PwAG/data/dirt01.dds", L"../PwAG/data/spec02.dds",
+	//																aiVector3D(-10.0f, 2.0f, 10.0f), aiVector3D(0.0f, 0.0f, 0.0f),
+	//																"Box", 
+	//																1.f, 1.f, 1.f,			//size
+	//																1.0f,					//mass
+	//																0.1f, 0.1f, 0.1f,		//inertia
+	//																shaders_types::AlphaMapShader);
+	//if(!result)
+	//{
+	//	MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
+	//	return false;
+	//}
 
-	m_dynamicsWorld->addRigidBody(m_EngineObjects.back()->m_rigidBody);
+	//m_dynamicsWorld->addRigidBody(m_EngineObjects.back()->m_rigidBody);
 
-	// Box 2 //
-	m_EngineObjects.push_back(new EngineObjectClass);
-	result = m_EngineObjects.back()->Initialize(m_D3D->GetDevice(), "../PwAG/data/cube.DAE", L"../PwAG/data/stone02.dds", 
-																	L"../PwAG/data/dirt01.dds", L"../PwAG/data/spec02.dds",
-																	aiVector3D(-10.0f, 5.5f, 10.0f), aiVector3D(0.0f, 0.0f, 0.0f),
-																	"Box", 
-																	1.f, 1.f, 1.f,			//size
-																	1.0f,					//mass
-																	0.1f, 0.1f, 0.1f,		//inertia
-																	shaders_types::MultiTextureShader);
-	if(!result)
-	{
-		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
-		return false;
-	}
+	//// Box 2 //
+	//m_EngineObjects.push_back(new EngineObjectClass);
+	//result = m_EngineObjects.back()->Initialize(m_D3D->GetDevice(), "../PwAG/data/cube.DAE", L"../PwAG/data/stone02.dds", 
+	//																L"../PwAG/data/dirt01.dds", L"../PwAG/data/spec02.dds",
+	//																aiVector3D(-10.0f, 5.5f, 10.0f), aiVector3D(0.0f, 0.0f, 0.0f),
+	//																"Box", 
+	//																1.f, 1.f, 1.f,			//size
+	//																1.0f,					//mass
+	//																0.1f, 0.1f, 0.1f,		//inertia
+	//																shaders_types::MultiTextureShader);
+	//if(!result)
+	//{
+	//	MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
+	//	return false;
+	//}
 
-	m_dynamicsWorld->addRigidBody(m_EngineObjects.back()->m_rigidBody);
+	//m_dynamicsWorld->addRigidBody(m_EngineObjects.back()->m_rigidBody);
 
-	// Box 3 //
-	m_EngineObjects.push_back(new EngineObjectClass);
-	result = m_EngineObjects.back()->Initialize(m_D3D->GetDevice(), "../PwAG/data/cube.DAE", L"../PwAG/data/stone02.dds", 
-																	L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
-																	aiVector3D(-8.0f, 2.0f, 4.0f), aiVector3D(0.0f, 0.0f, 0.0f),
-																	"Box", 
-																	1.f, 1.f, 1.f,			//size
-																	1.0f,					//mass
-																	0.1f, 0.1f, 0.1f,		//inertia
-																	shaders_types::SoftShadowShader);
-	if(!result)
-	{
-		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
-		return false;
-	}
+	//// Box 3 //
+	//m_EngineObjects.push_back(new EngineObjectClass);
+	//result = m_EngineObjects.back()->Initialize(m_D3D->GetDevice(), "../PwAG/data/cube.DAE", L"../PwAG/data/stone02.dds", 
+	//																L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
+	//																aiVector3D(-8.0f, 2.0f, 4.0f), aiVector3D(0.0f, 0.0f, 0.0f),
+	//																"Box", 
+	//																1.f, 1.f, 1.f,			//size
+	//																1.0f,					//mass
+	//																0.1f, 0.1f, 0.1f,		//inertia
+	//																shaders_types::SoftShadowShader);
+	//if(!result)
+	//{
+	//	MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
+	//	return false;
+	//}
 
-	m_dynamicsWorld->addRigidBody(m_EngineObjects.back()->m_rigidBody);
+	//m_dynamicsWorld->addRigidBody(m_EngineObjects.back()->m_rigidBody);
 
-	// Sphere 1 //
-	m_EngineObjects.push_back(new EngineObjectClass);
-	result = m_EngineObjects.back()->Initialize(m_D3D->GetDevice(), "../PwAG/data/sphere.DAE", L"../PwAG/data/stone02.dds", 
-																	L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
-																	aiVector3D(6.0f, 3.0f, 2.0f), aiVector3D(0.0f, 0.0f, 0.0f), 
-																	"Sphere", 
-																	1.f,					//radius
-																	2.0f,					//mass
-																	0.1f, 0.1f, 0.1f,		//inertia
-																	shaders_types::SoftShadowShader);
-	if(!result)
-	{
-		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
-		return false;
-	}
+	//// Sphere 1 //
+	//m_EngineObjects.push_back(new EngineObjectClass);
+	//result = m_EngineObjects.back()->Initialize(m_D3D->GetDevice(), "../PwAG/data/sphere.DAE", L"../PwAG/data/stone02.dds", 
+	//																L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
+	//																aiVector3D(6.0f, 3.0f, 2.0f), aiVector3D(0.0f, 0.0f, 0.0f), 
+	//																"Sphere", 
+	//																1.f,					//radius
+	//																2.0f,					//mass
+	//																0.1f, 0.1f, 0.1f,		//inertia
+	//																shaders_types::SoftShadowShader);
+	//if(!result)
+	//{
+	//	MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
+	//	return false;
+	//}
 
-	m_dynamicsWorld->addRigidBody(m_EngineObjects.back()->m_rigidBody);
+	//m_dynamicsWorld->addRigidBody(m_EngineObjects.back()->m_rigidBody);
 
-	// Box 4 //
-	m_EngineObjects.push_back(new EngineObjectClass);
-	result = m_EngineObjects.back()->Initialize(m_D3D->GetDevice(), "../PwAG/data/cube.DAE", L"../PwAG/data/stone02.dds", 
-																	L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
-																	aiVector3D(7.0f, 3.0f, 7.0f), aiVector3D(0.0f, 0.0f, 0.0f),
-																	"Box", 
-																	1.f, 1.f, 1.f,			//size
-																	1.0f,					//mass
-																	0.1f, 0.1f, 0.1f,		//inertia
-																	shaders_types::SpecMapShader);
-	if(!result)
-	{
-		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
-		return false;
-	}
+	//// Box 4 //
+	//m_EngineObjects.push_back(new EngineObjectClass);
+	//result = m_EngineObjects.back()->Initialize(m_D3D->GetDevice(), "../PwAG/data/cube.DAE", L"../PwAG/data/stone02.dds", 
+	//																L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
+	//																aiVector3D(7.0f, 3.0f, 7.0f), aiVector3D(0.0f, 0.0f, 0.0f),
+	//																"Box", 
+	//																1.f, 1.f, 1.f,			//size
+	//																1.0f,					//mass
+	//																0.1f, 0.1f, 0.1f,		//inertia
+	//																shaders_types::SpecMapShader);
+	//if(!result)
+	//{
+	//	MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
+	//	return false;
+	//}
 
-	m_dynamicsWorld->addRigidBody(m_EngineObjects.back()->m_rigidBody);
+	//m_dynamicsWorld->addRigidBody(m_EngineObjects.back()->m_rigidBody);
 
-	// Box 5 //
-	m_EngineObjects.push_back(new EngineObjectClass);
-	result = m_EngineObjects.back()->Initialize(m_D3D->GetDevice(), "../PwAG/data/cube.DAE", L"../PwAG/data/stone02.dds", 
-																	L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
-																	aiVector3D(8.5f, 6.0f, 6.0f), aiVector3D(0.5f, 0.0f, 0.0f),
-																	"Box", 
-																	1.f, 1.f, 1.f,			//size
-																	1.0f,					//mass
-																	0.1f, 0.1f, 0.1f,		//inertia
-																	shaders_types::SpecMapShader);
-	if(!result)
-	{
-		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
-		return false;
-	}
+	//// Box 5 //
+	//m_EngineObjects.push_back(new EngineObjectClass);
+	//result = m_EngineObjects.back()->Initialize(m_D3D->GetDevice(), "../PwAG/data/cube.DAE", L"../PwAG/data/stone02.dds", 
+	//																L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
+	//																aiVector3D(8.5f, 6.0f, 6.0f), aiVector3D(0.5f, 0.0f, 0.0f),
+	//																"Box", 
+	//																1.f, 1.f, 1.f,			//size
+	//																1.0f,					//mass
+	//																0.1f, 0.1f, 0.1f,		//inertia
+	//																shaders_types::SpecMapShader);
+	//if(!result)
+	//{
+	//	MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
+	//	return false;
+	//}
 
-	m_dynamicsWorld->addRigidBody(m_EngineObjects.back()->m_rigidBody);
+	//m_dynamicsWorld->addRigidBody(m_EngineObjects.back()->m_rigidBody);
 
 	// Ragdoll //	
 	m_Ragdoll = new RagdollClass;
@@ -211,7 +211,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	// Initialize the model object.
 	result = m_Ragdoll->Initialize(m_D3D->GetDevice(), "../PwAG/data/Wariat_001.dae", L"../PwAG/data/seafloor.dds", 
 													   L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
-													   aiVector3D(0.0f, 5.0f, 0.0f), aiVector3D(1.0f, 0.0f, 0.0f),
+													   aiVector3D(1.0f, 5.0f, 1.0f), aiVector3D(0.5f, 0.5f, 0.5f),
 													   "Ragdoll",
 													   shaders_types::SoftShadowShader);
 	for(int i = 0; i < num_bones; ++i)
@@ -1212,21 +1212,21 @@ void GraphicsClass::ShutdownPhysics()
 
 void GraphicsClass::GetPos(float& m_x, float& m_y, float& m_z, float& g_x, float& g_y, float& g_z, float& m_d_x, float& m_d_y, float& m_d_z)
 {
-	m_x = m_EngineObjects[0]->m_model->GetPosition().x;
-	m_y = m_EngineObjects[0]->m_model->GetPosition().y;
-	m_z = m_EngineObjects[0]->m_model->GetPosition().z;
+	//m_x = m_EngineObjects[0]->m_model->GetPosition().x;
+	//m_y = m_EngineObjects[0]->m_model->GetPosition().y;
+	//m_z = m_EngineObjects[0]->m_model->GetPosition().z;
 
-	g_x = m_EngineObjects[1]->m_model->GetPosition().x;
-	g_y = m_EngineObjects[1]->m_model->GetPosition().y;
-	g_z = m_EngineObjects[1]->m_model->GetPosition().z;
+	//g_x = m_EngineObjects[1]->m_model->GetPosition().x;
+	//g_y = m_EngineObjects[1]->m_model->GetPosition().y;
+	//g_z = m_EngineObjects[1]->m_model->GetPosition().z;
 
-	btTransform transform;
-	m_EngineObjects[2]->m_rigidBody->getMotionState()->getWorldTransform(transform);
+	//btTransform transform;
+	//m_EngineObjects[2]->m_rigidBody->getMotionState()->getWorldTransform(transform);
 
-	m_d_z = m_EngineObjects[0]->m_collisionShape->getMargin();
+	//m_d_z = m_EngineObjects[0]->m_collisionShape->getMargin();
 
-	m_d_x = transform.getOrigin().getX();
-	m_d_y = transform.getOrigin().getY();
+	//m_d_x = transform.getOrigin().getX();
+	//m_d_y = transform.getOrigin().getY();
 	//m_d_z = transform.getOrigin().getZ();
 }
 
