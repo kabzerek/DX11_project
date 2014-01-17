@@ -135,20 +135,22 @@ bool RagdollClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* 
 	}
 
 	// Head
-	float radius = 1.0f;
-	float height = 1.0f;
+	btVector3 he(0.5f, 0.5f, 0.5f);
 	float mass = 1.0;
-	btVector3 inertia(1.0f, 1.0f, 1.0f);
-	m_collisionShapes[bones::Head] = new btCapsuleShape(radius, height);
+	btVector3 in(1.0f, 1.0f, 1.0f);
 
-	aiMatrix4x4 boneMatrix = m_bones[bones::Head]->mOffsetMatrix;
-	aiMatrix4x4 rootMatrix = m_model->m_model->mRootNode->mTransformation;
-	//rootMatrix.Inverse();
-	aiMatrix4x4 boneWorldMatrix = rootMatrix * boneMatrix;
-	aiVector3D position = boneWorldMatrix * modelPosition;
-	aiVector3D rotation = modelRotation;	
+	for(int i = 0; i < num_bones; ++i)
+		Initialize(i, he.x(), he.y(), he.z(), modelPosition, modelRotation, mass, in.x(), in.y(), in.z());
 
-	Initialize(bones::Head, position, rotation, mass, inertia.x(), inertia.y(), inertia.z());
+	// Spine0
+	//Initialize(bones::Spine0, he.x(), he.y(), he.z(), modelPosition, modelRotation, mass, in.x(), in.y(), in.z());
+
+	// Spine0
+	//he = btVector3(1.0f, 1.0f, 1.0f);
+	//mass = 1.0;
+	//in = btVector3(1.0f, 1.0f, 1.0f);
+
+	Initialize(bones::Spine0, he.x(), he.y(), he.z(), modelPosition, modelRotation, mass, in.x(), in.y(), in.z());
 
 	return true;
 }
@@ -192,12 +194,51 @@ void RagdollClass::Update()
 
 }
 
-bool RagdollClass::Initialize(int bone, aiVector3D modelPosition, aiVector3D modelRotation, btScalar mass, btScalar inertiax, btScalar inertiay, btScalar inertiaz)
+bool RagdollClass::Initialize(int bone, btScalar size_x, btScalar size_y, btScalar size_z, aiVector3D position, aiVector3D rotation, btScalar mass, btScalar inertia_x, btScalar inertia_y, btScalar inertia_z)
 {
-	btDefaultMotionState* m_motionState = new btDefaultMotionState(btTransform(btQuaternion(modelRotation.y, modelRotation.x, modelRotation.z), btVector3(modelPosition.x, modelPosition.y, modelPosition.z)));
+	m_collisionShapes[bone] = new btBoxShape(btVector3(size_x, size_y, size_z));
+
+	aiMatrix4x4 rotationMatrix;
+	aiMatrix4x4 translationMatrix;
+	translationMatrix = aiMatrix4x4::Translation(position, translationMatrix);
+	rotationMatrix = rotationMatrix.FromEulerAnglesXYZ(rotation);
+	aiMatrix4x4 boneMatrix = m_bones[bone]->mOffsetMatrix;
+	aiMatrix4x4 rootMatrix = m_model->m_model->mRootNode->mTransformation;
+	//aiMatrix4x4 boneWorldMatrix = translationMatrix	* rotationMatrix	* rootMatrix		* boneMatrix;
+	//aiMatrix4x4 boneWorldMatrix = translationMatrix	* rotationMatrix	* boneMatrix		* rootMatrix;
+	//aiMatrix4x4 boneWorldMatrix = translationMatrix	* rootMatrix		* rotationMatrix	* boneMatrix;
+	//aiMatrix4x4 boneWorldMatrix = translationMatrix	* rootMatrix		* boneMatrix		* rotationMatrix;
+	//aiMatrix4x4 boneWorldMatrix = translationMatrix	* boneMatrix		* rotationMatrix	* rootMatrix;
+	//aiMatrix4x4 boneWorldMatrix = translationMatrix	* boneMatrix		* rootMatrix		* rotationMatrix;
+	//aiMatrix4x4 boneWorldMatrix = rotationMatrix	* translationMatrix * rootMatrix		* boneMatrix;
+	//aiMatrix4x4 boneWorldMatrix = rotationMatrix	* translationMatrix * boneMatrix		* rootMatrix;
+	//aiMatrix4x4 boneWorldMatrix = rotationMatrix	* rootMatrix		* translationMatrix * boneMatrix;
+	//aiMatrix4x4 boneWorldMatrix = rotationMatrix	* rootMatrix		* boneMatrix		* translationMatrix;
+	//aiMatrix4x4 boneWorldMatrix = rotationMatrix	* boneMatrix		* translationMatrix * rootMatrix;
+	//aiMatrix4x4 boneWorldMatrix = rotationMatrix	* boneMatrix		* rootMatrix		* translationMatrix;
+	//aiMatrix4x4 boneWorldMatrix = rootMatrix		* translationMatrix * rotationMatrix	* boneMatrix;
+	//aiMatrix4x4 boneWorldMatrix = rootMatrix		* translationMatrix * boneMatrix		* rotationMatrix;
+	//aiMatrix4x4 boneWorldMatrix = rootMatrix		* rotationMatrix	* translationMatrix * boneMatrix;
+	//aiMatrix4x4 boneWorldMatrix = rootMatrix		* rotationMatrix	* boneMatrix		* translationMatrix;
+	//aiMatrix4x4 boneWorldMatrix = rootMatrix		* boneMatrix		* translationMatrix * rotationMatrix;
+	//aiMatrix4x4 boneWorldMatrix = rootMatrix		* boneMatrix		* rotationMatrix	* translationMatrix;
+	//aiMatrix4x4 boneWorldMatrix = boneMatrix		* translationMatrix * rotationMatrix	* rootMatrix;
+	//aiMatrix4x4 boneWorldMatrix = boneMatrix		* translationMatrix * rootMatrix		* rotationMatrix;
+	//aiMatrix4x4 boneWorldMatrix = boneMatrix		* rotationMatrix	* translationMatrix * rootMatrix;
+	//aiMatrix4x4 boneWorldMatrix = boneMatrix		* rotationMatrix	* rootMatrix		* translationMatrix;
+	//aiMatrix4x4 boneWorldMatrix = boneMatrix		* rootMatrix		* translationMatrix * rotationMatrix;
+	//aiMatrix4x4 boneWorldMatrix = boneMatrix		* rootMatrix		* rotationMatrix	* translationMatrix;
+
+	aiMatrix4x4 boneWorldMatrix = translationMatrix * rotationMatrix;
+
+	aiVector3D bonePosition;
+	aiQuaternion boneRotation;
+	boneWorldMatrix.DecomposeNoScaling(boneRotation, bonePosition);
+
+	btDefaultMotionState* m_motionState = new btDefaultMotionState(btTransform(btQuaternion(boneRotation.x, boneRotation.y, boneRotation.z, boneRotation.w), btVector3(bonePosition.x, bonePosition.y, bonePosition.z)));
 	if(!m_motionState)
 		return false;
-	btVector3 m_inertia(inertiax, inertiay, inertiaz);
+	btVector3 m_inertia(inertia_x, inertia_y, inertia_z);
 	if(mass > 0.0f)		
 		m_collisionShapes[bone]->calculateLocalInertia(mass, m_inertia);
 

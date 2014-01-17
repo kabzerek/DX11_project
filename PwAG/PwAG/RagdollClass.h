@@ -59,7 +59,13 @@ public:
 	int m_shaderType;
 
 private:
-	bool Initialize(int, aiVector3D, aiVector3D, btScalar, btScalar, btScalar, btScalar);
+	bool Initialize(int bone,
+					btScalar size_x,
+					btScalar size_y,
+					btScalar size_z,
+					aiVector3D position, aiVector3D rotation, 
+					btScalar mass, 
+					btScalar inertia_x, btScalar inertia_y, btScalar inertia_z);
 
 	btCollisionShape** m_collisionShapes;
 	aiBone** m_bones;
