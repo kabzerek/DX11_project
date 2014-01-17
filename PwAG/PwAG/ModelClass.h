@@ -59,7 +59,6 @@ public:
 	void SetPosition(D3DXVECTOR3);
 	void SetRotation(D3DXVECTOR3);
 	void SetRotation(D3DXQUATERNION);
-	void Move(aiVector3D);
 
 private:
 	bool InitializeBuffers(ID3D11Device*);

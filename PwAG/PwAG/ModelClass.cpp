@@ -205,17 +205,6 @@ void ModelClass::SetRotation(D3DXQUATERNION quat)
 	D3DXQuaternionNormalize(&m_Rotation, &m_Rotation);
 }
 
-void ModelClass::Move(aiVector3D move)
-{
-	aiVector3D plus(move.x - m_Position.x, move.y - m_Position.y, move.z - m_Position.z);
-	for(unsigned int m = 0; m < m_model->mNumMeshes; ++m)
-		for(unsigned int v = 0; v < m_model->mMeshes[m]->mNumVertices; ++v)
-			m_model->mMeshes[m]->mVertices[v] += plus;
-
-	m_Position += aiVector3DtoD3DXVector3(plus);
-}
-
-
 D3DXVECTOR3 ModelClass::GetPosition()
 {
 	return m_Position;

@@ -203,7 +203,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	m_dynamicsWorld->addRigidBody(m_EngineObjects.back()->m_rigidBody);
 
 	// Ragdoll //	
-	m_Ragdoll = new EngineObjectClass;
+	m_Ragdoll = new RagdollClass;
 	if(!m_Ragdoll)
 	{
 		return false;
@@ -214,7 +214,8 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 													   aiVector3D(0.0f, 5.0f, 0.0f), aiVector3D(0.0f, 0.0f, 0.0f),
 													   "Ragdoll",
 													   shaders_types::SoftShadowShader);
-	m_EngineObjects.push_back(m_Ragdoll);
+	m_dynamicsWorld->addRigidBody(m_Ragdoll->m_rigidBodys[m_Ragdoll->Head]);
+	//m_EngineObjects.push_back(m_Ragdoll);
 
 	// Ground //
 	m_EngineObjects.push_back(new EngineObjectClass);
@@ -622,6 +623,23 @@ bool GraphicsClass::RenderSceneToTexture()
 		m_D3D->GetWorldMatrix(worldMatrix);
 	}
 
+	m_D3D->GetWorldMatrix(worldMatrix);
+	transformMatrix = worldMatrix;
+
+	D3DXMatrixAffineTransformation(&transformMatrix, 1.0f, &D3DXVECTOR3(0.0f,0.0f,0.0f), &m_Ragdoll->m_model->GetRotation(),  &m_Ragdoll->m_model->GetPosition());
+	//m_D3D->GetProjectionMatrix(projectionMatrix);
+
+	// Render the model with the depth shader.
+	m_Ragdoll->m_model->Render(m_D3D->GetDeviceContext());
+	result = m_ShaderManager->RenderDepthShader(m_D3D->GetDeviceContext(), m_Ragdoll->m_model->GetIndexCount(), transformMatrix, lightViewMatrix, lightProjectionMatrix);
+	if(!result)
+	{
+		return false;
+	}
+
+	// Reset the world matrix.
+	m_D3D->GetWorldMatrix(worldMatrix);
+
 	// Reset the render target back to the original back buffer and not the render to texture anymore.
 	m_D3D->SetBackBufferRenderTarget();
 
@@ -685,6 +703,24 @@ bool GraphicsClass::RenderBlackAndWhiteShadows()
 		// Reset the world matrix.
 		m_D3D->GetWorldMatrix(worldMatrix);
 	}
+
+	m_D3D->GetWorldMatrix(worldMatrix);
+	transformMatrix = worldMatrix;
+
+	D3DXMatrixAffineTransformation(&transformMatrix, 1.0f, &D3DXVECTOR3(0.0f,0.0f,0.0f), &m_Ragdoll->m_model->GetRotation(),  &m_Ragdoll->m_model->GetPosition());
+	//m_D3D->GetProjectionMatrix(projectionMatrix);
+
+	// Render the model with the depth shader.
+	m_Ragdoll->m_model->Render(m_D3D->GetDeviceContext());
+	result = m_ShaderManager->RenderShadowShader(m_D3D->GetDeviceContext(), m_Ragdoll->m_model->GetIndexCount(), transformMatrix, viewMatrix, projectionMatrix, lightViewMatrix,
+				lightProjectionMatrix, m_RenderTexture->GetShaderResourceView(), m_Light->GetPosition());
+	if(!result)
+	{
+		return false;
+	}
+
+	// Reset the world matrix.
+	m_D3D->GetWorldMatrix(worldMatrix);
 
 	// Reset the render target back to the original back buffer and not the render to texture anymore.
 	m_D3D->SetBackBufferRenderTarget();
@@ -1005,16 +1041,7 @@ bool GraphicsClass::Render()
 		// Put the model vertex and index buffers on the graphics pipeline to prepare them for drawing.
 		(*it)->m_model->Render(m_D3D->GetDeviceContext());
 
-		result = RenderShaders(m_D3D->GetDeviceContext(), (*it), transformMatrix, viewMatrix, projectionMatrix);
-		//result = m_ShaderManager->RenderSoftShadowShader(m_D3D->GetDeviceContext(), (*it)->m_model->GetIndexCount(), transformMatrix, viewMatrix, projectionMatrix, 
-		//												(*it)->m_model->GetTexture(), m_UpSampleTexture->GetShaderResourceView(), m_Light->GetPosition(), 
-		//												m_Light->GetAmbientColor(), m_Light->GetDiffuseColor());
-		//result = m_ShaderManager->RenderLightShader(m_D3D->GetDeviceContext(), (*it)->m_model->GetIndexCount(), transformMatrix, viewMatrix, projectionMatrix, 
-        //                               (*it)->m_model->GetTexture(), m_Light->GetDirection(), m_Light->GetAmbientColor(), m_Light->GetDiffuseColor(), 
-        //                               m_Camera->GetPosition(), m_Light->GetSpecularColor(), m_Light->GetSpecularPower());
-		//result = m_ShaderManager->RenderTextureShader(m_D3D->GetDeviceContext(), (*it)->m_model->GetIndexCount(), transformMatrix, viewMatrix, projectionMatrix, 
-        //                               (*it)->m_model->GetTexture());
-
+		result = RenderShaders(m_D3D->GetDeviceContext(), (*it)->m_model, transformMatrix, viewMatrix, projectionMatrix, (*it)->m_shaderType);
 
 		if(!result)
 		{
@@ -1025,6 +1052,22 @@ bool GraphicsClass::Render()
 		// Reset the world matrix.
 		m_D3D->GetWorldMatrix(worldMatrix);
 	}
+
+	transformMatrix = worldMatrix;
+	D3DXMatrixAffineTransformation(&transformMatrix, 1.0f, &D3DXVECTOR3(0.0f,0.0f,0.0f), &m_Ragdoll->m_model->GetRotation(),  &m_Ragdoll->m_model->GetPosition());
+	// Put the model vertex and index buffers on the graphics pipeline to prepare them for drawing.
+	m_Ragdoll->m_model->Render(m_D3D->GetDeviceContext());
+
+	result = RenderShaders(m_D3D->GetDeviceContext(), m_Ragdoll->m_model, transformMatrix, viewMatrix, projectionMatrix, m_Ragdoll->m_shaderType);
+
+	if(!result)
+	{
+		return false;
+	}
+	
+	
+	// Reset the world matrix.
+	m_D3D->GetWorldMatrix(worldMatrix);
 
 	std::vector<PhysicsDebugObjectClass*>::iterator dIt;
 	for(dIt = m_DebugObjects.begin(); dIt != m_DebugObjects.end(); ++dIt)
@@ -1077,46 +1120,46 @@ void GraphicsClass::SetSentence(int i, std::string text)
 	m_Text->SetSentence(i, text);
 }
 
-bool GraphicsClass::RenderShaders(ID3D11DeviceContext* device, EngineObjectClass* engineObject, D3DXMATRIX transformMatrix, D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix)
+bool GraphicsClass::RenderShaders(ID3D11DeviceContext* device, ModelClass* model, D3DXMATRIX transformMatrix, D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix, int shaderType)
 {
-	switch(engineObject->m_shaderType)
+	switch(shaderType)
 	{
 	case shaders_types::AlphaMapShader:
 		{
-			return m_ShaderManager->RenderAlphaMapShader(device, engineObject->m_model->GetIndexCount(), transformMatrix, viewMatrix, projectionMatrix,
-														 engineObject->m_model->GetTextureArray());
+			return m_ShaderManager->RenderAlphaMapShader(device, model->GetIndexCount(), transformMatrix, viewMatrix, projectionMatrix,
+														 model->GetTextureArray());
 			break;
 		}
 	case shaders_types::BumpMapShader:
 		{
-			return m_ShaderManager->RenderBumpMapShader(device, engineObject->m_model->GetIndexCount(), transformMatrix, viewMatrix, projectionMatrix,
-														engineObject->m_model->GetTextureArray(), m_Light->GetDirection(), m_Light->GetDiffuseColor());
+			return m_ShaderManager->RenderBumpMapShader(device, model->GetIndexCount(), transformMatrix, viewMatrix, projectionMatrix,
+														model->GetTextureArray(), m_Light->GetDirection(), m_Light->GetDiffuseColor());
 			break;
 		}
 	case shaders_types::MultiTextureShader:
 		{
-			return m_ShaderManager->RenderMultiTextureShader(device, engineObject->m_model->GetIndexCount(), transformMatrix, viewMatrix, projectionMatrix,
-															 engineObject->m_model->GetTextureArray());
+			return m_ShaderManager->RenderMultiTextureShader(device, model->GetIndexCount(), transformMatrix, viewMatrix, projectionMatrix,
+															 model->GetTextureArray());
 			break;
 		}
 	case shaders_types::SoftShadowShader:
 		{
-			return m_ShaderManager->RenderSoftShadowShader(device, engineObject->m_model->GetIndexCount(), transformMatrix, viewMatrix, projectionMatrix, 
-														   engineObject->m_model->GetTexture(), m_UpSampleTexture->GetShaderResourceView(), m_Light->GetPosition(), 
+			return m_ShaderManager->RenderSoftShadowShader(device, model->GetIndexCount(), transformMatrix, viewMatrix, projectionMatrix, 
+														   model->GetTexture(), m_UpSampleTexture->GetShaderResourceView(), m_Light->GetPosition(), 
 														   m_Light->GetAmbientColor(), m_Light->GetDiffuseColor());
 			break;
 		}
 	case shaders_types::SpecMapShader:
 		{
-			return m_ShaderManager->RenderSpecMapShader(device, engineObject->m_model->GetIndexCount(), transformMatrix, viewMatrix, projectionMatrix,
-														engineObject->m_model->GetTextureArray(), m_Light->GetDirection(), m_Light->GetDiffuseColor(),
+			return m_ShaderManager->RenderSpecMapShader(device, model->GetIndexCount(), transformMatrix, viewMatrix, projectionMatrix,
+														model->GetTextureArray(), m_Light->GetDirection(), m_Light->GetDiffuseColor(),
 														m_Camera->GetPosition(), m_Light->GetSpecularColor(), m_Light->GetSpecularPower());
 			break;
 		}
 	default:
 		{
-			return m_ShaderManager->RenderSoftShadowShader(device, engineObject->m_model->GetIndexCount(), transformMatrix, viewMatrix, projectionMatrix, 
-														   engineObject->m_model->GetTexture(), m_UpSampleTexture->GetShaderResourceView(), m_Light->GetPosition(), 
+			return m_ShaderManager->RenderSoftShadowShader(device, model->GetIndexCount(), transformMatrix, viewMatrix, projectionMatrix, 
+														   model->GetTexture(), m_UpSampleTexture->GetShaderResourceView(), m_Light->GetPosition(), 
 														   m_Light->GetAmbientColor(), m_Light->GetDiffuseColor());
 			break;
 		}

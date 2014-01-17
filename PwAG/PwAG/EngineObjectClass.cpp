@@ -16,19 +16,6 @@ EngineObjectClass::~EngineObjectClass(void)
 {
 }
 
-// for Ragdoll
-bool EngineObjectClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* textureFilename1, WCHAR* textureFilename2, 
-								   WCHAR* textureFilename3, aiVector3D modelPosition, aiVector3D modelRotation, std::string name, 
-								   int shaderType)
-{
-	m_model = new ModelClass;
-	m_model->Initialize(device, modelFilename, textureFilename1, textureFilename2, textureFilename3, modelPosition, modelRotation);
-
-	m_shaderType = shaderType;
-
-	return true;
-}
-
 // for StaticPlane
 bool EngineObjectClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* textureFilename1, WCHAR* textureFilename2, 
 								   WCHAR* textureFilename3, aiVector3D modelPosition, aiVector3D modelRotation, std::string name, 
@@ -126,12 +113,11 @@ bool EngineObjectClass::Initialize(aiVector3D modelPosition, aiVector3D modelRot
 	btDefaultMotionState* m_motionState = new btDefaultMotionState(btTransform(btQuaternion(modelRotation.y, modelRotation.x, modelRotation.z), btVector3(modelPosition.x, modelPosition.y, modelPosition.z)));
 	if(!m_motionState)
 		return false;
-	btScalar m_mass = mass;
 	btVector3 m_inertia(inertiax, inertiay, inertiaz);
-	if(m_mass)		
-		m_collisionShape->calculateLocalInertia(m_mass, m_inertia);
+	if(mass > 0.0f)		
+		m_collisionShape->calculateLocalInertia(mass, m_inertia);
 
-	btRigidBody::btRigidBodyConstructionInfo rigidBodyCI(m_mass, m_motionState, m_collisionShape, m_inertia);
+	btRigidBody::btRigidBodyConstructionInfo rigidBodyCI(mass, m_motionState, m_collisionShape, m_inertia);
 	m_rigidBody = new btRigidBody(rigidBodyCI);
 	if(!m_rigidBody)
 		return false;

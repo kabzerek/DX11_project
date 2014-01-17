@@ -4,6 +4,7 @@
 #include "ModelClass.h"
 
 #include <btBulletDynamicsCommon.h>
+#include <assimp\scene.h>
 
 #include <vector>
 
@@ -51,17 +52,17 @@ public:
 
 	void Update();
 
-private:
-	bool Initialize(aiVector3D, aiVector3D, btScalar, btScalar, btScalar, btScalar, int);
-
+public:
 	ModelClass* m_model;
-	btRigidBody*[] m_rigidBodys;
-	//std::vector<btRigidBody*> m_rigidBodys;
-	btCollisionShape*[] m_collisionShapes;
-	//std::vector<btCollisionShape*> m_collisionShapes;
-	"bone"*[] m_bones;
+	btRigidBody** m_rigidBodys;
 
 	int m_shaderType;
+
+private:
+	bool Initialize(int, aiVector3D, aiVector3D, btScalar, btScalar, btScalar, btScalar);
+
+	btCollisionShape** m_collisionShapes;
+	aiBone** m_bones;
 };
 
 #endif
