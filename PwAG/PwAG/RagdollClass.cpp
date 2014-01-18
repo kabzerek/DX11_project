@@ -142,140 +142,140 @@ bool RagdollClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* 
 	Initialize(bones::Head, he.x(), he.y(), he.z(), modelPosition, modelRotation, mass, in.x(), in.y(), in.z());
 
 	// Neck
-	he = btVector3(1.0f, 1.0f, 1.0f);
+	he = btVector3(0.2f, 0.3f, 0.2f);
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::Neck] = new btBoxShape(he);
 	Initialize(bones::Neck, he.x(), he.y(), he.z(), modelPosition, modelRotation, mass, in.x(), in.y(), in.z());
 	
 	// Spine2
-	he = btVector3(1.0f, 1.0f, 1.0f);
+	he = btVector3(0.1f, 0.6f, 0.1f);
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::Spine2] = new btBoxShape(he);
 	Initialize(bones::Spine2, he.x(), he.y(), he.z(), modelPosition, modelRotation, mass, in.x(), in.y(), in.z());
 
 	// Spine1
-	he = btVector3(1.0f, 1.0f, 1.0f);
+	he = btVector3(0.1f, 0.4f, 0.1f);
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::Spine1] = new btBoxShape(he);
 	Initialize(bones::Spine1, he.x(), he.y(), he.z(), modelPosition, modelRotation, mass, in.x(), in.y(), in.z());
 
 	// Spine0
-	he = btVector3(1.0f, 1.0f, 1.0f);
+	he = btVector3(0.0f, 0.0f, 0.0f);
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::Spine0] = new btBoxShape(he);
 	Initialize(bones::Spine0, he.x(), he.y(), he.z(), modelPosition, modelRotation, mass, in.x(), in.y(), in.z());
 
 	// RArm0
-	he = btVector3(1.0f, 1.0f, 1.0f);
+	he = btVector3(0.3f, 0.3f, 0.3f);
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::RArm0] = new btBoxShape(he);
 	Initialize(bones::RArm0, he.x(), he.y(), he.z(), modelPosition, modelRotation, mass, in.x(), in.y(), in.z());
 
 	// RArm1
-	he = btVector3(1.0f, 1.0f, 1.0f);
+	he = btVector3(0.3f, 0.6f, 0.3f);
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::RArm1] = new btBoxShape(he);
 	Initialize(bones::RArm1, he.x(), he.y(), he.z(), modelPosition, modelRotation, mass, in.x(), in.y(), in.z());
 
 	// RArm2
-	he = btVector3(1.0f, 1.0f, 1.0f);
+	he = btVector3(0.3f, 0.4f, 0.3f);
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::RArm2] = new btBoxShape(he);
 	Initialize(bones::RArm2, he.x(), he.y(), he.z(), modelPosition, modelRotation, mass, in.x(), in.y(), in.z());
 
 	// RHand
-	he = btVector3(1.0f, 1.0f, 1.0f);
+	he = btVector3(0.4f, 0.6f, 0.4f);
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::RHand] = new btBoxShape(he);
 	Initialize(bones::RHand, he.x(), he.y(), he.z(), modelPosition, modelRotation, mass, in.x(), in.y(), in.z());
 
 	// LArm0
-	he = btVector3(1.0f, 1.0f, 1.0f);
+	he = btVector3(0.3f, 0.3f, 0.3f);
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::LArm0] = new btBoxShape(he);
 	Initialize(bones::LArm0, he.x(), he.y(), he.z(), modelPosition, modelRotation, mass, in.x(), in.y(), in.z());
 
 	// LArm1
-	he = btVector3(1.0f, 1.0f, 1.0f);
+	he = btVector3(0.3f, 0.6f, 0.3f);
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::LArm1] = new btBoxShape(he);
 	Initialize(bones::LArm1, he.x(), he.y(), he.z(), modelPosition, modelRotation, mass, in.x(), in.y(), in.z());
 
 	// LArm2
-	he = btVector3(1.0f, 1.0f, 1.0f);
+	he = btVector3(0.3f, 0.4f, 0.3f);
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::LArm2] = new btBoxShape(he);
 	Initialize(bones::LArm2, he.x(), he.y(), he.z(), modelPosition, modelRotation, mass, in.x(), in.y(), in.z());
 
 	// LHand
-	he = btVector3(1.0f, 1.0f, 1.0f);
+	he = btVector3(0.4f, 0.6f, 0.4f);
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::LHand] = new btBoxShape(he);
 	Initialize(bones::LHand, he.x(), he.y(), he.z(), modelPosition, modelRotation, mass, in.x(), in.y(), in.z());
 
 	// RLeg0
-	he = btVector3(1.0f, 1.0f, 1.0f);
+	he = btVector3(0.0f, 0.0f, 0.0f);
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::RLeg0] = new btBoxShape(he);
 	Initialize(bones::RLeg0, he.x(), he.y(), he.z(), modelPosition, modelRotation, mass, in.x(), in.y(), in.z());
 
 	// RLeg1
-	he = btVector3(1.0f, 1.0f, 1.0f);
+	he = btVector3(0.3f, 0.6f, 0.3f);
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::RLeg1] = new btBoxShape(he);
 	Initialize(bones::RLeg1, he.x(), he.y(), he.z(), modelPosition, modelRotation, mass, in.x(), in.y(), in.z());
 
 	// RLeg2
-	he = btVector3(1.0f, 1.0f, 1.0f);
+	he = btVector3(0.3f, 0.4f, 0.3f);
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::RLeg2] = new btBoxShape(he);
 	Initialize(bones::RLeg2, he.x(), he.y(), he.z(), modelPosition, modelRotation, mass, in.x(), in.y(), in.z());
 
 	// RFoot
-	he = btVector3(1.0f, 1.0f, 1.0f);
+	he = btVector3(0.1f, 0.5f, 0.1f);
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::RFoot] = new btBoxShape(he);
 	Initialize(bones::RFoot, he.x(), he.y(), he.z(), modelPosition, modelRotation, mass, in.x(), in.y(), in.z());
 
 	// LLeg0
-	he = btVector3(1.0f, 1.0f, 1.0f);
+	he = btVector3(0.0f, 0.0f, 0.0f);
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::LLeg0] = new btBoxShape(he);
 	Initialize(bones::LLeg0, he.x(), he.y(), he.z(), modelPosition, modelRotation, mass, in.x(), in.y(), in.z());
 
 	// LLeg1
-	he = btVector3(1.0f, 1.0f, 1.0f);
+	he = btVector3(0.3f, 0.6f, 0.3f);
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::LLeg1] = new btBoxShape(he);
 	Initialize(bones::LLeg1, he.x(), he.y(), he.z(), modelPosition, modelRotation, mass, in.x(), in.y(), in.z());
 
 	// LLeg2
-	he = btVector3(1.0f, 1.0f, 1.0f);
+	he = btVector3(0.3f, 0.4f, 0.3f);
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::LLeg2] = new btBoxShape(he);
 	Initialize(bones::LLeg2, he.x(), he.y(), he.z(), modelPosition, modelRotation, mass, in.x(), in.y(), in.z());
 
 	// LFoot
-	he = btVector3(1.0f, 1.0f, 1.0f);
+	he = btVector3(0.1f, 0.5f, 0.1f);
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::LFoot] = new btBoxShape(he);
@@ -318,8 +318,13 @@ bool RagdollClass::Initialize(int bone, btScalar size_x, btScalar size_y, btScal
 	
 
 	aiMatrix4x4 rotationMatrix, XrotationMatrix, YrotationMatrix, ZrotationMatrix;
-	aiMatrix4x4 translationMatrix;
+	aiMatrix4x4 translationMatrix;// offsetMatrix;
+
 	translationMatrix = aiMatrix4x4::Translation(position, translationMatrix);
+
+	//offsetMatrix = aiMatrix4x4::Translation( aiVector3D(size_x/2,size_y/2,size_z/2), offsetMatrix);
+	//translationMatrix = offsetMatrix*translationMatrix;
+
 	XrotationMatrix = XrotationMatrix.FromEulerAnglesXYZ(rotation.x, 0.0f, 0.0f);
 	YrotationMatrix = YrotationMatrix.FromEulerAnglesXYZ(0.0f, rotation.y, 0.0f);
 	ZrotationMatrix = ZrotationMatrix.FromEulerAnglesXYZ(0.0f, 0.0f, rotation.z);
@@ -338,10 +343,10 @@ bool RagdollClass::Initialize(int bone, btScalar size_x, btScalar size_y, btScal
 	if(!m_motionState)
 		return false;
 	btVector3 m_inertia(inertia_x, inertia_y, inertia_z);
-	if(mass > 0.0f)		
-		m_collisionShapes[0]->calculateLocalInertia(mass, m_inertia);
+	if(mass > 0.0f)	
+		m_collisionShapes[bone]->calculateLocalInertia(mass, m_inertia);
 
-	btRigidBody::btRigidBodyConstructionInfo rigidBodyCI(mass, m_motionState, m_collisionShapes[0], m_inertia);
+	btRigidBody::btRigidBodyConstructionInfo rigidBodyCI(mass, m_motionState, m_collisionShapes[bone], m_inertia);
 	m_rigidBodys[bone] = new btRigidBody(rigidBodyCI);
 	if(!m_rigidBodys[bone])
 		return false;
