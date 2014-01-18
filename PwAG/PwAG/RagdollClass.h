@@ -8,7 +8,22 @@
 
 #include <vector>
 
+#define BIT(x) (1<<(x))
+
 #define num_bones 21
+#define num_joints 20
+
+#ifndef M_PI
+#define M_PI       3.14159265358979323846
+#endif
+
+#ifndef M_PI_2
+#define M_PI_2     1.57079632679489661923
+#endif
+
+#ifndef M_PI_4
+#define M_PI_4     0.785398163397448309616
+#endif
 
 class RagdollClass
 {
@@ -16,32 +31,60 @@ public:
 	enum bones
 	{
 		Head = 0,
-		Neck = 1,
-		Spine2 = 2,
-		Spine1 = 3,
-		Spine0 = 4,
+		Neck,
+		Spine2,
+		Spine1,
+		Spine0,
 
-		RArm0 = 5,
-		RArm1 = 6,
-		RArm2 = 7,
-		RHand = 8,
+		RArm0,
+		RArm1,
+		RArm2,
+		RHand,
 
-		LArm0 = 9,
-		LArm1 = 10,
-		LArm2 = 11,
-		LHand = 12,
+		LArm0,
+		LArm1,
+		LArm2,
+		LHand,
 
-		RLeg0 = 13,
-		RLeg1 = 14,
-		RLeg2 = 15,
-		RFoot = 16,
+		RLeg0,
+		RLeg1,
+		RLeg2,
+		RFoot,
 
-		LLeg0 = 17,
-		LLeg1 = 18,
-		LLeg2 = 19,
-		LFoot = 20
+		LLeg0,
+		LLeg1,
+		LLeg2,
+		LFoot
 	};
 
+	enum joints
+	{
+		Head_to_Neck = 0,
+		Neck_to_Spine2,
+		Spine2_to_Spine1,
+		Spine1_to_Spine0,
+		Spine1_to_RArm0,
+		Spine1_to_LArm0,
+		Spine0_to_RLeg0,
+		Spine0_to_LLeg0,
+
+		RArm0_to_RArm1,
+		RArm1_to_RArm2,
+		RArm2_to_RHand,
+
+		LArm0_to_LArm1,
+		LArm1_to_LArm2,
+		LArm2_to_LHand,
+
+		RLeg0_to_RLeg1,
+		RLeg1_to_RLeg2,
+		RLeg2_to_RFoot,
+
+		LLeg0_to_LLeg1,
+		LLeg1_to_LLeg2,
+		LLeg2_to_LFoot
+	};
+						
 public:
 	RagdollClass(void);
 	RagdollClass(const RagdollClass&);
@@ -55,6 +98,7 @@ public:
 public:
 	ModelClass* m_model;
 	btRigidBody** m_rigidBodys;
+	btTypedConstraint** m_joints;
 
 	int m_shaderType;
 

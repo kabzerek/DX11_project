@@ -7,6 +7,7 @@ RagdollClass::RagdollClass(void)
 	m_rigidBodys = new btRigidBody*[num_bones];
 	m_collisionShapes = new btCollisionShape*[num_bones];
 	m_bones = new aiBone*[num_bones];
+	m_joints = new btTypedConstraint*[num_joints];
 }
 
 RagdollClass::RagdollClass(const RagdollClass& other)
@@ -144,14 +145,14 @@ bool RagdollClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* 
 
 	// Neck
 	halfSize = btVector3(0.3f, 0.3f, 0.4f);
-	offset = btVector3(0.0f, 0.2f, 0.08f);
+	offset = btVector3(0.0f, 0.3f, 0.08f);
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::Neck] = new btBoxShape(halfSize);
 	Initialize(bones::Neck, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z());
 	
 	// Spine2
-	halfSize = btVector3(0.0f, 0.0f, 0.0f);
+	halfSize = btVector3(0.3f, 0.01f, 0.3f);
 	offset = btVector3(0.0f, 0.3f, 0.0f);
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
@@ -302,6 +303,21 @@ bool RagdollClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* 
 	m_collisionShapes[bones::LFoot] = new btBoxShape(halfSize);
 	Initialize(bones::LFoot, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z());
 
+	btConeTwistConstraint* coneC;
+
+	btTransform localA, localB;
+	localA.setIdentity();
+	localB.setIdentity();
+	localA.getBasis().setEulerZYX(0.0f, 0.0f, 0.0f);
+	localA.setOrigin(btVector3(0.0f, -0.85f, 0.0f));
+	localB.getBasis().setEulerZYX(0.0f, 0.0f, 0.0f);
+	localB.setOrigin(btVector3(0.0f, 0.25f, 0.0f));
+
+	coneC = new btConeTwistConstraint(*m_rigidBodys[bones::Head], *m_rigidBodys[bones::Neck], localA, localB);
+	coneC->setLimit(M_PI_4 * 0.9f, M_PI_4 * 0.9f, M_PI_2 * 0.9f, 0.9f);
+	m_joints[joints::Head_to_Neck] = coneC;
+	coneC->setDbgDrawSize(2.0f);
+
 	return true;
 }
 	
@@ -336,8 +352,6 @@ void RagdollClass::Update()
 
 bool RagdollClass::Initialize(int bone, btScalar size_x, btScalar size_y, btScalar size_z, aiVector3D position, btScalar offset_x, btScalar offset_y, btScalar offset_z, aiVector3D rotation, btScalar mass, btScalar inertia_x, btScalar inertia_y, btScalar inertia_z)
 {
-	
-
 	aiMatrix4x4 rotationMatrix, XrotationMatrix, YrotationMatrix, ZrotationMatrix;
 	aiMatrix4x4 translationMatrix, offsetMatrix;
 
