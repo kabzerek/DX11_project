@@ -211,7 +211,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	// Initialize the model object.
 	result = m_Ragdoll->Initialize(m_D3D->GetDevice(), "../PwAG/data/Wariat_001.dae", L"../PwAG/data/seafloor.dds", 
 													   L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
-													   aiVector3D(1.0f, 5.0f, 1.0f), aiVector3D(0.5f, 0.5f, 0.5f),
+													   aiVector3D(1.0f, 5.0f, 2.0f), aiVector3D(0.2f, 0.5f, 0.3f),
 													   "Ragdoll",
 													   shaders_types::SoftShadowShader);
 	for(int i = 0; i < num_bones; ++i)
