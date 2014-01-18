@@ -219,28 +219,28 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	m_dynamicsWorld->addRigidBody(m_Ragdoll->m_rigidBodys[m_Ragdoll->Head]);
 	m_dynamicsWorld->addRigidBody(m_Ragdoll->m_rigidBodys[m_Ragdoll->Neck]);
 	m_dynamicsWorld->addRigidBody(m_Ragdoll->m_rigidBodys[m_Ragdoll->Spine2]);
-	//m_dynamicsWorld->addRigidBody(m_Ragdoll->m_rigidBodys[m_Ragdoll->Spine1]);
-	//m_dynamicsWorld->addRigidBody(m_Ragdoll->m_rigidBodys[m_Ragdoll->Spine0]);
+	m_dynamicsWorld->addRigidBody(m_Ragdoll->m_rigidBodys[m_Ragdoll->Spine1]);
+	m_dynamicsWorld->addRigidBody(m_Ragdoll->m_rigidBodys[m_Ragdoll->Spine0]);
 
-	//m_dynamicsWorld->addRigidBody(m_Ragdoll->m_rigidBodys[m_Ragdoll->RArm0]);
-	//m_dynamicsWorld->addRigidBody(m_Ragdoll->m_rigidBodys[m_Ragdoll->RArm1]);
-	//m_dynamicsWorld->addRigidBody(m_Ragdoll->m_rigidBodys[m_Ragdoll->RArm2]);
-	//m_dynamicsWorld->addRigidBody(m_Ragdoll->m_rigidBodys[m_Ragdoll->RHand]);
+	m_dynamicsWorld->addRigidBody(m_Ragdoll->m_rigidBodys[m_Ragdoll->RArm0]);
+	m_dynamicsWorld->addRigidBody(m_Ragdoll->m_rigidBodys[m_Ragdoll->RArm1]);
+	m_dynamicsWorld->addRigidBody(m_Ragdoll->m_rigidBodys[m_Ragdoll->RArm2]);
+	m_dynamicsWorld->addRigidBody(m_Ragdoll->m_rigidBodys[m_Ragdoll->RHand]);
 
-	//m_dynamicsWorld->addRigidBody(m_Ragdoll->m_rigidBodys[m_Ragdoll->LArm0]);
-	//m_dynamicsWorld->addRigidBody(m_Ragdoll->m_rigidBodys[m_Ragdoll->LArm1]);
-	//m_dynamicsWorld->addRigidBody(m_Ragdoll->m_rigidBodys[m_Ragdoll->LArm2]);
-	//m_dynamicsWorld->addRigidBody(m_Ragdoll->m_rigidBodys[m_Ragdoll->LHand]);
+	m_dynamicsWorld->addRigidBody(m_Ragdoll->m_rigidBodys[m_Ragdoll->LArm0]);
+	m_dynamicsWorld->addRigidBody(m_Ragdoll->m_rigidBodys[m_Ragdoll->LArm1]);
+	m_dynamicsWorld->addRigidBody(m_Ragdoll->m_rigidBodys[m_Ragdoll->LArm2]);
+	m_dynamicsWorld->addRigidBody(m_Ragdoll->m_rigidBodys[m_Ragdoll->LHand]);
 
-	//m_dynamicsWorld->addRigidBody(m_Ragdoll->m_rigidBodys[m_Ragdoll->RLeg0]);
-	//m_dynamicsWorld->addRigidBody(m_Ragdoll->m_rigidBodys[m_Ragdoll->RLeg1]);
-	//m_dynamicsWorld->addRigidBody(m_Ragdoll->m_rigidBodys[m_Ragdoll->RLeg2]);
-	//m_dynamicsWorld->addRigidBody(m_Ragdoll->m_rigidBodys[m_Ragdoll->RFoot]);
+	m_dynamicsWorld->addRigidBody(m_Ragdoll->m_rigidBodys[m_Ragdoll->RLeg0]);
+	m_dynamicsWorld->addRigidBody(m_Ragdoll->m_rigidBodys[m_Ragdoll->RLeg1]);
+	m_dynamicsWorld->addRigidBody(m_Ragdoll->m_rigidBodys[m_Ragdoll->RLeg2]);
+	m_dynamicsWorld->addRigidBody(m_Ragdoll->m_rigidBodys[m_Ragdoll->RFoot]);
 
-	//m_dynamicsWorld->addRigidBody(m_Ragdoll->m_rigidBodys[m_Ragdoll->LLeg0]);
-	//m_dynamicsWorld->addRigidBody(m_Ragdoll->m_rigidBodys[m_Ragdoll->LLeg1]);
-	//m_dynamicsWorld->addRigidBody(m_Ragdoll->m_rigidBodys[m_Ragdoll->LLeg2]);
-	//m_dynamicsWorld->addRigidBody(m_Ragdoll->m_rigidBodys[m_Ragdoll->LFoot]);
+	m_dynamicsWorld->addRigidBody(m_Ragdoll->m_rigidBodys[m_Ragdoll->LLeg0]);
+	m_dynamicsWorld->addRigidBody(m_Ragdoll->m_rigidBodys[m_Ragdoll->LLeg1]);
+	m_dynamicsWorld->addRigidBody(m_Ragdoll->m_rigidBodys[m_Ragdoll->LLeg2]);
+	m_dynamicsWorld->addRigidBody(m_Ragdoll->m_rigidBodys[m_Ragdoll->LFoot]);
 
 	// Ground //
 	m_EngineObjects.push_back(new EngineObjectClass);
