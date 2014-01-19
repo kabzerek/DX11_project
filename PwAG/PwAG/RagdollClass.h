@@ -25,6 +25,14 @@
 #define M_PI_4     0.785398163397448309616
 #endif
 
+#ifndef M_PI_8
+#define M_PI_8     0.392699081698724154808
+#endif
+
+#ifndef M_PI_16
+#define M_PI_16    0.196349540849362077404
+#endif
+
 class RagdollClass
 {
 public:

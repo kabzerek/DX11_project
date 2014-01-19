@@ -22,6 +22,8 @@ bool RagdollClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* 
 								   WCHAR* textureFilename3, aiVector3D modelPosition, aiVector3D modelRotation, std::string name, 
 								   int shaderType)
 {
+	btConeTwistConstraint* coneC;
+	btHingeConstraint* hingeC;
 	m_model = new ModelClass;
 	m_model->Initialize(device, modelFilename, textureFilename1, textureFilename2, textureFilename3, modelPosition, modelRotation);
 	m_shaderType = shaderType;
@@ -135,7 +137,7 @@ bool RagdollClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* 
 		}
 	}
 
-	// Head
+// Head
 	btVector3 halfSize(0.7f, 0.9f, 0.7f);
 	btVector3 offset(0.0f, 0.9f, 0.0f);
 	float mass = 1.0;
@@ -143,180 +145,386 @@ bool RagdollClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* 
 	m_collisionShapes[bones::Head] = new btBoxShape(halfSize);
 	Initialize(bones::Head, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z());
 
-	// Neck
+// Neck
 	halfSize = btVector3(0.3f, 0.3f, 0.4f);
 	offset = btVector3(0.0f, 0.3f, 0.08f);
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::Neck] = new btBoxShape(halfSize);
 	Initialize(bones::Neck, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z());
+
+	btTransform localA, localB;
+	localA.setIdentity();
+	localB.setIdentity();
+	//localA.getBasis().setEulerZYX(0.0f, 0.0f, 0.0f);
+	localA.setOrigin(btVector3(0.0f, -0.85f, 0.0f));
+	//localB.getBasis().setEulerZYX(0.0f, 0.0f, 0.0f);
+	localB.setOrigin(btVector3(0.0f, 0.25f, 0.0f));
+
+	coneC = new btConeTwistConstraint(*m_rigidBodys[bones::Head], *m_rigidBodys[bones::Neck], localA, localB);
+	coneC->setLimit(M_PI_8 * 0.9f, M_PI_8 * 0.9f, M_PI_4 * 0.9f, 0.9f);
+	m_joints[joints::Head_to_Neck] = coneC;
 	
-	// Spine2
-	halfSize = btVector3(0.3f, 0.01f, 0.3f);
-	offset = btVector3(0.0f, 0.0f, 0.0f);
+// Spine2
+	halfSize = btVector3(0.3f, 0.2f, 0.45f);
+	offset = btVector3(0.0f, 0.3f, 0.05f);
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::Spine2] = new btBoxShape(halfSize);
 	Initialize(bones::Spine2, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z());
 
-	// Spine1
-	halfSize = btVector3(1.0f, 0.9f, 0.5f);
-	offset = btVector3(0.0f, 0.8f, 0.0f);
+	localA.setIdentity();
+	localB.setIdentity();
+	//localA.getBasis().setEulerZYX(0.0f, 0.0f, 0.0f);
+	localA.setOrigin(btVector3(0.0f, -0.3f, 0.0f));
+	//localB.getBasis().setEulerZYX(0.0f, 0.0f, 0.0f);
+	localB.setOrigin(btVector3(0.0f, 0.1f, 0.05f));
+
+	coneC = new btConeTwistConstraint(*m_rigidBodys[bones::Neck], *m_rigidBodys[bones::Spine2], localA, localB);
+	coneC->setLimit(M_PI_8 * 0.9f, M_PI_8 * 0.9f, M_PI_4 * 0.9f, 0.9f);
+	m_joints[joints::Neck_to_Spine2] = coneC;
+
+// Spine1
+	halfSize = btVector3(1.0f, 0.8f, 0.7f);
+	offset = btVector3(0.0f, 0.6f, 0.1f);
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::Spine1] = new btBoxShape(halfSize);
 	Initialize(bones::Spine1, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z());
 
-	// Spine0
-	halfSize = btVector3(1.0f, 0.6f, 0.5f);
-	offset = btVector3(0.0f, 0.0f, 0.0f);
+	localA.setIdentity();
+	localB.setIdentity();
+	//localA.getBasis().setEulerZYX(0.0f, 0.0f, 0.0f);
+	localA.setOrigin(btVector3(0.0f, -0.2f, 0.0f));
+	//localB.getBasis().setEulerZYX(0.0f, 0.0f, 0.0f);
+	localB.setOrigin(btVector3(0.0f, 0.8f, -0.05f));
+
+	coneC = new btConeTwistConstraint(*m_rigidBodys[bones::Spine2], *m_rigidBodys[bones::Spine1], localA, localB);
+	coneC->setLimit(M_PI_8 * 0.9f, M_PI_8 * 0.9f, 0.0f, 0.9f);
+	m_joints[joints::Spine2_to_Spine1] = coneC;
+
+// Spine0
+	halfSize = btVector3(0.9f, 0.6f, 0.6f);
+	offset = btVector3(0.0f, 0.0f, -0.1f);
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::Spine0] = new btBoxShape(halfSize);
 	Initialize(bones::Spine0, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z());
 
-	// RArm0
-	halfSize = btVector3(0.0f, 0.0f, 0.0f);
-	offset = btVector3(0.0f, 0.6f, 0.0f);
+	localA.setIdentity();
+	localB.setIdentity();
+	//localA.getBasis().setEulerZYX(0.0f, 0.0f, 0.0f);
+	localA.setOrigin(btVector3(0.0f, -0.75f, 0.0f));
+	localB.getBasis().setEulerZYX(0.0f, M_PI, 0.0f);
+	localB.setOrigin(btVector3(0.0f, 0.55f, 0.0f));
+
+	coneC = new btConeTwistConstraint(*m_rigidBodys[bones::Spine1], *m_rigidBodys[bones::Spine0], localA, localB);
+	coneC->setLimit(M_PI_16 * 0.9f, M_PI_16 * 0.9f, M_PI_8, 0.9f);
+	m_joints[joints::Spine1_to_Spine0] = coneC;
+
+// RArm0
+	halfSize = btVector3(0.4f, 0.4f, 0.5f);
+	offset = btVector3(-0.225f, 1.0f, 0.0f);
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::RArm0] = new btBoxShape(halfSize);
 	Initialize(bones::RArm0, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z());
 
-	// RArm1
-	halfSize = btVector3(0.3f, 0.6f, 0.3f);
-	offset = btVector3(0.0f, 0.6f, 0.0f);
+	localA.setIdentity();
+	localB.setIdentity();
+	//localA.getBasis().setEulerZYX(0.0f, 0.0f, 0.0f);
+	localA.setOrigin(btVector3(0.6f, 0.4f, 0.0f));
+	localB.getBasis().setEulerZYX(0.0f, M_PI, -M_PI_2);
+	localB.setOrigin(btVector3(0.0f, -0.5f, 0.0f));
+
+	coneC = new btConeTwistConstraint(*m_rigidBodys[bones::Spine1], *m_rigidBodys[bones::RArm0], localA, localB);
+	coneC->setLimit(M_PI_4 * 0.9f, M_PI_4 * 0.9f, 0.0f, 0.9f);
+	m_joints[joints::Spine1_to_RArm0] = coneC;
+
+// RArm1
+	halfSize = btVector3(0.1f, 0.5f, 0.1f);
+	offset = btVector3(-0.05f, 0.7f, 0.0f);
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::RArm1] = new btBoxShape(halfSize);
 	Initialize(bones::RArm1, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z());
 
-	// RArm2
-	halfSize = btVector3(0.3f, 0.4f, 0.3f);
-	offset = btVector3(0.0f, 0.4f, 0.0f);
+	localA.setIdentity();
+	localB.setIdentity();
+	localA.getBasis().setEulerZYX(0.0f, 0.0f, 0.0f);
+	localA.setOrigin(btVector3(0.0f, 0.25f, 0.0f));
+	localB.getBasis().setEulerZYX(0.0f, 0.0f, 0.0f);
+	localB.setOrigin(btVector3(-0.05f, -0.5f, 0.0f));
+
+	coneC = new btConeTwistConstraint(*m_rigidBodys[bones::RArm0], *m_rigidBodys[bones::RArm1], localA, localB);
+	coneC->setLimit(M_PI_4 * 0.9f, M_PI_4 * 0.9f, M_PI_4 * 0.9f);
+	m_joints[joints::RArm0_to_RArm1] = coneC;
+
+// RArm2
+	halfSize = btVector3(0.1f, 0.5f, 0.1f);
+	offset = btVector3(0.0f, 0.35f, 0.0f);
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::RArm2] = new btBoxShape(halfSize);
 	Initialize(bones::RArm2, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z());
 
-	// RHand
-	halfSize = btVector3(0.3f, 0.5f, 0.3f);
-	offset = btVector3(0.0f, 0.5f, 0.0f);
+	localA.setIdentity();
+	localB.setIdentity();
+	localA.getBasis().setEulerZYX(0.0f, 0.0f, 0.0f);
+	localA.setOrigin(btVector3(0.0f, 0.45f, 0.0f));
+	localB.getBasis().setEulerZYX(0.0f, 0.0f, 0.0f);
+	localB.setOrigin(btVector3(0.0f, -0.45f, 0.0f));
+
+	coneC = new btConeTwistConstraint(*m_rigidBodys[bones::RArm1], *m_rigidBodys[bones::RArm2], localA, localB);
+	coneC->setLimit(M_PI_4 * 0.9f, M_PI_4 * 0.9f, M_PI_4 * 0.9f);
+	m_joints[joints::RArm1_to_RArm2] = coneC;
+
+// RHand
+	halfSize = btVector3(0.3f, 0.4f, 0.3f);
+	offset = btVector3(0.0f, 0.45f, 0.0f);
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::RHand] = new btBoxShape(halfSize);
 	Initialize(bones::RHand, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z());
 
-	// LArm0
-	halfSize = btVector3(0.0f, 0.0f, 0.0f);
-	offset = btVector3(0.0f, 0.6f, 0.0f);
+	localA.setIdentity();
+	localB.setIdentity();
+	localA.getBasis().setEulerZYX(0.0f, 0.0f, 0.0f);
+	localA.setOrigin(btVector3(0.0f, 0.3f, 0.0f));
+	localB.getBasis().setEulerZYX(0.0f, 0.0f, 0.0f);
+	localB.setOrigin(btVector3(0.0f, -0.3f, 0.0f));
+
+	coneC = new btConeTwistConstraint(*m_rigidBodys[bones::RArm2], *m_rigidBodys[bones::RHand], localA, localB);
+	coneC->setLimit(M_PI_4 * 0.9f, M_PI_4 * 0.9f, M_PI_4 * 0.9f);
+	m_joints[joints::RArm2_to_RHand] = coneC;
+
+// LArm0
+	halfSize = btVector3(0.4f, 0.4f, 0.5f);
+	offset = btVector3(0.225f, 1.0f, 0.0f);
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::LArm0] = new btBoxShape(halfSize);
 	Initialize(bones::LArm0, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z());
 
-	// LArm1
-	halfSize = btVector3(0.3f, 0.6f, 0.3f);
-	offset = btVector3(0.0f, 0.6f, 0.0f);
+	localA.setIdentity();
+	localB.setIdentity();
+	//localA.getBasis().setEulerZYX(0.0f, 0.0f, 0.0f);
+	localA.setOrigin(btVector3(-0.6f, 0.4f, 0.0f));
+	localB.getBasis().setEulerZYX(0.0f, M_PI, M_PI_2);
+	localB.setOrigin(btVector3(0.0f, -0.5f, 0.0f));
+
+	coneC = new btConeTwistConstraint(*m_rigidBodys[bones::Spine1], *m_rigidBodys[bones::LArm0], localA, localB);
+	coneC->setLimit(M_PI_4 * 0.9f, M_PI_4 * 0.9f, 0.0f, 0.9f);
+	m_joints[joints::Spine1_to_LArm0] = coneC;
+
+// LArm1
+	halfSize = btVector3(0.1f, 0.5f, 0.1f);
+	offset = btVector3(0.05f, 0.7f, 0.0f);
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::LArm1] = new btBoxShape(halfSize);
 	Initialize(bones::LArm1, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z());
 
-	// LArm2
-	halfSize = btVector3(0.3f, 0.4f, 0.3f);
-	offset = btVector3(0.0f, 0.4f, 0.0f);
+	localA.setIdentity();
+	localB.setIdentity();
+	localA.getBasis().setEulerZYX(0.0f, 0.0f, 0.0f);
+	localA.setOrigin(btVector3(0.0f, 0.25f, 0.0f));
+	localB.getBasis().setEulerZYX(0.0f, 0.0f, 0.0f);
+	localB.setOrigin(btVector3(0.05f, -0.5f, 0.0f));
+
+	coneC = new btConeTwistConstraint(*m_rigidBodys[bones::LArm0], *m_rigidBodys[bones::LArm1], localA, localB);
+	coneC->setLimit(M_PI_4 * 0.9f, M_PI_4 * 0.9f, M_PI_4 * 0.9f);
+	m_joints[joints::LArm0_to_LArm1] = coneC;
+
+// LArm2
+	halfSize = btVector3(0.1f, 0.5f, 0.1f);
+	offset = btVector3(0.0f, 0.35f, 0.0f);
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::LArm2] = new btBoxShape(halfSize);
 	Initialize(bones::LArm2, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z());
+	
+	localA.setIdentity();
+	localB.setIdentity();
+	localA.getBasis().setEulerZYX(0.0f, 0.0f, 0.0f);
+	localA.setOrigin(btVector3(0.0f, 0.45f, 0.0f));
+	localB.getBasis().setEulerZYX(0.0f, 0.0f, 0.0f);
+	localB.setOrigin(btVector3(0.0f, -0.45f, 0.0f));
 
-	// LHand
-	halfSize = btVector3(0.3f, 0.5f, 0.3f);
-	offset = btVector3(0.0f, 0.5f, 0.0f);
+	coneC = new btConeTwistConstraint(*m_rigidBodys[bones::LArm1], *m_rigidBodys[bones::LArm2], localA, localB);
+	coneC->setLimit(M_PI_4 * 0.9f, M_PI_4 * 0.9f, M_PI_4 * 0.9f);
+	m_joints[joints::LArm1_to_LArm2] = coneC;
+
+// LHand
+	halfSize = btVector3(0.3f, 0.4f, 0.3f);
+	offset = btVector3(0.0f, 0.45f, 0.0f);
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::LHand] = new btBoxShape(halfSize);
 	Initialize(bones::LHand, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z());
 
-	// RLeg0
-	halfSize = btVector3(0.0f, 0.0f, 0.0f);
-	offset = btVector3(0.0f, 0.0f, 0.0f);
+	localA.setIdentity();
+	localB.setIdentity();
+	localA.getBasis().setEulerZYX(0.0f, 0.0f, 0.0f);
+	localA.setOrigin(btVector3(0.0f, 0.3f, 0.0f));
+	localB.getBasis().setEulerZYX(0.0f, 0.0f, 0.0f);
+	localB.setOrigin(btVector3(0.0f, -0.3f, 0.0f));
+
+	coneC = new btConeTwistConstraint(*m_rigidBodys[bones::LArm2], *m_rigidBodys[bones::LHand], localA, localB);
+	coneC->setLimit(M_PI_4 * 0.9f, M_PI_4 * 0.9f, M_PI_4 * 0.9f);
+	m_joints[joints::LArm2_to_LHand] = coneC;
+
+// RLeg0
+	halfSize = btVector3(0.3f, 0.45f, 0.7f);
+	offset = btVector3(-0.6f, 0.7f, -0.1f);
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::RLeg0] = new btBoxShape(halfSize);
 	Initialize(bones::RLeg0, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z());
 
-	// RLeg1
-	halfSize = btVector3(0.3f, 0.8f, 0.3f);
-	offset = btVector3(0.0f, 1.2f, 0.0f);
+	localA.setIdentity();
+	localB.setIdentity();
+	localA.getBasis().setEulerZYX(0.0f, 0.0f, 0.0f);
+	localA.setOrigin(btVector3(-0.6f, -0.6f, 0.0f));
+	localB.getBasis().setEulerZYX(0.0f, 0.0f, -M_PI_2);
+	localB.setOrigin(btVector3(0.1f, 0.0f, 0.0f));
+
+	coneC = new btConeTwistConstraint(*m_rigidBodys[bones::Spine0], *m_rigidBodys[bones::RLeg0], localA, localB);
+	coneC->setLimit(M_PI_4 * 0.9f, M_PI_4 * 0.9f, M_PI_16 * 0.01f);
+	m_joints[joints::Spine0_to_RLeg0] = coneC;
+
+// RLeg1
+	halfSize = btVector3(0.3f, 0.7f, 0.3f);
+	offset = btVector3(0.0f, 1.5f, 0.0f);
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::RLeg1] = new btBoxShape(halfSize);
 	Initialize(bones::RLeg1, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z());
 
-	// RLeg2
-	halfSize = btVector3(0.3f, 0.6f, 0.3f);
-	offset = btVector3(0.0f, 0.4f, 0.0f);
+	localA.setIdentity();
+	localB.setIdentity();
+	localA.getBasis().setEulerZYX(0.0f, 0.0f, 0.0f);
+	localA.setOrigin(btVector3(-0.2f, 0.0f, 0.0f));
+	localB.getBasis().setEulerZYX(0.0f, 0.0f, -M_PI_2);
+	localB.setOrigin(btVector3(0.0f, -0.7f, 0.0f));
+
+	coneC = new btConeTwistConstraint(*m_rigidBodys[bones::RLeg0], *m_rigidBodys[bones::RLeg1], localA, localB);
+	coneC->setLimit(M_PI_4 * 0.9f, M_PI_4 * 0.9f, M_PI_16 * 0.01f);
+	m_joints[joints::RLeg0_to_RLeg1] = coneC;
+
+// RLeg2
+	halfSize = btVector3(0.3f, 0.7f, 0.3f);
+	offset = btVector3(0.0f, 0.5f, 0.0f);
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::RLeg2] = new btBoxShape(halfSize);
 	Initialize(bones::RLeg2, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z());
 
-	// RFoot
-	halfSize = btVector3(0.3f, 0.8f, 0.3f);
-	offset = btVector3(0.0f, 0.5f, 0.0f);
+	localA.setIdentity();
+	localB.setIdentity();
+	localA.getBasis().setEulerZYX(0.0f, 0.0f, 0.0f);
+	localA.setOrigin(btVector3(0.0f, 0.6f, 0.0f));
+	localB.getBasis().setEulerZYX(0.0f, 0.0f, 0.0f);
+	localB.setOrigin(btVector3(0.0f, -0.6f, 0.0f));
+
+	coneC = new btConeTwistConstraint(*m_rigidBodys[bones::RLeg1], *m_rigidBodys[bones::RLeg2], localA, localB);
+	coneC->setLimit(M_PI_4 * 0.9f, M_PI_4 * 0.9f, M_PI_16 * 0.01f);
+	m_joints[joints::RLeg1_to_RLeg2] = coneC;
+
+// RFoot
+	halfSize = btVector3(0.3f, 0.9f, 0.3f);
+	offset = btVector3(0.0f, 0.35f, -0.1f);
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::RFoot] = new btBoxShape(halfSize);
 	Initialize(bones::RFoot, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z());
 
-	// LLeg0
-	halfSize = btVector3(0.0f, 0.0f, 0.0f);
-	offset = btVector3(0.0f, 0.0f, 0.0f);
+	localA.setIdentity();
+	localB.setIdentity();
+	localA.getBasis().setEulerZYX(-M_PI_2, 0.0f, 0.0f);
+	localA.setOrigin(btVector3(0.0f, 0.7f, 0.0f));
+	localB.getBasis().setEulerZYX(0.0f, 0.0f, 0.0f);
+	localB.setOrigin(btVector3(0.0f, -0.3f, 0.0f));
+
+	coneC = new btConeTwistConstraint(*m_rigidBodys[bones::RLeg2], *m_rigidBodys[bones::RFoot], localA, localB);
+	coneC->setLimit(M_PI_4 * 0.9f, M_PI_4 * 0.9f, M_PI_16 * 0.01f);
+	m_joints[joints::RLeg2_to_RFoot] = coneC;
+
+// LLeg0
+	halfSize = btVector3(0.3f, 0.45f, 0.7f);
+	offset = btVector3(0.6f, 0.7f, -0.1f);
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::LLeg0] = new btBoxShape(halfSize);
 	Initialize(bones::LLeg0, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z());
 
-	// LLeg1
-	halfSize = btVector3(0.3f, 0.8f, 0.3f);
-	offset = btVector3(0.0f, 1.2f, 0.0f);
+	localA.setIdentity();
+	localB.setIdentity();
+	localA.getBasis().setEulerZYX(0.0f, 0.0f, 0.0f);
+	localA.setOrigin(btVector3(0.6f, -0.6f, 0.0f));
+	localB.getBasis().setEulerZYX(0.0f, 0.0f, M_PI_2);
+	localB.setOrigin(btVector3(-0.1f, 0.0f, 0.0f));
+
+	coneC = new btConeTwistConstraint(*m_rigidBodys[bones::Spine0], *m_rigidBodys[bones::LLeg0], localA, localB);
+	coneC->setLimit(M_PI_4 * 0.9f, M_PI_4 * 0.9f, M_PI_16 * 0.01f);
+	m_joints[joints::Spine0_to_LLeg0] = coneC;
+
+// LLeg1
+	halfSize = btVector3(0.3f, 0.7f, 0.3f);
+	offset = btVector3(0.0f, 1.5f, 0.0f);
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::LLeg1] = new btBoxShape(halfSize);
 	Initialize(bones::LLeg1, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z());
 
-	// LLeg2
-	halfSize = btVector3(0.3f, 0.6f, 0.3f);
-	offset = btVector3(0.0f, 0.4f, 0.0f);
+	localA.setIdentity();
+	localB.setIdentity();
+	localA.getBasis().setEulerZYX(0.0f, 0.0f, 0.0f);
+	localA.setOrigin(btVector3(0.2f, 0.0f, 0.0f));
+	localB.getBasis().setEulerZYX(0.0f, 0.0f, M_PI_2);
+	localB.setOrigin(btVector3(0.0f, -0.7f, 0.0f));
+
+	coneC = new btConeTwistConstraint(*m_rigidBodys[bones::LLeg0], *m_rigidBodys[bones::LLeg1], localA, localB);
+	coneC->setLimit(M_PI_4 * 0.9f, M_PI_4 * 0.9f, M_PI_16 * 0.01f);
+	m_joints[joints::LLeg0_to_LLeg1] = coneC;
+
+// LLeg2
+	halfSize = btVector3(0.3f, 0.7f, 0.3f);
+	offset = btVector3(0.0f, 0.5f, 0.0f);
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::LLeg2] = new btBoxShape(halfSize);
 	Initialize(bones::LLeg2, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z());
 
-	// LFoot
-	halfSize = btVector3(0.3f, 0.8f, 0.3f);
-	offset = btVector3(0.0f, 0.5f, 0.0f);
+	localA.setIdentity();
+	localB.setIdentity();
+	localA.getBasis().setEulerZYX(0.0f, 0.0f, 0.0f);
+	localA.setOrigin(btVector3(0.0f, 0.6f, 0.0f));
+	localB.getBasis().setEulerZYX(0.0f, 0.0f, 0.0f);
+	localB.setOrigin(btVector3(0.0f, -0.6f, 0.0f));
+
+	coneC = new btConeTwistConstraint(*m_rigidBodys[bones::LLeg1], *m_rigidBodys[bones::LLeg2], localA, localB);
+	coneC->setLimit(M_PI_4 * 0.9f, M_PI_4 * 0.9f, M_PI_16 * 0.01f);
+	m_joints[joints::LLeg1_to_LLeg2] = coneC;
+
+// LFoot
+	halfSize = btVector3(0.3f, 0.9f, 0.3f);
+	offset = btVector3(0.0f, 0.35f, -0.1f);
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::LFoot] = new btBoxShape(halfSize);
 	Initialize(bones::LFoot, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z());
 
-	btConeTwistConstraint* coneC;
-
-	btTransform localA, localB;
 	localA.setIdentity();
 	localB.setIdentity();
-	localA.getBasis().setEulerZYX(0.0f, 0.0f, 0.0f);
-	localA.setOrigin(btVector3(0.0f, -0.85f, 0.0f));
+	localA.getBasis().setEulerZYX(-M_PI_2, 0.0f, 0.0f);
+	localA.setOrigin(btVector3(0.0f, 0.7f, 0.0f));
 	localB.getBasis().setEulerZYX(0.0f, 0.0f, 0.0f);
-	localB.setOrigin(btVector3(0.0f, 0.25f, 0.0f));
+	localB.setOrigin(btVector3(0.0f, -0.3f, 0.0f));
 
-	coneC = new btConeTwistConstraint(*m_rigidBodys[bones::Head], *m_rigidBodys[bones::Neck], localA, localB);
-	coneC->setLimit(M_PI_4 * 0.9f, M_PI_4 * 0.9f, M_PI_2 * 0.9f, 0.9f);
-	m_joints[joints::Head_to_Neck] = coneC;
-	coneC->setDbgDrawSize(2.0f);
+	coneC = new btConeTwistConstraint(*m_rigidBodys[bones::LLeg2], *m_rigidBodys[bones::LFoot], localA, localB);
+	coneC->setLimit(M_PI_4 * 0.9f, M_PI_4 * 0.9f, M_PI_16 * 0.01f);
+	m_joints[joints::LLeg2_to_LFoot] = coneC;
 
 	return true;
 }
