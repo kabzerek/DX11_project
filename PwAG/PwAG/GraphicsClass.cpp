@@ -1426,12 +1426,6 @@ void GraphicsClass::TestIntersection(int mouseX, int mouseY, int screenWidth, in
 	m_D3D->GetProjectionMatrix(projectionMatrix);
 	D3DXMatrixMultiply(&viewProjectionMatrix, &viewMatrix, &projectionMatrix);
 	D3DXMatrixInverse(&inverseViewProjectionMatrix, NULL, &viewProjectionMatrix);
-
-	//m_Camera->GetViewMatrix(viewMatrix);
-	//m_Camera->GetBaseViewMatrix(baseViewMatrix);
-	//D3DXMatrixInverse(&inverseViewMatrix, NULL, &viewMatrix);
-	
-	//rayFrom = m_Camera->GetPosition();
 	
 	// Find screen coordinates normalized to -1,1
 	coord.x =  ( ( ( 2.0f *((float)mouseX  / (float)screenWidth) ) - 1.f ));
@@ -1445,17 +1439,6 @@ void GraphicsClass::TestIntersection(int mouseX, int mouseY, int screenWidth, in
 	//SetSentence(8, "Width = " + to_string(screenWidth));
 	//SetSentence(9, "Height = " + to_string(screenHeight));
 			
-	// Back project the ray from screen to the far clip plane
-	//coord.x /= viewMatrix._11; 
-	//coord.y /= viewMatrix._22;
-
-	
-	//coord*=1000;
-
-
-	//D3DXVec3TransformCoord(&coord, &coord, &inverseViewMatrix);
-			
-	//rayTo = coord;
 
 	D3DXVECTOR3 near_vec(coord.x, coord.y, 0.0f);
 	D3DXVECTOR3 far_vec(coord.x, coord.y, 1.0f);
@@ -1487,7 +1470,7 @@ void GraphicsClass::TestIntersection(int mouseX, int mouseY, int screenWidth, in
 			if (rayCallback.hasHit())
 			{
 				pBody =  btRigidBody::upcast((btRigidBody*)rayCallback.m_collisionObject);
-				if (pBody != NULL) //&& pPhysicsData)
+				if (pBody != NULL) 
 				{
 					// Code for adding a constraint from Bullet Demo's DemoApplication.cpp
 					if (!(pBody->isStaticObject() || pBody->isKinematicObject()))
@@ -1583,40 +1566,5 @@ void GraphicsClass::TestIntersection(int mouseX, int mouseY, int screenWidth, in
 		
 	}
 
-
-	//if(intersect == true)
-	//{
-	//	// If it does intersect then set the intersection to "yes" in the text string that is displayed to the screen.
-	//	SetSentence(10, "Intersection");
-	//}
-	//else
-	//{
-	//	// If not then set the intersection to "No".
-	//	SetSentence(10, "No intersection");
-	//}
-
 	return;
-}
-
-
-bool GraphicsClass::RaySphereIntersect(D3DXVECTOR3 rayOrigin, D3DXVECTOR3 rayDirection, float radius)
-{
-	float a, b, c, discriminant;
-
-
-	// Calculate the a, b, and c coefficients.
-	a = (rayDirection.x * rayDirection.x) + (rayDirection.y * rayDirection.y) + (rayDirection.z * rayDirection.z);
-	b = ((rayDirection.x * rayOrigin.x) + (rayDirection.y * rayOrigin.y) + (rayDirection.z * rayOrigin.z)) * 2.0f;
-	c = ((rayOrigin.x * rayOrigin.x) + (rayOrigin.y * rayOrigin.y) + (rayOrigin.z * rayOrigin.z)) - (radius * radius);
-
-	// Find the discriminant.
-	discriminant = (b * b) - (4 * a * c);
-
-	// if discriminant is negative the picking ray missed the sphere, otherwise it intersected the sphere.
-	if (discriminant < 0.0f)
-	{
-		return false;
-	}
-
-	return true;
 }
