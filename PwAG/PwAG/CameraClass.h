@@ -21,6 +21,7 @@ public:
 
 	void RenderBaseViewMatrix();
 	void GetBaseViewMatrix(D3DXMATRIX&);
+	//D3DXVECTOR3 GetPickRay(float x, float y, int screen_w, int screen_h);
 
 private:
 	float m_positionX, m_positionY, m_positionZ;

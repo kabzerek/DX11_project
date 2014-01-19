@@ -47,11 +47,12 @@ public:
 	bool Initialize(int, int, HWND);
 	void Shutdown();
 	//bool Frame(int, int);
-	bool Frame(float, float, float, float, float, float, bool, int, int);
+	bool Frame(float, float, float, float, float, float, int, int);
 	bool SetWireframe();
 	void ToggleDebugMode();
+	void TogglePhysics();
 
-	void TestIntersection(int, int, int, int);
+	void TestIntersection(int, int, int, int, bool);
 	bool RaySphereIntersect(D3DXVECTOR3, D3DXVECTOR3, float);
 
 	void SetSentence(int, std::string);
@@ -87,6 +88,7 @@ private:
 	int  getDebugMode() const { return m_debugMode; }
 
 protected:
+	btTypedConstraint*		m_pickConstraint;
 	btDiscreteDynamicsWorld* m_dynamicsWorld;
 
 private:
@@ -94,11 +96,18 @@ private:
 	CameraClass* m_Camera;
 	std::vector<EngineObjectClass*> m_EngineObjects;
 	RagdollClass* m_Ragdoll;
+
+	btRigidBody* m_pickedBody;
+	btVector3 m_pickPos;
+	btScalar m_pickDist;
+
 	LightClass* m_Light;
 	TextClass* m_Text;
 	BitmapClass* m_Bitmap;
 	TextureShaderClass* m_TextureShader;
 	int m_mouseX, m_mouseY;
+	bool m_isHanging;
+	bool m_isPhysics;
 
 	ShaderManagerClass* m_ShaderManager;
 

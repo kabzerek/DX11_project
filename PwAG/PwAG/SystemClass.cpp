@@ -10,6 +10,8 @@ SystemClass::SystemClass()
 	m_TimeElapsed = 0.0f;
 	m_MaxInputTestTime = 1.0f;
 	m_WFPressed = false;
+	m_WirePressed = false;
+	m_PhysicsPressed = false;
 }
 
 
@@ -89,10 +91,6 @@ bool SystemClass::Initialize()
 	// Set the initial position of the viewer to the same as the initial camera position.
 	m_Position->SetPosition(-20.0f, 20.0f, -30.0f);
 	m_Position->SetRotation(40.0f, 35.0f, 0.0f);
-
-
-	// Initialize that the user has not clicked on the screen to try an intersection test yet.
-	m_beginCheck = false;
 
 	return true;
 }
@@ -201,17 +199,13 @@ bool SystemClass::Frame()
 	if(m_Input->IsMouseLeftPressed() == true)
 	{
 		// If they have clicked on the screen with the mouse then perform an intersection test.
-		if(m_beginCheck == false)
-		{
-			m_beginCheck = true;
-			m_Graphics->TestIntersection(mouseX, mouseY, m_screenWidth, m_screenHeight);
-		}
+		m_Graphics->TestIntersection(mouseX, mouseY, m_screenWidth, m_screenHeight, true);
 	}
 
 	// Check if the left mouse button has been released.
 	if(m_Input->IsMouseLeftPressed() == false)
 	{
-		m_beginCheck = false;
+		m_Graphics->TestIntersection(mouseX, mouseY, m_screenWidth, m_screenHeight, false);
 	}
 
 	// Update the system stats.
@@ -232,30 +226,23 @@ bool SystemClass::Frame()
 	//float m_x, m_y, m_z, g_x, g_y, g_z, d_x, d_y, d_z;
 	//m_Graphics->GetPos(m_x, m_y, m_z, g_x, g_y, g_z, d_x, d_y, d_z);
 
-	m_Graphics->SetSentence(0, "-");
-	m_Graphics->SetSentence(1, "-");
-	m_Graphics->SetSentence(2, "-");
+	//m_Graphics->SetSentence(0, "-");
+	//m_Graphics->SetSentence(1, "-");
+	//m_Graphics->SetSentence(2, "-");
 
-	m_Graphics->SetSentence(3, "-");
-	m_Graphics->SetSentence(4, "-");
-	m_Graphics->SetSentence(5, "-");
-	m_Graphics->SetSentence(6, "-");
+	//m_Graphics->SetSentence(3, "-");
+	//m_Graphics->SetSentence(4, "-");
+	//m_Graphics->SetSentence(5, "-");
+	//m_Graphics->SetSentence(6, "-");
 
-	m_Graphics->SetSentence(7, "-");
-	m_Graphics->SetSentence(8, "-");
-	m_Graphics->SetSentence(9, "-");
+	//m_Graphics->SetSentence(7, "-");
+	//m_Graphics->SetSentence(8, "-");
+	//m_Graphics->SetSentence(9, "-");
 
 	//m_Graphics->SetSentence(10,"-");
 
 	// Do the frame processing for the graphics object.
-	bool uptd = false;
-	if(m_Input->IsUPressed() == true)
-	{
-		uptd = true;
-	}
-
-	result = m_Graphics->Frame(posX, posY, posZ, rotX, rotY, rotZ, uptd, mouseX, mouseY);
-	uptd = false;
+	result = m_Graphics->Frame(posX, posY, posZ, rotX, rotY, rotZ, mouseX, mouseY);
 	if(!result)
 	{
 		return false;
@@ -344,6 +331,10 @@ bool SystemClass::HandleInput(float frameTime)
 		{
 			m_WirePressed = true;
 		}
+		if(m_Input->IsUPressed())
+		{
+			m_PhysicsPressed = true;
+		}
 	}
 	if(m_TimeElapsed >= m_MaxInputTestTime)
 	{
@@ -351,10 +342,13 @@ bool SystemClass::HandleInput(float frameTime)
 			result = m_Graphics->SetWireframe();
 		if(m_WirePressed)
 			m_Graphics->ToggleDebugMode();
+		if(m_PhysicsPressed)
+			m_Graphics->TogglePhysics();
 
 		m_TimeElapsed = 0.0f;
 		m_WFPressed = false;
 		m_WirePressed = false;
+		m_PhysicsPressed = false;
 	}
 
 	return result;

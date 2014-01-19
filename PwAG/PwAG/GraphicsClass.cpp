@@ -45,6 +45,11 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	D3DXMATRIX baseViewMatrix;
 	int downSampleWidth, downSampleHeight;
 
+	m_isHanging = false;
+	m_isPhysics = false;
+	//SetSentence(1, "Physics OFF");
+	//SetSentence(2, "No Link");
+
 	// Create the Direct3D object.
 	m_D3D = new D3DClass;
 	if(!m_D3D)
@@ -582,13 +587,13 @@ void GraphicsClass::Shutdown()
 }
 
 
-bool GraphicsClass::Frame(float posX, float posY, float posZ, float rotX, float rotY, float rotZ, bool uptd, int mouseX, int mouseY)
+bool GraphicsClass::Frame(float posX, float posY, float posZ, float rotX, float rotY, float rotZ, int mouseX, int mouseY)
 {
 	bool result;
 	static bool side = false;
 	static float lightPositionX = -5.0f;
 
-	if(uptd)
+	if(m_isPhysics)
 	{
 		m_dynamicsWorld->stepSimulation(1/60.0f, 10);
 
@@ -1340,65 +1345,217 @@ void GraphicsClass::ToggleDebugMode(void)
 		m_debugMode = btIDebugDraw::DBG_NoDebug;
 }
 
+void GraphicsClass::TogglePhysics(void)
+{
+	m_isPhysics = !m_isPhysics;
+	if(m_isPhysics)
+		SetSentence(1,"Physics ON");
+	else
+		SetSentence(1,"Physics OFF");
+}
 
 
-void GraphicsClass::TestIntersection(int mouseX, int mouseY, int screenWidth, int screenHeight)
+void GraphicsClass::TestIntersection(int mouseX, int mouseY, int screenWidth, int screenHeight, bool isPressed)
 {
 	float pointX, pointY;
 	D3DXMATRIX projectionMatrix, viewMatrix, inverseViewMatrix, worldMatrix, translateMatrix, inverseWorldMatrix;
-	D3DXVECTOR3 direction, origin, rayOrigin, rayDirection;
-	bool intersect, result;
+	D3DXVECTOR3 direction, origin, rayFrom, rayTo;
+	//bool intersect, result;
 
-
-	// Move the mouse cursor coordinates into the -1 to +1 range.
-	pointX = ((2.0f * (float)mouseX) / (float)screenWidth) - 1.0f;
-	pointY = (((2.0f * (float)mouseY) / (float)screenHeight) - 1.0f) * -1.0f;
-		
-	// Adjust the points using the projection matrix to account for the aspect ratio of the viewport.
+	//// Move the mouse cursor coordinates into the -1 to +1 range.
+	//pointX = ((2.0f * (float)mouseX) / (float)screenWidth) - 1.0f;
+	//pointY = (((2.0f * (float)mouseY) / (float)screenHeight) - 1.0f) * -1.0f;
+	//	
+	//// Adjust the points using the projection matrix to account for the aspect ratio of the viewport.
 	m_D3D->GetProjectionMatrix(projectionMatrix);
-	pointX = pointX / projectionMatrix._11;
-	pointY = pointY / projectionMatrix._22;
+	//pointX = pointX / projectionMatrix._11;
+	//pointY = pointY / projectionMatrix._22;
 
-	// Get the inverse of the view matrix.
+	//// Get the inverse of the view matrix.
 	m_Camera->GetViewMatrix(viewMatrix);
-	D3DXMatrixInverse(&inverseViewMatrix, NULL, &viewMatrix);
+	//D3DXMatrixInverse(&inverseViewMatrix, NULL, &viewMatrix);
 
-	// Calculate the direction of the picking ray in view space.
-	direction.x = (pointX * inverseViewMatrix._11) + (pointY * inverseViewMatrix._21) + inverseViewMatrix._31;
-	direction.y = (pointX * inverseViewMatrix._12) + (pointY * inverseViewMatrix._22) + inverseViewMatrix._32;
-	direction.z = (pointX * inverseViewMatrix._13) + (pointY * inverseViewMatrix._23) + inverseViewMatrix._33;
+	//// Calculate the direction of the picking ray in view space.
+	//direction.x = (pointX * inverseViewMatrix._11) + (pointY * inverseViewMatrix._21) + inverseViewMatrix._31;
+	//direction.y = (pointX * inverseViewMatrix._12) + (pointY * inverseViewMatrix._22) + inverseViewMatrix._32;
+	//direction.z = (pointX * inverseViewMatrix._13) + (pointY * inverseViewMatrix._23) + inverseViewMatrix._33;
 
-	// Get the origin of the picking ray which is the position of the camera.
-	origin = m_Camera->GetPosition();
+	//// Get the origin of the picking ray which is the position of the camera.
+	//origin = m_Camera->GetPosition();
 
-	// Get the world matrix and translate to the location of the sphere.
-	m_D3D->GetWorldMatrix(worldMatrix);
-	D3DXMatrixTranslation(&translateMatrix, -5.0f, 1.0f, 5.0f);
-	D3DXMatrixMultiply(&worldMatrix, &worldMatrix, &translateMatrix); 
+	//// Get the world matrix and translate to the location of the objects.
+	//m_D3D->GetWorldMatrix(worldMatrix);
+	//D3DXMatrixTranslation(&translateMatrix, -5.0f, 1.0f, 5.0f);
+	//D3DXMatrixMultiply(&worldMatrix, &worldMatrix, &translateMatrix); 
 
-	// Now get the inverse of the translated world matrix.
-	D3DXMatrixInverse(&inverseWorldMatrix, NULL, &worldMatrix);
+	//// Now get the inverse of the translated world matrix.
+	//D3DXMatrixInverse(&inverseWorldMatrix, NULL, &worldMatrix);
 
-	// Now transform the ray origin and the ray direction from view space to world space.
-	D3DXVec3TransformCoord(&rayOrigin, &origin, &inverseWorldMatrix);
-	D3DXVec3TransformNormal(&rayDirection, &direction, &inverseWorldMatrix);
+	//// Now transform the ray origin and the ray direction from view space to world space.
+	//D3DXVec3TransformCoord(&rayOrigin, &origin, &inverseWorldMatrix);
+	//D3DXVec3TransformNormal(&rayDirection, &direction, &inverseWorldMatrix);
 
 	// Normalize the ray direction.
-	D3DXVec3Normalize(&rayDirection, &rayDirection);
+	//D3DXVec3Normalize(&rayDirection, &rayDirection);
 
-	// Now perform the ray-sphere intersection test.
-	intersect = RaySphereIntersect(rayOrigin, rayDirection, 1.0f);
+
+
+
+	// Now perform the intersection test.
+	//intersect = RaySphereIntersect(rayOrigin, rayDirection, 1.0f);
 	
-	if(intersect == true)
+	if(!m_isHanging)
 	{
-		// If it does intersect then set the intersection to "yes" in the text string that is displayed to the screen.
-		SetSentence(10, "Intersection");
+		if(isPressed)
+		{
+			//SetSentence(3,"LMB pressed");
+			//Need to pick up the object now (if raycast hits)
+			
+			rayFrom = m_Camera->GetPosition();
+
+
+
+			//rayTo = //m_Camera->GetPickRay(mouseX, mouseY, screenWidth, screenHeight);
+			// Find screen coordinates normalized to -1,1
+			D3DXVECTOR3 coord;
+			coord.x = ( ( ( 2.0f * mouseX ) / screenWidth ) - 1 );
+			coord.y = -( ( ( 2.0f * mouseY ) / screenHeight ) - 1 );
+			coord.z = 1.0f;
+			
+			// Back project the ray from screen to the far clip plane
+			coord.x /= viewMatrix._11; 
+			coord.y /= viewMatrix._22;
+
+			D3DXMATRIX matinv;
+			D3DXMatrixInverse(&matinv, NULL, &projectionMatrix);//&m_baseViewMatrix);
+
+			coord*=100;
+			D3DXVec3TransformCoord(&coord, &coord, &matinv);
+			
+			rayTo = coord;
+			
+			
+			
+			
+			
+			btVector3 btRayFrom = btVector3(rayFrom.x, rayFrom.y, rayFrom.z);
+			btVector3 btRayTo = btVector3(rayTo.x, rayTo.y, rayTo.z);
+
+
+			btCollisionWorld::ClosestRayResultCallback rayCallback(btRayFrom,btRayTo);
+			m_dynamicsWorld->rayTest(btRayFrom, btRayTo, rayCallback);
+			if (rayCallback.hasHit())
+			{
+				//PhysicsData* pPhysicsData = reinterpret_cast<PhysicsData*>(rayCallback.m_collisionObject->getUserPointer());
+				//void *pPhysicsData = rayCallback.m_collisionObject->getUserPointer();
+				btRigidBody* pBody =  btRigidBody::upcast((btRigidBody*)rayCallback.m_collisionObject);
+				if (pBody) //&& pPhysicsData)
+				{
+					// Code for adding a constraint from Bullet Demo's DemoApplication.cpp
+					if ( pBody->isKinematicObject() )
+					{
+						m_pickedBody = pBody;
+
+						m_pickPos = rayCallback.m_hitPointWorld;
+
+						btVector3 localPivot = pBody->getCenterOfMassTransform().inverse() * m_pickPos;
+							
+						btTransform tr;
+						tr.setIdentity();
+						tr.setOrigin(localPivot);
+						btGeneric6DofConstraint* dof6 = new btGeneric6DofConstraint(*pBody, tr, false);
+						dof6->setLinearLowerLimit(btVector3(0,0,0));
+						dof6->setLinearUpperLimit(btVector3(0,0,0));
+						dof6->setAngularLowerLimit(btVector3(0,0,0));
+						dof6->setAngularUpperLimit(btVector3(0,0,0));
+							
+						m_dynamicsWorld->addConstraint(dof6);
+						m_pickConstraint = dof6;
+						dof6->setParam(BT_CONSTRAINT_STOP_CFM,0.8f,0);
+						dof6->setParam(BT_CONSTRAINT_STOP_CFM,0.8f,1);
+						dof6->setParam(BT_CONSTRAINT_STOP_CFM,0.8f,2);
+						dof6->setParam(BT_CONSTRAINT_STOP_CFM,0.8f,3);
+						dof6->setParam(BT_CONSTRAINT_STOP_CFM,0.8f,4);
+						dof6->setParam(BT_CONSTRAINT_STOP_CFM,0.8f,5);
+							
+						dof6->setParam(BT_CONSTRAINT_STOP_ERP,0.1f,0);
+						dof6->setParam(BT_CONSTRAINT_STOP_ERP,0.1f,1);
+						dof6->setParam(BT_CONSTRAINT_STOP_ERP,0.1f,2);
+						dof6->setParam(BT_CONSTRAINT_STOP_ERP,0.1f,3);
+						dof6->setParam(BT_CONSTRAINT_STOP_ERP,0.1f,4);
+						dof6->setParam(BT_CONSTRAINT_STOP_ERP,0.1f,5);
+
+						//save mouse position for dragging
+						m_pickDist = (m_pickPos - btRayFrom).length();
+
+						m_isHanging = true;
+						SetSentence(2, "Linked!");
+					}
+				}
+			}
+		}
 	}
 	else
-	{
-		// If not then set the intersection to "No".
-		SetSentence(10, "No intersection");
+	{		
+		if(isPressed)
+		{
+			SetSentence(3,"LMB pressed");
+//			rayFrom = m_Camera->GetPosition();
+//			rayTo = m_Camera->GetPickRay(mouseX, mouseY, screenWidth, screenHeight);
+
+			//The object is picked already, we need to maintain the constraint
+			btGeneric6DofConstraint* pickCon = static_cast<btGeneric6DofConstraint*>(m_pickConstraint);
+			if (pickCon)
+			{
+				//keep it at the same picking distance            
+				btVector3 btRayFrom = btVector3(rayFrom.x, rayFrom.y, rayFrom.z);
+				btVector3 btRayTo = btVector3(rayTo.x, rayTo.y, rayTo.z);
+				btVector3 oldPivotInB = pickCon->getFrameOffsetA().getOrigin();
+
+				btVector3 newPivotB;
+
+				btVector3 dir = btRayTo - btRayFrom;
+				dir.normalize();
+				dir *= m_pickDist;
+
+				newPivotB = btRayFrom + dir;
+
+				pickCon->getFrameOffsetA().setOrigin(newPivotB);
+				SetSentence(2, "Still linked!");
+			}
+
+		}
+		else
+		{
+			SetSentence(3,"LMB not pressed");
+			//The object has to be unpicked - need to release the constraint
+
+			if (m_pickConstraint && m_dynamicsWorld)
+			{
+				m_dynamicsWorld->removeConstraint(m_pickConstraint);
+				delete m_pickConstraint;
+				m_pickConstraint = NULL;
+				m_pickedBody->setDeactivationTime( 0.f );
+				m_pickedBody = NULL;
+
+				m_isHanging = false;
+				SetSentence(2,"No Link!");
+			}
+		}
+		
 	}
+
+
+	//if(intersect == true)
+	//{
+	//	// If it does intersect then set the intersection to "yes" in the text string that is displayed to the screen.
+	//	SetSentence(10, "Intersection");
+	//}
+	//else
+	//{
+	//	// If not then set the intersection to "No".
+	//	SetSentence(10, "No intersection");
+	//}
 
 	return;
 }
