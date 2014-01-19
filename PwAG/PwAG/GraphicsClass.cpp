@@ -1358,8 +1358,9 @@ void GraphicsClass::TogglePhysics(void)
 void GraphicsClass::TestIntersection(int mouseX, int mouseY, int screenWidth, int screenHeight, bool isPressed)
 {
 	float pointX, pointY;
-	D3DXMATRIX projectionMatrix, viewMatrix, inverseViewMatrix, worldMatrix, translateMatrix, inverseWorldMatrix;
+	D3DXMATRIX projectionMatrix, viewMatrix, baseViewMatrix, inverseViewMatrix, worldMatrix, translateMatrix, inverseWorldMatrix;
 	D3DXVECTOR3 direction, origin, rayFrom, rayTo;
+	btRigidBody* pBody = NULL; 
 	//bool intersect, result;
 
 	//// Move the mouse cursor coordinates into the -1 to +1 range.
@@ -1367,12 +1368,13 @@ void GraphicsClass::TestIntersection(int mouseX, int mouseY, int screenWidth, in
 	//pointY = (((2.0f * (float)mouseY) / (float)screenHeight) - 1.0f) * -1.0f;
 	//	
 	//// Adjust the points using the projection matrix to account for the aspect ratio of the viewport.
-	m_D3D->GetProjectionMatrix(projectionMatrix);
+	//m_D3D->GetProjectionMatrix(projectionMatrix);
 	//pointX = pointX / projectionMatrix._11;
 	//pointY = pointY / projectionMatrix._22;
 
 	//// Get the inverse of the view matrix.
 	m_Camera->GetViewMatrix(viewMatrix);
+	m_Camera->GetBaseViewMatrix(baseViewMatrix);
 	//D3DXMatrixInverse(&inverseViewMatrix, NULL, &viewMatrix);
 
 	//// Calculate the direction of the picking ray in view space.
@@ -1398,19 +1400,7 @@ void GraphicsClass::TestIntersection(int mouseX, int mouseY, int screenWidth, in
 	// Normalize the ray direction.
 	//D3DXVec3Normalize(&rayDirection, &rayDirection);
 
-
-
-
-	// Now perform the intersection test.
-	//intersect = RaySphereIntersect(rayOrigin, rayDirection, 1.0f);
-	
-	if(!m_isHanging)
-	{
-		if(isPressed)
-		{
-			//SetSentence(3,"LMB pressed");
-			//Need to pick up the object now (if raycast hits)
-			
+				
 			rayFrom = m_Camera->GetPosition();
 
 
@@ -1427,9 +1417,9 @@ void GraphicsClass::TestIntersection(int mouseX, int mouseY, int screenWidth, in
 			coord.y /= viewMatrix._22;
 
 			D3DXMATRIX matinv;
-			D3DXMatrixInverse(&matinv, NULL, &projectionMatrix);//&m_baseViewMatrix);
+			D3DXMatrixInverse(&matinv, NULL, &viewMatrix);
 
-			coord*=100;
+			coord*=1000;
 			D3DXVec3TransformCoord(&coord, &coord, &matinv);
 			
 			rayTo = coord;
@@ -1442,19 +1432,32 @@ void GraphicsClass::TestIntersection(int mouseX, int mouseY, int screenWidth, in
 			btVector3 btRayTo = btVector3(rayTo.x, rayTo.y, rayTo.z);
 
 
+	// Now perform the intersection test.
+	//intersect = RaySphereIntersect(rayOrigin, rayDirection, 1.0f);
+	
+	if(!m_isHanging)
+	{
+		if(isPressed)
+		{
+			//SetSentence(3,"LMB pressed");
+			//Need to pick up the object now (if raycast hits)
+
+
+
 			btCollisionWorld::ClosestRayResultCallback rayCallback(btRayFrom,btRayTo);
 			m_dynamicsWorld->rayTest(btRayFrom, btRayTo, rayCallback);
 			if (rayCallback.hasHit())
 			{
 				//PhysicsData* pPhysicsData = reinterpret_cast<PhysicsData*>(rayCallback.m_collisionObject->getUserPointer());
 				//void *pPhysicsData = rayCallback.m_collisionObject->getUserPointer();
-				btRigidBody* pBody =  btRigidBody::upcast((btRigidBody*)rayCallback.m_collisionObject);
-				if (pBody) //&& pPhysicsData)
+				pBody =  btRigidBody::upcast((btRigidBody*)rayCallback.m_collisionObject);
+				if (pBody != NULL) //&& pPhysicsData)
 				{
 					// Code for adding a constraint from Bullet Demo's DemoApplication.cpp
-					if ( pBody->isKinematicObject() )
+					if (!(pBody->isStaticObject() || pBody->isKinematicObject()))
 					{
 						m_pickedBody = pBody;
+						m_pickedBody->setActivationState(DISABLE_DEACTIVATION);
 
 						m_pickPos = rayCallback.m_hitPointWorld;
 
@@ -1463,6 +1466,7 @@ void GraphicsClass::TestIntersection(int mouseX, int mouseY, int screenWidth, in
 						btTransform tr;
 						tr.setIdentity();
 						tr.setOrigin(localPivot);
+
 						btGeneric6DofConstraint* dof6 = new btGeneric6DofConstraint(*pBody, tr, false);
 						dof6->setLinearLowerLimit(btVector3(0,0,0));
 						dof6->setLinearUpperLimit(btVector3(0,0,0));

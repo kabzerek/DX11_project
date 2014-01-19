@@ -54,6 +54,7 @@
       <CompileAsManaged>
       </CompileAsManaged>
       <AdditionalIncludeDirectories>..\..\bullet-2.82-r2704\src</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
