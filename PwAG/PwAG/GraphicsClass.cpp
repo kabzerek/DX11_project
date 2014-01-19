@@ -100,6 +100,39 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	InitializePhysics();
 
 	// Create the model object.
+	// The Pyramid
+	
+	float x = -16.0f;
+	float y = 0.0f;
+	float bz = 0.0f;
+	float offset = 0.0f;
+	for (int j = 9; j>0; --j)
+	{
+		float z = bz+offset;
+		for(int i = 0; i < j; ++i)
+		{
+			m_EngineObjects.push_back(new EngineObjectClass);
+			result = m_EngineObjects.back()->Initialize(m_D3D->GetDevice(), "../PwAG/data/cube.DAE", L"../PwAG/data/stone02.dds", 
+																			L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
+																			aiVector3D(x, y, z), aiVector3D(0.0f, 0.0f, 0.0f),
+																			"Box", 
+																			1.f, 1.f, 1.f,			//size
+																			1.0f,					//mass
+																			0.1f, 0.1f, 0.1f,		//inertia
+																			shaders_types::SoftShadowShader);
+			if(!result)
+			{
+				MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
+				return false;
+			}
+
+			m_dynamicsWorld->addRigidBody(m_EngineObjects.back()->m_rigidBody);
+			z+=2.1f;
+		}
+		y+=2.1f;
+		offset+=1.05f;
+	}
+
 	// Box 1 //
 	m_EngineObjects.push_back(new EngineObjectClass);
 	result = m_EngineObjects.back()->Initialize(m_D3D->GetDevice(), "../PwAG/data/cube.DAE", L"../PwAG/data/stone02.dds", 
