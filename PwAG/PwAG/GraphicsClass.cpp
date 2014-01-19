@@ -1399,6 +1399,13 @@ void GraphicsClass::TestIntersection(int mouseX, int mouseY, int screenWidth, in
 	coord.x =  ( ( ( 2.0f *((float)mouseX  / (float)screenWidth) ) - 1.f ));
 	coord.y = -( ( ( 2.0f *((float)mouseY  / (float)screenHeight)) - 1.f ));
 	coord.z = 1.0f;
+
+	SetSentence(4, "mouseX = " + to_string(mouseX));
+	SetSentence(5, "cx = " + to_string(coord.x));
+	SetSentence(6, "mouseY = " + to_string(mouseY));
+	SetSentence(7, "cy = " + to_string(coord.y));
+	SetSentence(8, "Width = " + to_string(screenWidth));
+	SetSentence(9, "Height = " + to_string(screenHeight));
 			
 	// Back project the ray from screen to the far clip plane
 	coord.x /= viewMatrix._11; 
