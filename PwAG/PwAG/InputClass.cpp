@@ -30,6 +30,8 @@ bool InputClass::Initialize(HINSTANCE hinstance, HWND hwnd, int screenWidth, int
 	// Initialize the location of the mouse on the screen
 	m_mouseX = 0;
 	m_mouseY = 0;
+	m_mouseRealX = 0;
+	m_mouseRealY = 0;
 	m_mouseDeltaX = 0;
 	m_mouseDeltaY = 0;
 	
@@ -200,18 +202,23 @@ bool InputClass::ReadMouse()
 void InputClass::ProcessInput()
 {
 	// Update the location of the mouse cursor based on the change of the mouse location during the frame.
-	m_mouseX += m_mouseState.lX;
-	m_mouseY += m_mouseState.lY;
+	m_mouseRealX += m_mouseState.lX;
+	m_mouseRealY += m_mouseState.lY;
 
 	m_mouseDeltaX = m_mouseState.lX;
 	m_mouseDeltaY = m_mouseState.lY;
 
+	if((m_mouseRealX >= 0) && (m_mouseRealX <= m_screenWidth))
+		m_mouseX = m_mouseRealX;
+	if((m_mouseRealY >= 0) && (m_mouseRealY <= m_screenHeight))
+		m_mouseY = m_mouseRealY;
+
 	// Ensure the mouse location doesn't exceed the screen width or height.
-	if(m_mouseX < 0)  { m_mouseX = 0; }
-	if(m_mouseY < 0)  { m_mouseY = 0; }
-	
-	if(m_mouseX > m_screenWidth)  { m_mouseX = m_screenWidth; }
-	if(m_mouseY > m_screenHeight) { m_mouseY = m_screenHeight; }
+	//if(m_mouseX < 0)  { m_mouseX = 0; }
+	//if(m_mouseY < 0)  { m_mouseY = 0; }
+	//
+	//if(m_mouseX > m_screenWidth)  { m_mouseX = m_screenWidth; }
+	//if(m_mouseY > m_screenHeight) { m_mouseY = m_screenHeight; }
 	
 	return;
 }

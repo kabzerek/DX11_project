@@ -1382,7 +1382,7 @@ void GraphicsClass::TogglePhysics(void)
 
 void GraphicsClass::TestIntersection(int mouseX, int mouseY, int screenWidth, int screenHeight, bool isPressed)
 {
-	D3DXMATRIX viewMatrix, inverseViewMatrix, baseViewMatrix;
+	D3DXMATRIX viewMatrix, projectionMatrix, viewProjectionMatrix, inverseViewProjectionMatrix;
 	D3DXVECTOR3 rayFrom, rayTo;
 	D3DXVECTOR3 coord;
 	btRigidBody* pBody = NULL; 
@@ -1390,35 +1390,58 @@ void GraphicsClass::TestIntersection(int mouseX, int mouseY, int screenWidth, in
 
 	//// Get the inverse of the view matrix.
 	m_Camera->GetViewMatrix(viewMatrix);
-	m_Camera->GetBaseViewMatrix(baseViewMatrix);
-	D3DXMatrixInverse(&inverseViewMatrix, NULL, &viewMatrix);
+	m_D3D->GetProjectionMatrix(projectionMatrix);
+	D3DXMatrixMultiply(&viewProjectionMatrix, &viewMatrix, &projectionMatrix);
+	D3DXMatrixInverse(&inverseViewProjectionMatrix, NULL, &viewProjectionMatrix);
+
+	//m_Camera->GetViewMatrix(viewMatrix);
+	//m_Camera->GetBaseViewMatrix(baseViewMatrix);
+	//D3DXMatrixInverse(&inverseViewMatrix, NULL, &viewMatrix);
 	
-	rayFrom = m_Camera->GetPosition();
+	//rayFrom = m_Camera->GetPosition();
 	
 	// Find screen coordinates normalized to -1,1
 	coord.x =  ( ( ( 2.0f *((float)mouseX  / (float)screenWidth) ) - 1.f ));
 	coord.y = -( ( ( 2.0f *((float)mouseY  / (float)screenHeight)) - 1.f ));
 	coord.z = 1.0f;
 
-	SetSentence(4, "mouseX = " + to_string(mouseX));
-	SetSentence(5, "cx = " + to_string(coord.x));
-	SetSentence(6, "mouseY = " + to_string(mouseY));
-	SetSentence(7, "cy = " + to_string(coord.y));
-	SetSentence(8, "Width = " + to_string(screenWidth));
-	SetSentence(9, "Height = " + to_string(screenHeight));
+	//SetSentence(4, "mouseX = " + to_string(mouseX));
+	//SetSentence(5, "cx = " + to_string(coord.x));
+	//SetSentence(6, "mouseY = " + to_string(mouseY));
+	//SetSentence(7, "cy = " + to_string(coord.y));
+	//SetSentence(8, "Width = " + to_string(screenWidth));
+	//SetSentence(9, "Height = " + to_string(screenHeight));
 			
 	// Back project the ray from screen to the far clip plane
-	coord.x /= viewMatrix._11; 
-	coord.y /= viewMatrix._22;
+	//coord.x /= viewMatrix._11; 
+	//coord.y /= viewMatrix._22;
 
 	
-	coord*=1000;
-	D3DXVec3TransformCoord(&coord, &coord, &inverseViewMatrix);
+	//coord*=1000;
+
+
+	//D3DXVec3TransformCoord(&coord, &coord, &inverseViewMatrix);
 			
-	rayTo = coord;
+	//rayTo = coord;
+
+	D3DXVECTOR3 near_vec(coord.x, coord.y, 0.0f);
+	D3DXVECTOR3 far_vec(coord.x, coord.y, 1.0f);
+
+	D3DXVec3TransformCoord(&rayFrom, &near_vec, &inverseViewProjectionMatrix);
+	D3DXVec3TransformCoord(&rayTo, &far_vec, &inverseViewProjectionMatrix);
 			
 	btVector3 btRayFrom = btVector3(rayFrom.x, rayFrom.y, rayFrom.z);
 	btVector3 btRayTo = btVector3(rayTo.x, rayTo.y, rayTo.z);
+
+	//drawLine(btRayFrom, btRayTo, btVector3(1.0f, 0.0f, 0.0f));
+
+	SetSentence(4, "fx = " + to_string(rayFrom.x));
+	SetSentence(5, "fy = " + to_string(rayFrom.y));
+	SetSentence(6, "fz = " + to_string(rayFrom.z));
+
+	SetSentence(7, "tx = " + to_string(rayTo.x));
+	SetSentence(8, "ty = " + to_string(rayTo.y));
+	SetSentence(9, "tz = " + to_string(rayTo.z));
 	
 	if(!m_isHanging)
 	{
