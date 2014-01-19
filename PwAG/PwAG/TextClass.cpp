@@ -6,7 +6,7 @@ TextClass::TextClass()
 	m_Font = 0;
 	m_FontShader = 0;
 
-	for (int i = 0; i < 10; ++i)
+	for (int i = 0; i < 11; ++i)
 	{
 		m_sentences.push_back(new SentenceType());
 		m_sentences_text.push_back("");
@@ -66,7 +66,7 @@ bool TextClass::Initialize(ID3D11Device* device, ID3D11DeviceContext* deviceCont
 		return false;
 	}
 
-	for (int i = 0; i < 10; ++i)
+	for (int i = 0; i < 11; ++i)
 	{
 		// Initialize the sentence.
 		result = InitializeSentence(&m_sentences[i], 16, device);
@@ -117,7 +117,7 @@ bool TextClass::Render(ID3D11DeviceContext* deviceContext, D3DXMATRIX worldMatri
 {
 	bool result;
 
-	for (int i = 0; i < 10; ++i)
+	for (int i = 0; i < 11; ++i)
 	{
 		// Now update the sentence vertex buffer with the new string information.
 		result = UpdateSentence(m_sentences[i],  (char *)m_sentences_text[i].c_str(), 10, 10 + (i * 20), 1.0f, 1.0f, 1.0f, deviceContext);
@@ -369,7 +369,7 @@ bool TextClass::RenderSentence(ID3D11DeviceContext* deviceContext, SentenceType*
 
 void TextClass::SetSentence(int i, std::string text)
 {
-	if(i > 9)
+	if(i > 10)
 		return;
 
 	m_sentences_text[i] = text;

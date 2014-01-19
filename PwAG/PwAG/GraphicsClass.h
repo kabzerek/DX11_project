@@ -9,6 +9,7 @@
 #include "DebugWindowClass.h"
 #include "OrthoWindowClass.h"
 #include "TextClass.h"
+#include "BitmapClass.h"
 
 #include "EngineObjectClass.h"
 #include "PhysicsDebugObjectClass.h"
@@ -46,9 +47,12 @@ public:
 	bool Initialize(int, int, HWND);
 	void Shutdown();
 	//bool Frame(int, int);
-	bool Frame(float, float, float, float, float, float, bool);
+	bool Frame(float, float, float, float, float, float, bool, int, int);
 	bool SetWireframe();
 	void ToggleDebugMode();
+
+	void TestIntersection(int, int, int, int);
+	bool RaySphereIntersect(D3DXVECTOR3, D3DXVECTOR3, float);
 
 	void SetSentence(int, std::string);
 
@@ -92,6 +96,9 @@ private:
 	RagdollClass* m_Ragdoll;
 	LightClass* m_Light;
 	TextClass* m_Text;
+	BitmapClass* m_Bitmap;
+	TextureShaderClass* m_TextureShader;
+	int m_mouseX, m_mouseY;
 
 	ShaderManagerClass* m_ShaderManager;
 

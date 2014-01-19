@@ -25,16 +25,15 @@ SystemClass::~SystemClass()
 
 bool SystemClass::Initialize()
 {
-	int screenWidth, screenHeight;
 	bool result;
 
 
 	// Initialize the width and height of the screen to zero before sending the variables into the function.
-	screenWidth = 0;
-	screenHeight = 0;
+	m_screenWidth = 0;
+	m_screenHeight = 0;
 
 	// Initialize the windows api.
-	InitializeWindows(screenWidth, screenHeight);
+	InitializeWindows(m_screenWidth, m_screenHeight);
 
 	// Create the input object.  This object will be used to handle reading the keyboard input from the user.
 	m_Input = new InputClass;
@@ -44,7 +43,7 @@ bool SystemClass::Initialize()
 	}
 
 	// Initialize the input object.
-	result = m_Input->Initialize(m_hinstance, m_hwnd, screenWidth, screenHeight);
+	result = m_Input->Initialize(m_hinstance, m_hwnd, m_screenWidth, m_screenHeight);
 	if(!result)
 	{
 		MessageBox(m_hwnd, L"Could not initialize the input object.", L"Error", MB_OK);
@@ -59,7 +58,7 @@ bool SystemClass::Initialize()
 	}
 
 	// Initialize the graphics object.
-	result = m_Graphics->Initialize(screenWidth, screenHeight, m_hwnd);
+	result = m_Graphics->Initialize(m_screenWidth, m_screenHeight, m_hwnd);
 	if(!result)
 	{
 		return false;
@@ -90,6 +89,10 @@ bool SystemClass::Initialize()
 	// Set the initial position of the viewer to the same as the initial camera position.
 	m_Position->SetPosition(-20.0f, 20.0f, -30.0f);
 	m_Position->SetRotation(40.0f, 35.0f, 0.0f);
+
+
+	// Initialize that the user has not clicked on the screen to try an intersection test yet.
+	m_beginCheck = false;
 
 	return true;
 }
@@ -178,7 +181,7 @@ bool SystemClass::Frame()
 {
 	bool result;
 	float posX, posY, posZ, rotX, rotY, rotZ;
-
+	int mouseX, mouseY;
 
 	// Read the user input.
 	result = m_Input->Frame();
@@ -186,11 +189,29 @@ bool SystemClass::Frame()
 	{
 		return false;
 	}
+	m_Input->GetMouseLocation(mouseX, mouseY);
 	
 	// Check if the user pressed escape and wants to exit the application.
 	if(m_Input->IsEscapePressed() == true)
 	{
 		return false;
+	}
+
+	// Check if the left mouse button has been pressed.
+	if(m_Input->IsMouseLeftPressed() == true)
+	{
+		// If they have clicked on the screen with the mouse then perform an intersection test.
+		if(m_beginCheck == false)
+		{
+			m_beginCheck = true;
+			m_Graphics->TestIntersection(mouseX, mouseY, m_screenWidth, m_screenHeight);
+		}
+	}
+
+	// Check if the left mouse button has been released.
+	if(m_Input->IsMouseLeftPressed() == false)
+	{
+		m_beginCheck = false;
 	}
 
 	// Update the system stats.
@@ -211,18 +232,20 @@ bool SystemClass::Frame()
 	//float m_x, m_y, m_z, g_x, g_y, g_z, d_x, d_y, d_z;
 	//m_Graphics->GetPos(m_x, m_y, m_z, g_x, g_y, g_z, d_x, d_y, d_z);
 
-	m_Graphics->SetSentence(0, "");
-	m_Graphics->SetSentence(1, "");
-	m_Graphics->SetSentence(2, "");
+	m_Graphics->SetSentence(0, "-");
+	m_Graphics->SetSentence(1, "-");
+	m_Graphics->SetSentence(2, "-");
 
-	m_Graphics->SetSentence(3, "");
-	m_Graphics->SetSentence(4, "");
-	m_Graphics->SetSentence(5, "");
-	m_Graphics->SetSentence(6, "");
+	m_Graphics->SetSentence(3, "-");
+	m_Graphics->SetSentence(4, "-");
+	m_Graphics->SetSentence(5, "-");
+	m_Graphics->SetSentence(6, "-");
 
-	m_Graphics->SetSentence(7, "");
-	m_Graphics->SetSentence(8, "");
-	m_Graphics->SetSentence(9, "");
+	m_Graphics->SetSentence(7, "-");
+	m_Graphics->SetSentence(8, "-");
+	m_Graphics->SetSentence(9, "-");
+
+	//m_Graphics->SetSentence(10,"-");
 
 	// Do the frame processing for the graphics object.
 	bool uptd = false;
@@ -231,7 +254,7 @@ bool SystemClass::Frame()
 		uptd = true;
 	}
 
-	result = m_Graphics->Frame(posX, posY, posZ, rotX, rotY, rotZ, uptd);
+	result = m_Graphics->Frame(posX, posY, posZ, rotX, rotY, rotZ, uptd, mouseX, mouseY);
 	uptd = false;
 	if(!result)
 	{
@@ -342,6 +365,8 @@ LRESULT CALLBACK SystemClass::MessageHandler(HWND hwnd, UINT umsg, WPARAM wparam
 {
 	return DefWindowProc(hwnd, umsg, wparam, lparam);
 }
+
+
 
 
 void SystemClass::InitializeWindows(int& screenWidth, int& screenHeight)
