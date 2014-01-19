@@ -15,6 +15,7 @@ public:
 
 	D3DXVECTOR3 GetPosition();
 	D3DXVECTOR3 GetRotation();
+	D3DXVECTOR3 GetUp();
 
 	void Render();
 	void GetViewMatrix(D3DXMATRIX&);

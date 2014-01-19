@@ -181,6 +181,7 @@ bool SystemClass::Frame()
 	float posX, posY, posZ, rotX, rotY, rotZ;
 	int mouseX, mouseY;
 
+
 	// Read the user input.
 	result = m_Input->Frame();
 	if(!result)
@@ -188,6 +189,9 @@ bool SystemClass::Frame()
 		return false;
 	}
 	m_Input->GetMouseLocation(mouseX, mouseY);
+
+	m_Graphics->SetSentence(4,"X: "+	to_string(mouseX));
+	m_Graphics->SetSentence(5,"Y: "+	to_string(mouseY));
 	
 	// Check if the user pressed escape and wants to exit the application.
 	if(m_Input->IsEscapePressed() == true)
