@@ -43,6 +43,9 @@ private:
 	float m_MaxInputTestTime;
 	bool m_WFPressed;
 	bool m_WirePressed;
+	bool m_PhysicsPressed;
+
+	int m_screenWidth, m_screenHeight;
 };
 
 static LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);

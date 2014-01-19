@@ -10,6 +10,8 @@ SystemClass::SystemClass()
 	m_TimeElapsed = 0.0f;
 	m_MaxInputTestTime = 1.0f;
 	m_WFPressed = false;
+	m_WirePressed = false;
+	m_PhysicsPressed = false;
 }
 
 
@@ -25,16 +27,15 @@ SystemClass::~SystemClass()
 
 bool SystemClass::Initialize()
 {
-	int screenWidth, screenHeight;
 	bool result;
 
 
 	// Initialize the width and height of the screen to zero before sending the variables into the function.
-	screenWidth = 0;
-	screenHeight = 0;
+	m_screenWidth = 0;
+	m_screenHeight = 0;
 
 	// Initialize the windows api.
-	InitializeWindows(screenWidth, screenHeight);
+	InitializeWindows(m_screenWidth, m_screenHeight);
 
 	// Create the input object.  This object will be used to handle reading the keyboard input from the user.
 	m_Input = new InputClass;
@@ -44,7 +45,7 @@ bool SystemClass::Initialize()
 	}
 
 	// Initialize the input object.
-	result = m_Input->Initialize(m_hinstance, m_hwnd, screenWidth, screenHeight);
+	result = m_Input->Initialize(m_hinstance, m_hwnd, m_screenWidth, m_screenHeight);
 	if(!result)
 	{
 		MessageBox(m_hwnd, L"Could not initialize the input object.", L"Error", MB_OK);
@@ -59,7 +60,7 @@ bool SystemClass::Initialize()
 	}
 
 	// Initialize the graphics object.
-	result = m_Graphics->Initialize(screenWidth, screenHeight, m_hwnd);
+	result = m_Graphics->Initialize(m_screenWidth, m_screenHeight, m_hwnd);
 	if(!result)
 	{
 		return false;
@@ -178,7 +179,7 @@ bool SystemClass::Frame()
 {
 	bool result;
 	float posX, posY, posZ, rotX, rotY, rotZ;
-
+	int mouseX, mouseY;
 
 	// Read the user input.
 	result = m_Input->Frame();
@@ -186,11 +187,25 @@ bool SystemClass::Frame()
 	{
 		return false;
 	}
+	m_Input->GetMouseLocation(mouseX, mouseY);
 	
 	// Check if the user pressed escape and wants to exit the application.
 	if(m_Input->IsEscapePressed() == true)
 	{
 		return false;
+	}
+
+	// Check if the left mouse button has been pressed.
+	if(m_Input->IsMouseLeftPressed() == true)
+	{
+		// If they have clicked on the screen with the mouse then perform an intersection test.
+		m_Graphics->TestIntersection(mouseX, mouseY, m_screenWidth, m_screenHeight, true);
+	}
+
+	// Check if the left mouse button has been released.
+	if(m_Input->IsMouseLeftPressed() == false)
+	{
+		m_Graphics->TestIntersection(mouseX, mouseY, m_screenWidth, m_screenHeight, false);
 	}
 
 	// Update the system stats.
@@ -211,28 +226,23 @@ bool SystemClass::Frame()
 	//float m_x, m_y, m_z, g_x, g_y, g_z, d_x, d_y, d_z;
 	//m_Graphics->GetPos(m_x, m_y, m_z, g_x, g_y, g_z, d_x, d_y, d_z);
 
-	m_Graphics->SetSentence(0, "");
-	m_Graphics->SetSentence(1, "");
-	m_Graphics->SetSentence(2, "");
+	//m_Graphics->SetSentence(0, "-");
+	//m_Graphics->SetSentence(1, "-");
+	//m_Graphics->SetSentence(2, "-");
 
-	m_Graphics->SetSentence(3, "");
-	m_Graphics->SetSentence(4, "");
-	m_Graphics->SetSentence(5, "");
-	m_Graphics->SetSentence(6, "");
+	//m_Graphics->SetSentence(3, "-");
+	//m_Graphics->SetSentence(4, "-");
+	//m_Graphics->SetSentence(5, "-");
+	//m_Graphics->SetSentence(6, "-");
 
-	m_Graphics->SetSentence(7, "");
-	m_Graphics->SetSentence(8, "");
-	m_Graphics->SetSentence(9, "");
+	//m_Graphics->SetSentence(7, "-");
+	//m_Graphics->SetSentence(8, "-");
+	//m_Graphics->SetSentence(9, "-");
+
+	//m_Graphics->SetSentence(10,"-");
 
 	// Do the frame processing for the graphics object.
-	bool uptd = false;
-	if(m_Input->IsUPressed() == true)
-	{
-		uptd = true;
-	}
-
-	result = m_Graphics->Frame(posX, posY, posZ, rotX, rotY, rotZ, uptd);
-	uptd = false;
+	result = m_Graphics->Frame(posX, posY, posZ, rotX, rotY, rotZ, mouseX, mouseY);
 	if(!result)
 	{
 		return false;
@@ -321,6 +331,10 @@ bool SystemClass::HandleInput(float frameTime)
 		{
 			m_WirePressed = true;
 		}
+		if(m_Input->IsUPressed())
+		{
+			m_PhysicsPressed = true;
+		}
 	}
 	if(m_TimeElapsed >= m_MaxInputTestTime)
 	{
@@ -328,10 +342,13 @@ bool SystemClass::HandleInput(float frameTime)
 			result = m_Graphics->SetWireframe();
 		if(m_WirePressed)
 			m_Graphics->ToggleDebugMode();
+		if(m_PhysicsPressed)
+			m_Graphics->TogglePhysics();
 
 		m_TimeElapsed = 0.0f;
 		m_WFPressed = false;
 		m_WirePressed = false;
+		m_PhysicsPressed = false;
 	}
 
 	return result;
@@ -342,6 +359,8 @@ LRESULT CALLBACK SystemClass::MessageHandler(HWND hwnd, UINT umsg, WPARAM wparam
 {
 	return DefWindowProc(hwnd, umsg, wparam, lparam);
 }
+
+
 
 
 void SystemClass::InitializeWindows(int& screenWidth, int& screenHeight)
@@ -400,9 +419,9 @@ void SystemClass::InitializeWindows(int& screenWidth, int& screenHeight)
 	}
 	else
 	{
-		// If windowed then set it to 800x600 resolution.
-		screenWidth  = 800;
-		screenHeight = 600;
+		// If windowed then set it to 1024x768 resolution.
+		screenWidth  = 1024;
+		screenHeight = 768;
 
 		// Place the window in the middle of the screen.
 		posX = (GetSystemMetrics(SM_CXSCREEN) - screenWidth)  / 2;

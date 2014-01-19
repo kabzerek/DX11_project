@@ -9,6 +9,7 @@ GraphicsClass::GraphicsClass()
 	m_Light = 0;	
 	m_RenderTexture = 0;
 	//m_DebugWindow = 0;
+	m_Bitmap = 0;
 
 	m_ShaderManager = 0;
 
@@ -43,6 +44,11 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	bool result;
 	D3DXMATRIX baseViewMatrix;
 	int downSampleWidth, downSampleHeight;
+
+	m_isHanging = false;
+	m_isPhysics = false;
+	//SetSentence(1, "Physics OFF");
+	//SetSentence(2, "No Link");
 
 	// Create the Direct3D object.
 	m_D3D = new D3DClass;
@@ -93,114 +99,114 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	// Create physics world
 	InitializePhysics();
 
-	//// Create the model object.
-	//// Box 1 //
-	//m_EngineObjects.push_back(new EngineObjectClass);
-	//result = m_EngineObjects.back()->Initialize(m_D3D->GetDevice(), "../PwAG/data/cube.DAE", L"../PwAG/data/stone02.dds", 
-	//																L"../PwAG/data/dirt01.dds", L"../PwAG/data/spec02.dds",
-	//																aiVector3D(-10.0f, 2.0f, 10.0f), aiVector3D(0.0f, 0.0f, 0.0f),
-	//																"Box", 
-	//																1.f, 1.f, 1.f,			//size
-	//																1.0f,					//mass
-	//																0.1f, 0.1f, 0.1f,		//inertia
-	//																shaders_types::AlphaMapShader);
-	//if(!result)
-	//{
-	//	MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
-	//	return false;
-	//}
+	// Create the model object.
+	// Box 1 //
+	m_EngineObjects.push_back(new EngineObjectClass);
+	result = m_EngineObjects.back()->Initialize(m_D3D->GetDevice(), "../PwAG/data/cube.DAE", L"../PwAG/data/stone02.dds", 
+																	L"../PwAG/data/dirt01.dds", L"../PwAG/data/spec02.dds",
+																	aiVector3D(-10.0f, 2.0f, 10.0f), aiVector3D(0.0f, 0.0f, 0.0f),
+																	"Box", 
+																	1.f, 1.f, 1.f,			//size
+																	1.0f,					//mass
+																	0.1f, 0.1f, 0.1f,		//inertia
+																	shaders_types::AlphaMapShader);
+	if(!result)
+	{
+		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
+		return false;
+	}
 
-	//m_dynamicsWorld->addRigidBody(m_EngineObjects.back()->m_rigidBody);
+	m_dynamicsWorld->addRigidBody(m_EngineObjects.back()->m_rigidBody);
 
-	//// Box 2 //
-	//m_EngineObjects.push_back(new EngineObjectClass);
-	//result = m_EngineObjects.back()->Initialize(m_D3D->GetDevice(), "../PwAG/data/cube.DAE", L"../PwAG/data/stone02.dds", 
-	//																L"../PwAG/data/dirt01.dds", L"../PwAG/data/spec02.dds",
-	//																aiVector3D(-10.0f, 5.5f, 10.0f), aiVector3D(0.0f, 0.0f, 0.0f),
-	//																"Box", 
-	//																1.f, 1.f, 1.f,			//size
-	//																1.0f,					//mass
-	//																0.1f, 0.1f, 0.1f,		//inertia
-	//																shaders_types::MultiTextureShader);
-	//if(!result)
-	//{
-	//	MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
-	//	return false;
-	//}
+	// Box 2 //
+	m_EngineObjects.push_back(new EngineObjectClass);
+	result = m_EngineObjects.back()->Initialize(m_D3D->GetDevice(), "../PwAG/data/cube.DAE", L"../PwAG/data/stone02.dds", 
+																	L"../PwAG/data/dirt01.dds", L"../PwAG/data/spec02.dds",
+																	aiVector3D(-10.0f, 5.5f, 10.0f), aiVector3D(0.0f, 0.0f, 0.0f),
+																	"Box", 
+																	1.f, 1.f, 1.f,			//size
+																	1.0f,					//mass
+																	0.1f, 0.1f, 0.1f,		//inertia
+																	shaders_types::MultiTextureShader);
+	if(!result)
+	{
+		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
+		return false;
+	}
 
-	//m_dynamicsWorld->addRigidBody(m_EngineObjects.back()->m_rigidBody);
+	m_dynamicsWorld->addRigidBody(m_EngineObjects.back()->m_rigidBody);
 
-	//// Box 3 //
-	//m_EngineObjects.push_back(new EngineObjectClass);
-	//result = m_EngineObjects.back()->Initialize(m_D3D->GetDevice(), "../PwAG/data/cube.DAE", L"../PwAG/data/stone02.dds", 
-	//																L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
-	//																aiVector3D(-8.0f, 2.0f, 4.0f), aiVector3D(0.0f, 0.0f, 0.0f),
-	//																"Box", 
-	//																1.f, 1.f, 1.f,			//size
-	//																1.0f,					//mass
-	//																0.1f, 0.1f, 0.1f,		//inertia
-	//																shaders_types::SoftShadowShader);
-	//if(!result)
-	//{
-	//	MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
-	//	return false;
-	//}
+	// Box 3 //
+	m_EngineObjects.push_back(new EngineObjectClass);
+	result = m_EngineObjects.back()->Initialize(m_D3D->GetDevice(), "../PwAG/data/cube.DAE", L"../PwAG/data/stone02.dds", 
+																	L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
+																	aiVector3D(-8.0f, 2.0f, 4.0f), aiVector3D(0.0f, 0.0f, 0.0f),
+																	"Box", 
+																	1.f, 1.f, 1.f,			//size
+																	1.0f,					//mass
+																	0.1f, 0.1f, 0.1f,		//inertia
+																	shaders_types::SoftShadowShader);
+	if(!result)
+	{
+		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
+		return false;
+	}
 
-	//m_dynamicsWorld->addRigidBody(m_EngineObjects.back()->m_rigidBody);
+	m_dynamicsWorld->addRigidBody(m_EngineObjects.back()->m_rigidBody);
 
-	//// Sphere 1 //
-	//m_EngineObjects.push_back(new EngineObjectClass);
-	//result = m_EngineObjects.back()->Initialize(m_D3D->GetDevice(), "../PwAG/data/sphere.DAE", L"../PwAG/data/stone02.dds", 
-	//																L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
-	//																aiVector3D(6.0f, 3.0f, 2.0f), aiVector3D(0.0f, 0.0f, 0.0f), 
-	//																"Sphere", 
-	//																1.f,					//radius
-	//																2.0f,					//mass
-	//																0.1f, 0.1f, 0.1f,		//inertia
-	//																shaders_types::SoftShadowShader);
-	//if(!result)
-	//{
-	//	MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
-	//	return false;
-	//}
+	// Sphere 1 //
+	m_EngineObjects.push_back(new EngineObjectClass);
+	result = m_EngineObjects.back()->Initialize(m_D3D->GetDevice(), "../PwAG/data/sphere.DAE", L"../PwAG/data/stone02.dds", 
+																	L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
+																	aiVector3D(6.0f, 3.0f, 2.0f), aiVector3D(0.0f, 0.0f, 0.0f), 
+																	"Sphere", 
+																	1.f,					//radius
+																	2.0f,					//mass
+																	0.1f, 0.1f, 0.1f,		//inertia
+																	shaders_types::SoftShadowShader);
+	if(!result)
+	{
+		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
+		return false;
+	}
 
-	//m_dynamicsWorld->addRigidBody(m_EngineObjects.back()->m_rigidBody);
+	m_dynamicsWorld->addRigidBody(m_EngineObjects.back()->m_rigidBody);
 
-	//// Box 4 //
-	//m_EngineObjects.push_back(new EngineObjectClass);
-	//result = m_EngineObjects.back()->Initialize(m_D3D->GetDevice(), "../PwAG/data/cube.DAE", L"../PwAG/data/stone02.dds", 
-	//																L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
-	//																aiVector3D(7.0f, 3.0f, 7.0f), aiVector3D(0.0f, 0.0f, 0.0f),
-	//																"Box", 
-	//																1.f, 1.f, 1.f,			//size
-	//																1.0f,					//mass
-	//																0.1f, 0.1f, 0.1f,		//inertia
-	//																shaders_types::SpecMapShader);
-	//if(!result)
-	//{
-	//	MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
-	//	return false;
-	//}
+	// Box 4 //
+	m_EngineObjects.push_back(new EngineObjectClass);
+	result = m_EngineObjects.back()->Initialize(m_D3D->GetDevice(), "../PwAG/data/cube.DAE", L"../PwAG/data/stone02.dds", 
+																	L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
+																	aiVector3D(7.0f, 3.0f, 7.0f), aiVector3D(0.0f, 0.0f, 0.0f),
+																	"Box", 
+																	1.f, 1.f, 1.f,			//size
+																	1.0f,					//mass
+																	0.1f, 0.1f, 0.1f,		//inertia
+																	shaders_types::SpecMapShader);
+	if(!result)
+	{
+		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
+		return false;
+	}
 
-	//m_dynamicsWorld->addRigidBody(m_EngineObjects.back()->m_rigidBody);
+	m_dynamicsWorld->addRigidBody(m_EngineObjects.back()->m_rigidBody);
 
-	//// Box 5 //
-	//m_EngineObjects.push_back(new EngineObjectClass);
-	//result = m_EngineObjects.back()->Initialize(m_D3D->GetDevice(), "../PwAG/data/cube.DAE", L"../PwAG/data/stone02.dds", 
-	//																L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
-	//																aiVector3D(8.5f, 6.0f, 6.0f), aiVector3D(0.5f, 0.0f, 0.0f),
-	//																"Box", 
-	//																1.f, 1.f, 1.f,			//size
-	//																1.0f,					//mass
-	//																0.1f, 0.1f, 0.1f,		//inertia
-	//																shaders_types::SpecMapShader);
-	//if(!result)
-	//{
-	//	MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
-	//	return false;
-	//}
+	// Box 5 //
+	m_EngineObjects.push_back(new EngineObjectClass);
+	result = m_EngineObjects.back()->Initialize(m_D3D->GetDevice(), "../PwAG/data/cube.DAE", L"../PwAG/data/stone02.dds", 
+																	L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
+																	aiVector3D(8.5f, 6.0f, 6.0f), aiVector3D(0.5f, 0.0f, 0.0f),
+																	"Box", 
+																	1.f, 1.f, 1.f,			//size
+																	1.0f,					//mass
+																	0.1f, 0.1f, 0.1f,		//inertia
+																	shaders_types::SpecMapShader);
+	if(!result)
+	{
+		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
+		return false;
+	}
 
-	//m_dynamicsWorld->addRigidBody(m_EngineObjects.back()->m_rigidBody);
+	m_dynamicsWorld->addRigidBody(m_EngineObjects.back()->m_rigidBody);
 
 	// Ragdoll //	
 	m_Ragdoll = new RagdollClass;
@@ -300,6 +306,22 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 
 	m_Light->SetLookAt(0.0f, 0.0f, 0.0f);
 	m_Light->GenerateProjectionMatrix(SCREEN_DEPTH, SCREEN_NEAR);
+
+	
+	// Create the texture shader object.
+	m_TextureShader = new TextureShaderClass;
+	if(!m_TextureShader)
+	{
+		return false;
+	}
+	
+	// Initialize the texture shader object.
+	result = m_TextureShader->Initialize(m_D3D->GetDevice(), hwnd);
+	if(!result)
+	{
+		MessageBox(hwnd, L"Could not initialize the texture shader object.", L"Error", MB_OK);
+		return false;
+	}
 
 
 	// Create the render to texture object.
@@ -426,6 +448,22 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 		return false;
 	}
 
+	
+	// Create the bitmap object.
+	m_Bitmap = new BitmapClass;
+	if(!m_Bitmap)
+	{
+		return false;
+	}
+
+	// Initialize the bitmap object.
+	result = m_Bitmap->Initialize(m_D3D->GetDevice(), screenWidth, screenHeight, L"../PwAG/data/mouse.dds", 32, 32);
+	if(!result)
+	{
+		MessageBox(hwnd, L"Could not initialize the bitmap object.", L"Error", MB_OK);
+		return false;
+	}
+
 	// Create the text object.
 	m_Text = new TextClass;
 	if(!m_Text)
@@ -448,6 +486,21 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 void GraphicsClass::Shutdown()
 {
 	ShutdownPhysics();
+
+	// Release the bitmap object.
+	if(m_Bitmap)
+	{
+		m_Bitmap->Shutdown();
+		delete m_Bitmap;
+		m_Bitmap = 0;
+	}
+	// Release the texture shader object.
+	if(m_TextureShader)
+	{
+		m_TextureShader->Shutdown();
+		delete m_TextureShader;
+		m_TextureShader = 0;
+	}
 
 	// Release the text object.
 	if(m_Text)
@@ -559,13 +612,13 @@ void GraphicsClass::Shutdown()
 }
 
 
-bool GraphicsClass::Frame(float posX, float posY, float posZ, float rotX, float rotY, float rotZ, bool uptd)
+bool GraphicsClass::Frame(float posX, float posY, float posZ, float rotX, float rotY, float rotZ, int mouseX, int mouseY)
 {
 	bool result;
 	static bool side = false;
 	static float lightPositionX = -5.0f;
 
-	if(uptd)
+	if(m_isPhysics)
 	{
 		m_dynamicsWorld->stepSimulation(1/60.0f, 10);
 
@@ -580,6 +633,10 @@ bool GraphicsClass::Frame(float posX, float posY, float posZ, float rotX, float 
 	// Set the position of the camera.
 	m_Camera->SetPosition(posX, posY, posZ);
 	m_Camera->SetRotation(rotX, rotY, rotZ);
+
+	// Set the position of the mouse.
+	m_mouseX = mouseX;
+	m_mouseY = mouseY;
 
 	// Update the position of the light each frame.
 	if (side)
@@ -1022,7 +1079,7 @@ bool GraphicsClass::Render2DTextureScene()
 
 bool GraphicsClass::Render()
 {
-	D3DXMATRIX worldMatrix, viewMatrix, projectionMatrix, orthoMatrix;
+	D3DXMATRIX worldMatrix, viewMatrix, projectionMatrix, orthoMatrix, baseViewMatrix;
 	D3DXMATRIX transformMatrix, translationMatrix, rotationMatrix;
 	D3DXMATRIX lightViewMatrix, lightProjectionMatrix;
 	bool result;
@@ -1079,6 +1136,7 @@ bool GraphicsClass::Render()
 	
 	// Get the world, view, and projection matrices from the camera and d3d objects.
 	m_Camera->GetViewMatrix(viewMatrix);
+	m_Camera->GetBaseViewMatrix(baseViewMatrix);
 	m_D3D->GetWorldMatrix(worldMatrix);
 	m_D3D->GetProjectionMatrix(projectionMatrix);
 	m_D3D->GetOrthoMatrix(orthoMatrix);
@@ -1116,6 +1174,37 @@ bool GraphicsClass::Render()
 	}
 	
 	
+	// Turn off the Z buffer to begin all 2D rendering.
+	m_D3D->TurnZBufferOff();
+
+	// Turn on the alpha blending before rendering the text.
+	m_D3D->TurnOnAlphaBlending();
+
+	// Render the mouse cursor with the texture shader.
+	result = m_Bitmap->Render(m_D3D->GetDeviceContext(), m_mouseX, m_mouseY);
+	if(!result) 
+	{ 
+		return false; 
+	}
+	result = m_TextureShader->Render(m_D3D->GetDeviceContext(), m_Bitmap->GetIndexCount(), worldMatrix, baseViewMatrix, orthoMatrix, m_Bitmap->GetTexture());
+	if(!result) 
+	{
+		return false;
+	}
+	
+	// Render the text strings.
+	result = m_Text->Render(m_D3D->GetDeviceContext(), worldMatrix, orthoMatrix);
+	if(!result)
+	{
+		return false;
+	}
+
+	// Turn off alpha blending after rendering the text.
+	m_D3D->TurnOffAlphaBlending();
+
+	// Turn the Z buffer back on now that all 2D rendering has completed.
+	m_D3D->TurnZBufferOn();
+
 	// Reset the world matrix.
 	m_D3D->GetWorldMatrix(worldMatrix);
 
@@ -1140,24 +1229,6 @@ bool GraphicsClass::Render()
 		m_D3D->GetWorldMatrix(worldMatrix);
 	}
 
-	// Turn off the Z buffer to begin all 2D rendering.
-	m_D3D->TurnZBufferOff();
-
-	// Turn on the alpha blending before rendering the text.
-	m_D3D->TurnOnAlphaBlending();
-
-	// Render the text strings.
-	result = m_Text->Render(m_D3D->GetDeviceContext(), worldMatrix, orthoMatrix);
-	if(!result)
-	{
-		return false;
-	}
-
-	// Turn off alpha blending after rendering the text.
-	m_D3D->TurnOffAlphaBlending();
-
-	// Turn the Z buffer back on now that all 2D rendering has completed.
-	m_D3D->TurnZBufferOn();
 
 	// Present the rendered scene to the screen.
 	m_D3D->EndScene();
@@ -1297,4 +1368,192 @@ void GraphicsClass::ToggleDebugMode(void)
 		m_debugMode = btIDebugDraw::DBG_DrawWireframe;
 	else
 		m_debugMode = btIDebugDraw::DBG_NoDebug;
+}
+
+void GraphicsClass::TogglePhysics(void)
+{
+	m_isPhysics = !m_isPhysics;
+	if(m_isPhysics)
+		SetSentence(1,"Physics ON");
+	else
+		SetSentence(1,"Physics OFF");
+}
+
+
+void GraphicsClass::TestIntersection(int mouseX, int mouseY, int screenWidth, int screenHeight, bool isPressed)
+{
+	D3DXMATRIX viewMatrix, inverseViewMatrix, baseViewMatrix;
+	D3DXVECTOR3 rayFrom, rayTo;
+	D3DXVECTOR3 coord;
+	btRigidBody* pBody = NULL; 
+	//bool intersect, result;
+
+	//// Get the inverse of the view matrix.
+	m_Camera->GetViewMatrix(viewMatrix);
+	m_Camera->GetBaseViewMatrix(baseViewMatrix);
+	D3DXMatrixInverse(&inverseViewMatrix, NULL, &viewMatrix);
+	
+	rayFrom = m_Camera->GetPosition();
+	
+	// Find screen coordinates normalized to -1,1
+	coord.x =  ( ( ( 2.0f *((float)mouseX  / (float)screenWidth) ) - 1.f ));
+	coord.y = -( ( ( 2.0f *((float)mouseY  / (float)screenHeight)) - 1.f ));
+	coord.z = 1.0f;
+			
+	// Back project the ray from screen to the far clip plane
+	coord.x /= viewMatrix._11; 
+	coord.y /= viewMatrix._22;
+
+	
+	coord*=1000;
+	D3DXVec3TransformCoord(&coord, &coord, &inverseViewMatrix);
+			
+	rayTo = coord;
+			
+	btVector3 btRayFrom = btVector3(rayFrom.x, rayFrom.y, rayFrom.z);
+	btVector3 btRayTo = btVector3(rayTo.x, rayTo.y, rayTo.z);
+	
+	if(!m_isHanging)
+	{
+		if(isPressed)
+		{
+			//Need to pick up the object now (if raycast hits)
+
+			btCollisionWorld::ClosestRayResultCallback rayCallback(btRayFrom,btRayTo);
+			m_dynamicsWorld->rayTest(btRayFrom, btRayTo, rayCallback);
+			if (rayCallback.hasHit())
+			{
+				pBody =  btRigidBody::upcast((btRigidBody*)rayCallback.m_collisionObject);
+				if (pBody != NULL) //&& pPhysicsData)
+				{
+					// Code for adding a constraint from Bullet Demo's DemoApplication.cpp
+					if (!(pBody->isStaticObject() || pBody->isKinematicObject()))
+					{
+						m_pickedBody = pBody;
+						m_pickedBody->setActivationState(DISABLE_DEACTIVATION);
+
+						m_pickPos = rayCallback.m_hitPointWorld;
+
+						btVector3 localPivot = pBody->getCenterOfMassTransform().inverse() * m_pickPos;
+							
+						btTransform tr;
+						tr.setIdentity();
+						tr.setOrigin(localPivot);
+
+						btGeneric6DofConstraint* dof6 = new btGeneric6DofConstraint(*pBody, tr, false);
+						dof6->setLinearLowerLimit(btVector3(0,0,0));
+						dof6->setLinearUpperLimit(btVector3(0,0,0));
+						dof6->setAngularLowerLimit(btVector3(0,0,0));
+						dof6->setAngularUpperLimit(btVector3(0,0,0));
+							
+						m_dynamicsWorld->addConstraint(dof6);
+						m_pickConstraint = dof6;
+						dof6->setParam(BT_CONSTRAINT_STOP_CFM,0.8f,0);
+						dof6->setParam(BT_CONSTRAINT_STOP_CFM,0.8f,1);
+						dof6->setParam(BT_CONSTRAINT_STOP_CFM,0.8f,2);
+						dof6->setParam(BT_CONSTRAINT_STOP_CFM,0.8f,3);
+						dof6->setParam(BT_CONSTRAINT_STOP_CFM,0.8f,4);
+						dof6->setParam(BT_CONSTRAINT_STOP_CFM,0.8f,5);
+							
+						dof6->setParam(BT_CONSTRAINT_STOP_ERP,0.1f,0);
+						dof6->setParam(BT_CONSTRAINT_STOP_ERP,0.1f,1);
+						dof6->setParam(BT_CONSTRAINT_STOP_ERP,0.1f,2);
+						dof6->setParam(BT_CONSTRAINT_STOP_ERP,0.1f,3);
+						dof6->setParam(BT_CONSTRAINT_STOP_ERP,0.1f,4);
+						dof6->setParam(BT_CONSTRAINT_STOP_ERP,0.1f,5);
+
+						//save mouse position for dragging
+						m_pickDist = (m_pickPos - btRayFrom).length();
+
+						m_isHanging = true;
+						SetSentence(2, "Linked!");
+					}
+				}
+			}
+		}
+	}
+	else
+	{		
+		if(isPressed)
+		{
+			SetSentence(3,"LMB pressed");
+	
+			//The object is picked already, we need to maintain the constraint
+			btGeneric6DofConstraint* pickCon = static_cast<btGeneric6DofConstraint*>(m_pickConstraint);
+			if (pickCon)
+			{
+				//keep it at the same picking distance            
+				btVector3 btRayFrom = btVector3(rayFrom.x, rayFrom.y, rayFrom.z);
+				btVector3 btRayTo = btVector3(rayTo.x, rayTo.y, rayTo.z);
+				btVector3 oldPivotInB = pickCon->getFrameOffsetA().getOrigin();
+
+				btVector3 newPivotB;
+
+				btVector3 dir = btRayTo - btRayFrom;
+				dir.normalize();
+				dir *= m_pickDist;
+
+				newPivotB = btRayFrom + dir;
+
+				pickCon->getFrameOffsetA().setOrigin(newPivotB);
+				SetSentence(2, "Still linked!");
+			}
+
+		}
+		else
+		{
+			SetSentence(3,"LMB not pressed");
+			//The object has to be unpicked - need to release the constraint
+
+			if (m_pickConstraint && m_dynamicsWorld)
+			{
+				m_dynamicsWorld->removeConstraint(m_pickConstraint);
+				delete m_pickConstraint;
+				m_pickConstraint = NULL;
+				m_pickedBody->setDeactivationTime( 0.f );
+				m_pickedBody = NULL;
+
+				m_isHanging = false;
+				SetSentence(2,"No Link!");
+			}
+		}
+		
+	}
+
+
+	//if(intersect == true)
+	//{
+	//	// If it does intersect then set the intersection to "yes" in the text string that is displayed to the screen.
+	//	SetSentence(10, "Intersection");
+	//}
+	//else
+	//{
+	//	// If not then set the intersection to "No".
+	//	SetSentence(10, "No intersection");
+	//}
+
+	return;
+}
+
+
+bool GraphicsClass::RaySphereIntersect(D3DXVECTOR3 rayOrigin, D3DXVECTOR3 rayDirection, float radius)
+{
+	float a, b, c, discriminant;
+
+
+	// Calculate the a, b, and c coefficients.
+	a = (rayDirection.x * rayDirection.x) + (rayDirection.y * rayDirection.y) + (rayDirection.z * rayDirection.z);
+	b = ((rayDirection.x * rayOrigin.x) + (rayDirection.y * rayOrigin.y) + (rayDirection.z * rayOrigin.z)) * 2.0f;
+	c = ((rayOrigin.x * rayOrigin.x) + (rayOrigin.y * rayOrigin.y) + (rayOrigin.z * rayOrigin.z)) - (radius * radius);
+
+	// Find the discriminant.
+	discriminant = (b * b) - (4 * a * c);
+
+	// if discriminant is negative the picking ray missed the sphere, otherwise it intersected the sphere.
+	if (discriminant < 0.0f)
+	{
+		return false;
+	}
+
+	return true;
 }

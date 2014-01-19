@@ -49,6 +49,8 @@ D3DXVECTOR3 CameraClass::GetRotation()
 	return D3DXVECTOR3(m_rotationX, m_rotationY, m_rotationZ);
 }
 
+
+
 void CameraClass::Render()
 {
 	D3DXVECTOR3 up, position, lookAt;

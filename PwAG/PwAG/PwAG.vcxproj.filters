@@ -101,6 +101,9 @@
     <ClCompile Include="RagdollClass.cpp">
       <Filter>Classess</Filter>
     </ClCompile>
+    <ClCompile Include="BitmapClass.cpp">
+      <Filter>Classess</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraClass.h">
@@ -203,6 +206,9 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="RagdollClass.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="BitmapClass.h">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>
