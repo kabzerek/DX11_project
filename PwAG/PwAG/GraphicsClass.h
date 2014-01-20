@@ -53,7 +53,6 @@ public:
 	void TogglePhysics();
 
 	void TestIntersection(int, int, int, int, bool);
-	bool RaySphereIntersect(D3DXVECTOR3, D3DXVECTOR3, float);
 
 	void SetSentence(int, std::string);
 
