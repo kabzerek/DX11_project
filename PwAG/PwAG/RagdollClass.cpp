@@ -10,6 +10,7 @@ RagdollClass::RagdollClass(void)
 	m_joints = new btTypedConstraint*[num_joints];
 	m_prevTransforms = new btTransform[num_bones];
 	m_transformations = new aiMatrix4x4[num_bones];
+	m_models = new ModelClass*[num_bones];
 }
 
 RagdollClass::RagdollClass(const RagdollClass& other)
@@ -146,15 +147,15 @@ bool RagdollClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* 
 	float mass = 1.0;
 	btVector3 in(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::Head] = new btBoxShape(halfSize);
-	Initialize(bones::Head, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z());
-
+	Initialize(bones::Head, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z(), device);
+	
 // Neck
 	halfSize = btVector3(0.3f, 0.3f, 0.4f);
 	offset = btVector3(0.0f, 0.3f, 0.08f);
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::Neck] = new btBoxShape(halfSize);
-	Initialize(bones::Neck, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z());
+	Initialize(bones::Neck, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z(), device);
 
 	btTransform localA, localB;
 	localA.setIdentity();
@@ -174,7 +175,7 @@ bool RagdollClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* 
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::Spine2] = new btBoxShape(halfSize);
-	Initialize(bones::Spine2, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z());
+	Initialize(bones::Spine2, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z(), device);
 
 	localA.setIdentity();
 	localB.setIdentity();
@@ -193,7 +194,7 @@ bool RagdollClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* 
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::Spine1] = new btBoxShape(halfSize);
-	Initialize(bones::Spine1, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z());
+	Initialize(bones::Spine1, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z(), device);
 
 	localA.setIdentity();
 	localB.setIdentity();
@@ -212,7 +213,7 @@ bool RagdollClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* 
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::Spine0] = new btBoxShape(halfSize);
-	Initialize(bones::Spine0, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z());
+	Initialize(bones::Spine0, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z(), device);
 
 	localA.setIdentity();
 	localB.setIdentity();
@@ -231,7 +232,7 @@ bool RagdollClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* 
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::RArm0] = new btBoxShape(halfSize);
-	Initialize(bones::RArm0, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z());
+	Initialize(bones::RArm0, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z(), device);
 
 	localA.setIdentity();
 	localB.setIdentity();
@@ -250,7 +251,7 @@ bool RagdollClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* 
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::RArm1] = new btBoxShape(halfSize);
-	Initialize(bones::RArm1, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z());
+	Initialize(bones::RArm1, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z(), device);
 
 	localA.setIdentity();
 	localB.setIdentity();
@@ -269,7 +270,7 @@ bool RagdollClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* 
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::RArm2] = new btBoxShape(halfSize);
-	Initialize(bones::RArm2, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z());
+	Initialize(bones::RArm2, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z(), device);
 
 	localA.setIdentity();
 	localB.setIdentity();
@@ -288,7 +289,7 @@ bool RagdollClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* 
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::RHand] = new btBoxShape(halfSize);
-	Initialize(bones::RHand, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z());
+	Initialize(bones::RHand, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z(), device);
 
 	localA.setIdentity();
 	localB.setIdentity();
@@ -307,7 +308,7 @@ bool RagdollClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* 
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::LArm0] = new btBoxShape(halfSize);
-	Initialize(bones::LArm0, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z());
+	Initialize(bones::LArm0, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z(), device);
 
 	localA.setIdentity();
 	localB.setIdentity();
@@ -326,7 +327,7 @@ bool RagdollClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* 
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::LArm1] = new btBoxShape(halfSize);
-	Initialize(bones::LArm1, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z());
+	Initialize(bones::LArm1, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z(), device);
 
 	localA.setIdentity();
 	localB.setIdentity();
@@ -345,7 +346,7 @@ bool RagdollClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* 
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::LArm2] = new btBoxShape(halfSize);
-	Initialize(bones::LArm2, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z());
+	Initialize(bones::LArm2, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z(), device);
 	
 	localA.setIdentity();
 	localB.setIdentity();
@@ -364,7 +365,7 @@ bool RagdollClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* 
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::LHand] = new btBoxShape(halfSize);
-	Initialize(bones::LHand, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z());
+	Initialize(bones::LHand, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z(), device);
 
 	localA.setIdentity();
 	localB.setIdentity();
@@ -383,7 +384,7 @@ bool RagdollClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* 
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::RLeg0] = new btBoxShape(halfSize);
-	Initialize(bones::RLeg0, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z());
+	Initialize(bones::RLeg0, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z(), device);
 
 	localA.setIdentity();
 	localB.setIdentity();
@@ -402,7 +403,7 @@ bool RagdollClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* 
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::RLeg1] = new btBoxShape(halfSize);
-	Initialize(bones::RLeg1, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z());
+	Initialize(bones::RLeg1, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z(), device);
 
 	localA.setIdentity();
 	localB.setIdentity();
@@ -421,7 +422,7 @@ bool RagdollClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* 
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::RLeg2] = new btBoxShape(halfSize);
-	Initialize(bones::RLeg2, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z());
+	Initialize(bones::RLeg2, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z(), device);
 
 	localA.setIdentity();
 	localB.setIdentity();
@@ -440,7 +441,7 @@ bool RagdollClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* 
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::RFoot] = new btBoxShape(halfSize);
-	Initialize(bones::RFoot, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z());
+	Initialize(bones::RFoot, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z(), device);
 
 	localA.setIdentity();
 	localB.setIdentity();
@@ -459,7 +460,7 @@ bool RagdollClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* 
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::LLeg0] = new btBoxShape(halfSize);
-	Initialize(bones::LLeg0, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z());
+	Initialize(bones::LLeg0, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z(), device);
 
 	localA.setIdentity();
 	localB.setIdentity();
@@ -478,7 +479,7 @@ bool RagdollClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* 
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::LLeg1] = new btBoxShape(halfSize);
-	Initialize(bones::LLeg1, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z());
+	Initialize(bones::LLeg1, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z(), device);
 
 	localA.setIdentity();
 	localB.setIdentity();
@@ -497,7 +498,7 @@ bool RagdollClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* 
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::LLeg2] = new btBoxShape(halfSize);
-	Initialize(bones::LLeg2, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z());
+	Initialize(bones::LLeg2, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z(), device);
 
 	localA.setIdentity();
 	localB.setIdentity();
@@ -516,7 +517,7 @@ bool RagdollClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* 
 	mass = 1.0;
 	in = btVector3(1.0f, 1.0f, 1.0f);
 	m_collisionShapes[bones::LFoot] = new btBoxShape(halfSize);
-	Initialize(bones::LFoot, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z());
+	Initialize(bones::LFoot, halfSize.x(), halfSize.y(), halfSize.z(), modelPosition, offset.x(), offset.y(), offset.z(), modelRotation, mass, in.x(), in.y(), in.z(), device);
 
 	localA.setIdentity();
 	localB.setIdentity();
@@ -574,121 +575,131 @@ void RagdollClass::Shutdown()
 
 void RagdollClass::Update()
 {
-	for(int bone = 0; bone < num_bones; ++bone)
-	{
-		//if(bone == 123456)
-		//{
-			// calculate tranformation
-			btVector3 move;
-			btVector3 prev_rot;
-			btVector3 rot;
-			btMatrix3x3 prev_rotMat;
-			btMatrix3x3 rotMat;
+	//for(int bone = 0; bone < num_bones; ++bone)
+	//{
+	//	//if(bone == 123456)
+	//	//{
+	//		// calculate tranformation
+	//		btVector3 move;
+	//		btVector3 prev_rot;
+	//		btVector3 rot;
+	//		btMatrix3x3 prev_rotMat;
+	//		btMatrix3x3 rotMat;
 
-			btTransform actual;
-			m_rigidBodys[bone]->getMotionState()->getWorldTransform(actual);
+	//		btTransform actual;
+	//		m_rigidBodys[bone]->getMotionState()->getWorldTransform(actual);
 
-			move.setX(actual.getOrigin().x() - m_prevTransforms[bone].getOrigin().x());
-			move.setY(actual.getOrigin().y() - m_prevTransforms[bone].getOrigin().y());
-			move.setZ(actual.getOrigin().z() - m_prevTransforms[bone].getOrigin().z());
-			rotMat = actual.getBasis();
-			prev_rotMat = m_prevTransforms[bone].getBasis();
+	//		move.setX(actual.getOrigin().x() - m_prevTransforms[bone].getOrigin().x());
+	//		move.setY(actual.getOrigin().y() - m_prevTransforms[bone].getOrigin().y());
+	//		move.setZ(actual.getOrigin().z() - m_prevTransforms[bone].getOrigin().z());
+	//		rotMat = actual.getBasis();
+	//		prev_rotMat = m_prevTransforms[bone].getBasis();
 
-			float r11 = prev_rotMat.getColumn(0).x();
-			float r21 = prev_rotMat.getColumn(0).y();
-			float r31 = prev_rotMat.getColumn(0).z();
-			float r32 = prev_rotMat.getColumn(1).z();
-			float r33 = prev_rotMat.getColumn(2).z();
-			prev_rot.setX(atan2f(r32, r33));
-			prev_rot.setY(atan2f(-r31, sqrtf(powf(r32, 2.0f) + powf(r33, 2.0f))));
-			prev_rot.setZ(atan2f(r21, r11));
+	//		float r11 = prev_rotMat.getColumn(0).x();
+	//		float r21 = prev_rotMat.getColumn(0).y();
+	//		float r31 = prev_rotMat.getColumn(0).z();
+	//		float r32 = prev_rotMat.getColumn(1).z();
+	//		float r33 = prev_rotMat.getColumn(2).z();
+	//		prev_rot.setX(atan2f(r32, r33));
+	//		prev_rot.setY(atan2f(-r31, sqrtf(powf(r32, 2.0f) + powf(r33, 2.0f))));
+	//		prev_rot.setZ(atan2f(r21, r11));
 
-			r11 = rotMat.getColumn(0).x();
-			r21 = rotMat.getColumn(0).y();
-			r31 = rotMat.getColumn(0).z();
-			r32 = rotMat.getColumn(1).z();
-			r33 = rotMat.getColumn(2).z();
+	//		r11 = rotMat.getColumn(0).x();
+	//		r21 = rotMat.getColumn(0).y();
+	//		r31 = rotMat.getColumn(0).z();
+	//		r32 = rotMat.getColumn(1).z();
+	//		r33 = rotMat.getColumn(2).z();
 
-			rot.setX(atan2f(r32, r33) - prev_rot.x());
-			rot.setY(atan2f(-r31, sqrtf(powf(r32, 2.0f) + powf(r33, 2.0f))) - prev_rot.y());
-			rot.setZ(atan2f(r21, r11) - prev_rot.z());
+	//		rot.setX(atan2f(r32, r33) - prev_rot.x());
+	//		rot.setY(atan2f(-r31, sqrtf(powf(r32, 2.0f) + powf(r33, 2.0f))) - prev_rot.y());
+	//		rot.setZ(atan2f(r21, r11) - prev_rot.z());
 
-			aiMatrix4x4 rotation, Xrotation, Yrotation, Zrotation;
-			aiMatrix4x4 translation;
+	//		aiMatrix4x4 rotation, Xrotation, Yrotation, Zrotation;
+	//		aiMatrix4x4 translation;
 
-			translation = aiMatrix4x4::Translation(aiVector3D(move.x(), move.y(), move.z()), translation);
-			Xrotation = Xrotation.FromEulerAnglesXYZ(rot.x(), 0.0f, 0.0f);
-			Yrotation = Yrotation.FromEulerAnglesXYZ(0.0f, rot.y(), 0.0f);
-			Zrotation = Zrotation.FromEulerAnglesXYZ(0.0f, 0.0f, rot.z());
-			rotation = Zrotation * Xrotation * Yrotation;
+	//		translation = aiMatrix4x4::Translation(aiVector3D(move.x(), move.y(), move.z()), translation);
+	//		Xrotation = Xrotation.FromEulerAnglesXYZ(rot.x(), 0.0f, 0.0f);
+	//		Yrotation = Yrotation.FromEulerAnglesXYZ(0.0f, rot.y(), 0.0f);
+	//		Zrotation = Zrotation.FromEulerAnglesXYZ(0.0f, 0.0f, rot.z());
+	//		rotation = Zrotation * Xrotation * Yrotation;
 
-	//Check!
-			m_transformations[bone] = /*rotation.Inverse() * */translation;
-			m_prevTransforms[bone] = actual;
-		//}
-		//else
-		//{
-		//	m_transformations[bone] = aiMatrix4x4();
-		//	btTransform actual;
-		//	m_rigidBodys[bone]->getMotionState()->getWorldTransform(actual);
-		//	m_prevTransforms[bone] = actual;
-		//}
-	}
+	////Check!
+	//		m_transformations[bone] = /*rotation * */translation;
+	//		m_prevTransforms[bone] = actual;
+	//	//}
+	//	//else
+	//	//{
+	//	//	m_transformations[bone] = aiMatrix4x4();
+	//	//	btTransform actual;
+	//	//	m_rigidBodys[bone]->getMotionState()->getWorldTransform(actual);
+	//	//	m_prevTransforms[bone] = actual;
+	//	//}
+	//}
 
-	for(int ver = 0; ver < m_model->m_model->mMeshes[0]->mNumVertices; ++ver)
-	{
-		aiMatrix4x4 transform, finalTransform;
-		aiVector3D pos = m_model->m_model->mMeshes[0]->mVertices[ver];
-		float w = 0.0f;
-		float we = 0.0f;
-		finalTransform = aiMatrix4x4();
-		for(int bone = 0; bone < m_vertexInfos[ver].m_boneWeights.size(); ++bone)
-		{
-			we = m_vertexInfos[ver].m_boneWeights[bone]->weight;
-			w += we;
-			if(w > 1.0f)
-			{
-				we -= w - 1.0f;
-				w = 1.0f;
-			}
-			transform = m_transformations[m_vertexInfos[ver].m_boneWeights[bone]->boneID];
-			transform.a1 *= we;
-			transform.a2 *= we;
-			transform.a3 *= we;
-			transform.a4 *= we;
-			transform.b1 *= we;
-			transform.b2 *= we;
-			transform.b3 *= we;
-			transform.b4 *= we;
-			transform.c1 *= we;
-			transform.c2 *= we;
-			transform.c3 *= we;
-			transform.c4 *= we;
-			transform.d1 *= we;
-			transform.d2 *= we;
-			transform.d3 *= we;
-			transform.d4 *= we;
+	//for(int ver = 0; ver < m_model->m_model->mMeshes[0]->mNumVertices; ++ver)
+	//{
+	//	aiMatrix4x4 transform, finalTransform;
+	//	aiVector3D pos = m_model->m_model->mMeshes[0]->mVertices[ver];
+	//	float w = 0.0f;
+	//	float we = 0.0f;
+	//	finalTransform = aiMatrix4x4();
+	//	for(int bone = 0; bone < m_vertexInfos[ver].m_boneWeights.size(); ++bone)
+	//	{
+	//		btTransform actual;
+	//		m_rigidBodys[bone]->getMotionState()->getWorldTransform(actual);
 
-			//finalTransform = transform * finalTransform;
+	//		aiVector3D n_pos(actual.getOrigin.x(), actual.getOrigin.y(), actual.getOrigin.z());
+	//		btMatrix3x3  actual.getBasis()
+	//		aiQuaternion n_rot(actual.getRotation().w(), actual.getRotation().x(), actual.getRotation().y(), actual.getRotation().z());
 
-			pos = transform * pos;
-			//m_model->m_model->mMeshes[0]->mVertices[ver] = transform * m_model->m_model->mMeshes[0]->mVertices[ver];
-			//m_model->m_model->mMeshes[0]->mVertices[ver] += aiVector3D(0.0f, 0.1f, 0.0f);
-		}
+	//		we = m_vertexInfos[ver].m_boneWeights[bone]->weight;
+	//		w += we;
+	//		if(w > 1.0f)
+	//		{
+	//			we -= w - 1.0f;
+	//			w = 1.0f;
+	//		}
+	//		//transform = m_transformations[m_vertexInfos[ver].m_boneWeights[bone]->boneID];
+	//		//transform.a1 *= we;
+	//		//transform.a2 *= we;
+	//		//transform.a3 *= we;
+	//		//transform.a4 *= we;
+	//		//transform.b1 *= we;
+	//		//transform.b2 *= we;
+	//		//transform.b3 *= we;
+	//		//transform.b4 *= we;
+	//		//transform.c1 *= we;
+	//		//transform.c2 *= we;
+	//		//transform.c3 *= we;
+	//		//transform.c4 *= we;
+	//		//transform.d1 *= we;
+	//		//transform.d2 *= we;
+	//		//transform.d3 *= we;
+	//		//transform.d4 *= we;
 
-		//m_model->m_model->mMeshes[0]->mVertices[ver] = finalTransform * m_model->m_model->mMeshes[0]->mVertices[ver];
-		m_model->m_model->mMeshes[0]->mVertices[ver] = pos;
-	}
+	//		//finalTransform = transform * finalTransform;
+	//		aiMatrix4x4 n_posMat;
+	//		aiMatrix4x4::Translation(n_pos, n_posMat);
+	//		aiMatrix4x4 n_rotMat;
+	//		pos = aiMatrix4x4::Translation(n_pos, 
+	//		//pos = transform * pos;
+	//		//m_model->m_model->mMeshes[0]->mVertices[ver] = transform * m_model->m_model->mMeshes[0]->mVertices[ver];
+	//		//m_model->m_model->mMeshes[0]->mVertices[ver] += aiVector3D(0.0f, 0.1f, 0.0f);
+	//	}
 
-	//btTransform trans;
-	//m_rigidBodys[bones::Spine0]->getMotionState()->getWorldTransform(trans);
-	//btVector3 pos = trans.getOrigin();
-	//btQuaternion rot = trans.getRotation();
-	//m_model->SetPosition(D3DXVECTOR3(pos.x(), pos.y(), pos.z()));
-	//m_model->SetRotation(D3DXQUATERNION(rot.x(), rot.y(), rot.z(), rot.w()));
+	//	//m_model->m_model->mMeshes[0]->mVertices[ver] = finalTransform * m_model->m_model->mMeshes[0]->mVertices[ver];
+	//	m_model->m_model->mMeshes[0]->mVertices[ver] = pos;
+	//}
+
+	////btTransform trans;
+	////m_rigidBodys[bones::Spine0]->getMotionState()->getWorldTransform(trans);
+	////btVector3 pos = trans.getOrigin();
+	////btQuaternion rot = trans.getRotation();
+	////m_model->SetPosition(D3DXVECTOR3(pos.x(), pos.y(), pos.z()));
+	////m_model->SetRotation(D3DXQUATERNION(rot.x(), rot.y(), rot.z(), rot.w()));
 }
 
-bool RagdollClass::Initialize(int bone, btScalar size_x, btScalar size_y, btScalar size_z, aiVector3D position, btScalar offset_x, btScalar offset_y, btScalar offset_z, aiVector3D rotation, btScalar mass, btScalar inertia_x, btScalar inertia_y, btScalar inertia_z)
+bool RagdollClass::Initialize(int bone, btScalar size_x, btScalar size_y, btScalar size_z, aiVector3D position, btScalar offset_x, btScalar offset_y, btScalar offset_z, aiVector3D rotation, btScalar mass, btScalar inertia_x, btScalar inertia_y, btScalar inertia_z, ID3D11Device* device)
 {
 	aiMatrix4x4 rotationMatrix, XrotationMatrix, YrotationMatrix, ZrotationMatrix;
 	aiMatrix4x4 translationMatrix, offsetMatrix;
@@ -721,6 +732,12 @@ bool RagdollClass::Initialize(int bone, btScalar size_x, btScalar size_y, btScal
 	m_rigidBodys[bone] = new btRigidBody(rigidBodyCI);
 	if(!m_rigidBodys[bone])
 		return false;
+
+	m_models[bone] = new ModelClass;
+	m_models[bone]->Initialize(device,  "../PwAG/data/cube.DAE", L"../PwAG/data/stone02.dds", 
+										L"../PwAG/data/bump02.dds", L"../PwAG/data/spec02.dds",
+										bonePosition, boneRotation);
+	m_models[bone]->SetScale(size_x, size_y, size_z);
 
 	return true;
 }

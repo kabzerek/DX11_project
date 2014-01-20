@@ -126,6 +126,7 @@ public:
 
 public:
 	ModelClass* m_model;
+	ModelClass** m_models;
 	btRigidBody** m_rigidBodys;
 	btTypedConstraint** m_joints;
 
@@ -139,7 +140,8 @@ private:
 					aiVector3D position, btScalar offset_x, btScalar offset_y, btScalar offset_z,
 					aiVector3D rotation, 
 					btScalar mass, 
-					btScalar inertia_x, btScalar inertia_y, btScalar inertia_z);
+					btScalar inertia_x, btScalar inertia_y, btScalar inertia_z,
+					ID3D11Device* device);
 
 	btCollisionShape** m_collisionShapes;
 	aiBone** m_bones;

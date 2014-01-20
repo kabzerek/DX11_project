@@ -41,6 +41,7 @@ public:
 	~ModelClass();
 	
 	bool Initialize(ID3D11Device*, char*, WCHAR*, WCHAR*, WCHAR*, aiVector3D, aiVector3D);
+	bool Initialize(ID3D11Device*, char*, WCHAR*, WCHAR*, WCHAR*, aiVector3D, aiQuaternion);
 	void Shutdown();
 	void Render(ID3D11DeviceContext*);
 
@@ -62,6 +63,8 @@ public:
 
 	bool InitializeBuffers(ID3D11Device*);
 	void ShutdownBuffers();
+
+	void SetScale(float&, float&, float&);
 
 private:
 	

@@ -71,6 +71,8 @@ private:
 	bool UpSampleTexture();
 	bool Render2DTextureScene();
 
+	bool RenderRagdoll();
+
 	bool RenderShaders(ID3D11DeviceContext* device, ModelClass* model, D3DXMATRIX transformMatrix, D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix, int shaderType);
 
 	bool InitializePhysics();

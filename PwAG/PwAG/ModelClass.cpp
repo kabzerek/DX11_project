@@ -57,6 +57,47 @@ bool ModelClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* te
 	return true;
 }
 
+bool ModelClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* textureFilename1, WCHAR* textureFilename2, 
+							WCHAR* textureFilename3, aiVector3D modelPosition, aiQuaternion modelRotation)
+{
+	bool result;
+
+	// Load in the model data
+	result = LoadModel(modelFilename);
+	if(!result)
+	{
+		return false;
+	}
+	
+	// Set position of the model
+	SetInitialPosition(modelPosition);
+	// Set rotation of the model
+	SetRotation( D3DXQUATERNION(modelRotation.x, modelRotation.y, modelRotation.z, modelRotation.z) );
+	m_Scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+
+	// Initialize the vertex and index buffers.
+	result = InitializeBuffers(device);
+	if(!result)
+	{
+		return false;
+	}
+
+	// Load the texture for this model.
+	
+	//result = LoadTexture(device, textureFilename);
+	result = LoadTextures(device, textureFilename1, textureFilename2, textureFilename3);
+	if(!result)
+	{
+		return false;
+	}
+
+	return true;
+}
+
+void ModelClass::SetScale(float& x, float& y, float& z)
+{
+	m_Scale = D3DXVECTOR3(x, y, z);
+}
 
 void ModelClass::Shutdown()
 {
