@@ -628,6 +628,10 @@ bool GraphicsClass::Frame(float posX, float posY, float posZ, float rotX, float 
 			if((*it)->m_rigidBody)
 				(*it)->Update();
 		}
+
+		m_Ragdoll->m_model->ShutdownBuffers();
+		//m_Ragdoll->Update();
+		m_Ragdoll->m_model->InitializeBuffers(m_D3D->GetDevice());
 	}
 
 	// Set the position of the camera.
@@ -1324,6 +1328,19 @@ bool GraphicsClass::InitializePhysics(void)
 
 void GraphicsClass::ShutdownPhysics()
 {
+	if(m_Ragdoll)
+	{
+		for(int i = 0; i < num_joints; ++i)
+			m_dynamicsWorld->removeConstraint(m_Ragdoll->m_joints[i]);
+
+		for(int i = 0; i < num_bones; ++i)
+			m_dynamicsWorld->removeRigidBody(m_Ragdoll->m_rigidBodys[i]);
+
+		m_Ragdoll->Shutdown();
+		delete m_Ragdoll;
+	}
+	m_Ragdoll = 0;
+
 	if(m_dynamicsWorld)
 		delete m_dynamicsWorld;
 	m_dynamicsWorld = 0;

@@ -60,11 +60,12 @@ public:
 	void SetRotation(D3DXVECTOR3);
 	void SetRotation(D3DXQUATERNION);
 
-private:
 	bool InitializeBuffers(ID3D11Device*);
 	void ShutdownBuffers();
-	void RenderBuffers(ID3D11DeviceContext*);
 
+private:
+	
+	void RenderBuffers(ID3D11DeviceContext*);
 	//bool LoadTexture(ID3D11Device*, WCHAR*);
 	//void ReleaseTexture();
 	bool LoadTextures(ID3D11Device*, WCHAR*, WCHAR*, WCHAR*);
@@ -78,6 +79,7 @@ private:
 
 public:
 	const aiScene* m_model;
+	
 
 private:
 	ID3D11Buffer* m_vertexBuffer, * m_indexBuffer;

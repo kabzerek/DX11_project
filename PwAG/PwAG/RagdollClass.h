@@ -92,6 +92,27 @@ public:
 		LLeg1_to_LLeg2,
 		LLeg2_to_LFoot
 	};
+private:
+	class boneWeight
+	{
+	public:
+		boneWeight(void) {boneID = 0; weight = 0.0f;}
+		boneWeight(int id, float w) {boneID = id; weight = w;}
+		boneWeight(const boneWeight& o) {boneID = o.boneID; weight = o.weight;}
+		~boneWeight(void) {}
+
+		int boneID;
+		float weight;
+	};
+	class vertexInfo
+	{
+	public:
+		vertexInfo(void) {}
+		vertexInfo(const vertexInfo& o) {}
+		~vertexInfo(void) {}
+
+		std::vector<boneWeight*> m_boneWeights;
+	};
 						
 public:
 	RagdollClass(void);
@@ -122,6 +143,10 @@ private:
 
 	btCollisionShape** m_collisionShapes;
 	aiBone** m_bones;
+
+	btTransform* m_prevTransforms;
+	aiMatrix4x4* m_transformations;
+	vertexInfo* m_vertexInfos;
 };
 
 #endif

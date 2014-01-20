@@ -8,6 +8,8 @@ RagdollClass::RagdollClass(void)
 	m_collisionShapes = new btCollisionShape*[num_bones];
 	m_bones = new aiBone*[num_bones];
 	m_joints = new btTypedConstraint*[num_joints];
+	m_prevTransforms = new btTransform[num_bones];
+	m_transformations = new aiMatrix4x4[num_bones];
 }
 
 RagdollClass::RagdollClass(const RagdollClass& other)
@@ -23,10 +25,11 @@ bool RagdollClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* 
 								   int shaderType)
 {
 	btConeTwistConstraint* coneC;
-	btHingeConstraint* hingeC;
 	m_model = new ModelClass;
 	m_model->Initialize(device, modelFilename, textureFilename1, textureFilename2, textureFilename3, modelPosition, modelRotation);
 	m_shaderType = shaderType;
+
+	m_vertexInfos = new vertexInfo[m_model->m_model->mMeshes[0]->mNumVertices];
 
 	for(int i = 0; i < m_model->m_model->mMeshes[0]->mNumBones; ++i)
 	{
@@ -526,17 +529,26 @@ bool RagdollClass::Initialize(ID3D11Device* device, char* modelFilename, WCHAR* 
 	coneC->setLimit(M_PI_4 * 0.9f, M_PI_4 * 0.9f, M_PI_16 * 0.01f);
 	m_joints[joints::LLeg2_to_LFoot] = coneC;
 
+	btTransform trans;
+	for(int i = 0; i < num_bones; ++i)
+	{
+		m_rigidBodys[i]->getMotionState()->getWorldTransform(trans);
+		m_prevTransforms[i] = trans;
+
+		for(int w = 0; w < m_bones[i]->mNumWeights; ++w)
+			m_vertexInfos[m_bones[i]->mWeights[w].mVertexId].m_boneWeights.push_back(new boneWeight(i, m_bones[i]->mWeights[w].mWeight));
+	}
+
 	return true;
 }
 	
 void RagdollClass::Shutdown()
 {
-	if(m_model)
-	{
-		m_model->Shutdown();
-		delete m_model;
-	}
-	m_model = 0;
+	for(int i = 0; i < m_model->m_model->mMeshes[0]->mNumVertices; ++i)
+		m_vertexInfos[i].m_boneWeights.clear();
+	//delete m_vertexInfos;
+	delete m_transformations;
+	delete m_prevTransforms;
 
 	for(int i = 0; i < num_bones; ++i)
 	{
@@ -544,18 +556,136 @@ void RagdollClass::Shutdown()
 			delete m_rigidBodys[i];
 		if(m_collisionShapes[i])
 			delete m_collisionShapes[i];
-		if(m_bones[i])
-			delete m_bones[i];
+		//if(m_bones[i])
+		//	delete m_bones[i];
 	}
 
-	delete m_rigidBodys;
-	delete m_collisionShapes;
 	delete m_bones;
+	delete m_collisionShapes;
+	delete m_rigidBodys;
+
+	if(m_model)
+	{
+		m_model->Shutdown();
+		delete m_model;
+	}
+	m_model = 0;
 }
 
 void RagdollClass::Update()
 {
+	for(int bone = 0; bone < num_bones; ++bone)
+	{
+		//if(bone == 123456)
+		//{
+			// calculate tranformation
+			btVector3 move;
+			btVector3 prev_rot;
+			btVector3 rot;
+			btMatrix3x3 prev_rotMat;
+			btMatrix3x3 rotMat;
 
+			btTransform actual;
+			m_rigidBodys[bone]->getMotionState()->getWorldTransform(actual);
+
+			move.setX(actual.getOrigin().x() - m_prevTransforms[bone].getOrigin().x());
+			move.setY(actual.getOrigin().y() - m_prevTransforms[bone].getOrigin().y());
+			move.setZ(actual.getOrigin().z() - m_prevTransforms[bone].getOrigin().z());
+			rotMat = actual.getBasis();
+			prev_rotMat = m_prevTransforms[bone].getBasis();
+
+			float r11 = prev_rotMat.getColumn(0).x();
+			float r21 = prev_rotMat.getColumn(0).y();
+			float r31 = prev_rotMat.getColumn(0).z();
+			float r32 = prev_rotMat.getColumn(1).z();
+			float r33 = prev_rotMat.getColumn(2).z();
+			prev_rot.setX(atan2f(r32, r33));
+			prev_rot.setY(atan2f(-r31, sqrtf(powf(r32, 2.0f) + powf(r33, 2.0f))));
+			prev_rot.setZ(atan2f(r21, r11));
+
+			r11 = rotMat.getColumn(0).x();
+			r21 = rotMat.getColumn(0).y();
+			r31 = rotMat.getColumn(0).z();
+			r32 = rotMat.getColumn(1).z();
+			r33 = rotMat.getColumn(2).z();
+
+			rot.setX(atan2f(r32, r33) - prev_rot.x());
+			rot.setY(atan2f(-r31, sqrtf(powf(r32, 2.0f) + powf(r33, 2.0f))) - prev_rot.y());
+			rot.setZ(atan2f(r21, r11) - prev_rot.z());
+
+			aiMatrix4x4 rotation, Xrotation, Yrotation, Zrotation;
+			aiMatrix4x4 translation;
+
+			translation = aiMatrix4x4::Translation(aiVector3D(move.x(), move.y(), move.z()), translation);
+			Xrotation = Xrotation.FromEulerAnglesXYZ(rot.x(), 0.0f, 0.0f);
+			Yrotation = Yrotation.FromEulerAnglesXYZ(0.0f, rot.y(), 0.0f);
+			Zrotation = Zrotation.FromEulerAnglesXYZ(0.0f, 0.0f, rot.z());
+			rotation = Zrotation * Xrotation * Yrotation;
+
+	//Check!
+			m_transformations[bone] = /*rotation.Inverse() * */translation;
+			m_prevTransforms[bone] = actual;
+		//}
+		//else
+		//{
+		//	m_transformations[bone] = aiMatrix4x4();
+		//	btTransform actual;
+		//	m_rigidBodys[bone]->getMotionState()->getWorldTransform(actual);
+		//	m_prevTransforms[bone] = actual;
+		//}
+	}
+
+	for(int ver = 0; ver < m_model->m_model->mMeshes[0]->mNumVertices; ++ver)
+	{
+		aiMatrix4x4 transform, finalTransform;
+		aiVector3D pos = m_model->m_model->mMeshes[0]->mVertices[ver];
+		float w = 0.0f;
+		float we = 0.0f;
+		finalTransform = aiMatrix4x4();
+		for(int bone = 0; bone < m_vertexInfos[ver].m_boneWeights.size(); ++bone)
+		{
+			we = m_vertexInfos[ver].m_boneWeights[bone]->weight;
+			w += we;
+			if(w > 1.0f)
+			{
+				we -= w - 1.0f;
+				w = 1.0f;
+			}
+			transform = m_transformations[m_vertexInfos[ver].m_boneWeights[bone]->boneID];
+			transform.a1 *= we;
+			transform.a2 *= we;
+			transform.a3 *= we;
+			transform.a4 *= we;
+			transform.b1 *= we;
+			transform.b2 *= we;
+			transform.b3 *= we;
+			transform.b4 *= we;
+			transform.c1 *= we;
+			transform.c2 *= we;
+			transform.c3 *= we;
+			transform.c4 *= we;
+			transform.d1 *= we;
+			transform.d2 *= we;
+			transform.d3 *= we;
+			transform.d4 *= we;
+
+			//finalTransform = transform * finalTransform;
+
+			pos = transform * pos;
+			//m_model->m_model->mMeshes[0]->mVertices[ver] = transform * m_model->m_model->mMeshes[0]->mVertices[ver];
+			//m_model->m_model->mMeshes[0]->mVertices[ver] += aiVector3D(0.0f, 0.1f, 0.0f);
+		}
+
+		//m_model->m_model->mMeshes[0]->mVertices[ver] = finalTransform * m_model->m_model->mMeshes[0]->mVertices[ver];
+		m_model->m_model->mMeshes[0]->mVertices[ver] = pos;
+	}
+
+	//btTransform trans;
+	//m_rigidBodys[bones::Spine0]->getMotionState()->getWorldTransform(trans);
+	//btVector3 pos = trans.getOrigin();
+	//btQuaternion rot = trans.getRotation();
+	//m_model->SetPosition(D3DXVECTOR3(pos.x(), pos.y(), pos.z()));
+	//m_model->SetRotation(D3DXQUATERNION(rot.x(), rot.y(), rot.z(), rot.w()));
 }
 
 bool RagdollClass::Initialize(int bone, btScalar size_x, btScalar size_y, btScalar size_z, aiVector3D position, btScalar offset_x, btScalar offset_y, btScalar offset_z, aiVector3D rotation, btScalar mass, btScalar inertia_x, btScalar inertia_y, btScalar inertia_z)
@@ -565,9 +695,6 @@ bool RagdollClass::Initialize(int bone, btScalar size_x, btScalar size_y, btScal
 
 	translationMatrix = aiMatrix4x4::Translation(position, translationMatrix);
 	offsetMatrix = aiMatrix4x4::Translation(aiVector3D(offset_x, offset_y, offset_z), offsetMatrix);
-
-	//offsetMatrix = aiMatrix4x4::Translation( aiVector3D(size_x/2,size_y/2,size_z/2), offsetMatrix);
-	//translationMatrix = offsetMatrix*translationMatrix;
 
 	XrotationMatrix = XrotationMatrix.FromEulerAnglesXYZ(rotation.x, 0.0f, 0.0f);
 	YrotationMatrix = YrotationMatrix.FromEulerAnglesXYZ(0.0f, rotation.y, 0.0f);
