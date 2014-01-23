@@ -588,9 +588,13 @@ void RagdollClass::Update()
 			btTransform actual;
 			m_rigidBodys[bone]->getMotionState()->getWorldTransform(actual);
 
-			move.setX(actual.getOrigin().x() - m_prevTransforms[bone].getOrigin().x());
-			move.setY(actual.getOrigin().y() - m_prevTransforms[bone].getOrigin().y());
-			move.setZ(actual.getOrigin().z() - m_prevTransforms[bone].getOrigin().z());
+			//move.setX(actual.getOrigin().x() - m_prevTransforms[bone].getOrigin().x());
+			//move.setY(actual.getOrigin().y() - m_prevTransforms[bone].getOrigin().y());
+			//move.setZ(actual.getOrigin().z() - m_prevTransforms[bone].getOrigin().z());
+
+			move.setX(actual.getOrigin().x());
+			move.setY(actual.getOrigin().y());
+			move.setZ(actual.getOrigin().z());
 			rotMat = actual.getBasis();
 			prev_rotMat = m_prevTransforms[bone].getBasis();
 
@@ -609,9 +613,13 @@ void RagdollClass::Update()
 			r32 = rotMat.getColumn(1).z();
 			r33 = rotMat.getColumn(2).z();
 
-			rot.setX(atan2f(r32, r33) - prev_rot.x());
-			rot.setY(atan2f(-r31, sqrtf(powf(r32, 2.0f) + powf(r33, 2.0f))) - prev_rot.y());
-			rot.setZ(atan2f(r21, r11) - prev_rot.z());
+			//rot.setX(atan2f(r32, r33) - prev_rot.x());
+			//rot.setY(atan2f(-r31, sqrtf(powf(r32, 2.0f) + powf(r33, 2.0f))) - prev_rot.y());
+			//rot.setZ(atan2f(r21, r11) - prev_rot.z());
+
+			rot.setX(atan2f(r32, r33));
+			rot.setY(atan2f(-r31, sqrtf(powf(r32, 2.0f) + powf(r33, 2.0f))));
+			rot.setZ(atan2f(r21, r11));
 
 			aiMatrix4x4 rotation, Xrotation, Yrotation, Zrotation;
 			aiMatrix4x4 translation;
@@ -638,12 +646,36 @@ void RagdollClass::Update()
 	for(int ver = 0; ver < m_model->m_model->mMeshes[0]->mNumVertices; ++ver)
 	{
 		aiMatrix4x4 transform, finalTransform;
+		aiVector3D finalPos = aiVector3D(0.0f, 0.0f, 0.0f);
+		aiVector3D finalRot = aiVector3D(0.0f, 0.0f, 0.0f);
 		aiVector3D pos = m_model->m_model->mMeshes[0]->mVertices[ver];
 		float w = 0.0f;
 		float we = 0.0f;
 		finalTransform = aiMatrix4x4();
 		for(int bone = 0; bone < m_vertexInfos[ver].m_boneWeights.size(); ++bone)
 		{
+			btVector3 move;
+			btVector3 rot;
+			btMatrix3x3 rotMat;
+
+			btTransform actual;
+			m_rigidBodys[bone]->getMotionState()->getWorldTransform(actual);
+
+			move.setX(actual.getOrigin().x());
+			move.setY(actual.getOrigin().y());
+			move.setZ(actual.getOrigin().z());
+			rotMat = actual.getBasis();
+
+			float r11 = rotMat.getColumn(0).x();
+			float r21 = rotMat.getColumn(0).y();
+			float r31 = rotMat.getColumn(0).z();
+			float r32 = rotMat.getColumn(1).z();
+			float r33 = rotMat.getColumn(2).z();
+
+			rot.setX(atan2f(r32, r33));
+			rot.setY(atan2f(-r31, sqrtf(powf(r32, 2.0f) + powf(r33, 2.0f))));
+			rot.setZ(atan2f(r21, r11));
+
 			we = m_vertexInfos[ver].m_boneWeights[bone]->weight;
 			w += we;
 			if(w > 1.0f)
@@ -651,33 +683,50 @@ void RagdollClass::Update()
 				we -= w - 1.0f;
 				w = 1.0f;
 			}
-			transform = m_transformations[m_vertexInfos[ver].m_boneWeights[bone]->boneID];
-			transform.a1 *= we;
-			transform.a2 *= we;
-			transform.a3 *= we;
-			transform.a4 *= we;
-			transform.b1 *= we;
-			transform.b2 *= we;
-			transform.b3 *= we;
-			transform.b4 *= we;
-			transform.c1 *= we;
-			transform.c2 *= we;
-			transform.c3 *= we;
-			transform.c4 *= we;
-			transform.d1 *= we;
-			transform.d2 *= we;
-			transform.d3 *= we;
-			transform.d4 *= we;
+			//transform = m_transformations[m_vertexInfos[ver].m_boneWeights[bone]->boneID];
+			//transform.a1 *= we;
+			//transform.a2 *= we;
+			//transform.a3 *= we;
+			//transform.a4 *= we;
+			//transform.b1 *= we;
+			//transform.b2 *= we;
+			//transform.b3 *= we;
+			//transform.b4 *= we;
+			//transform.c1 *= we;
+			//transform.c2 *= we;
+			//transform.c3 *= we;
+			//transform.c4 *= we;
+			//transform.d1 *= we;
+			//transform.d2 *= we;
+			//transform.d3 *= we;
+			//transform.d4 *= we;
 
 			//finalTransform = transform * finalTransform;
 
-			pos = transform * pos;
+			finalPos.x += move.x() * we;
+			finalPos.y += move.y() * we;
+			finalPos.z += move.z() * we;
+
+			finalRot.x += rot.x() * we;
+			finalRot.y += rot.y() * we;
+			finalRot.z += rot.z() * we;
+
+			//pos = transform * pos;
 			//m_model->m_model->mMeshes[0]->mVertices[ver] = transform * m_model->m_model->mMeshes[0]->mVertices[ver];
 			//m_model->m_model->mMeshes[0]->mVertices[ver] += aiVector3D(0.0f, 0.1f, 0.0f);
 		}
 
+		aiMatrix4x4 rotation, Xrotation, Yrotation, Zrotation;
+		aiMatrix4x4 translation;
+
+		translation = aiMatrix4x4::Translation(finalPos, translation);
+		Xrotation = Xrotation.FromEulerAnglesXYZ(finalRot.x, 0.0f, 0.0f);
+		Yrotation = Yrotation.FromEulerAnglesXYZ(0.0f, finalRot.y, 0.0f);
+		Zrotation = Zrotation.FromEulerAnglesXYZ(0.0f, 0.0f, finalRot.z);
+		rotation = Zrotation * Xrotation * Yrotation;
+
 		//m_model->m_model->mMeshes[0]->mVertices[ver] = finalTransform * m_model->m_model->mMeshes[0]->mVertices[ver];
-		m_model->m_model->mMeshes[0]->mVertices[ver] = pos;
+		m_model->m_model->mMeshes[0]->mVertices[ver] = /*rotation.Inverse() **/ translation * pos;
 	}
 
 	//btTransform trans;
