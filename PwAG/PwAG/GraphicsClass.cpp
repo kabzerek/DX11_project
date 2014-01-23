@@ -663,7 +663,7 @@ bool GraphicsClass::Frame(float posX, float posY, float posZ, float rotX, float 
 		}
 
 		m_Ragdoll->m_model->ShutdownBuffers();
-		//m_Ragdoll->Update();
+		m_Ragdoll->Update();
 		m_Ragdoll->m_model->InitializeBuffers(m_D3D->GetDevice());
 	}
 
@@ -773,16 +773,7 @@ bool GraphicsClass::RenderSceneToTexture()
 	D3DXMatrixAffineTransformation(&transformMatrix, 1.0f, &D3DXVECTOR3(0.0f,0.0f,0.0f), &m_Ragdoll->m_model->GetRotation(),  &m_Ragdoll->m_model->GetPosition());
 	//m_D3D->GetProjectionMatrix(projectionMatrix);
 
-	// Render the model with the depth shader.
-	m_Ragdoll->m_model->Render(m_D3D->GetDeviceContext());
-	result = m_ShaderManager->RenderDepthShader(m_D3D->GetDeviceContext(), m_Ragdoll->m_model->GetIndexCount(), transformMatrix, lightViewMatrix, lightProjectionMatrix);
-	if(!result)
-	{
-		return false;
-	}
-
-	// Reset the world matrix.
-	m_D3D->GetWorldMatrix(worldMatrix);
+	RenderRagdoll();
 
 	// Reset the render target back to the original back buffer and not the render to texture anymore.
 	m_D3D->SetBackBufferRenderTarget();
@@ -854,17 +845,7 @@ bool GraphicsClass::RenderBlackAndWhiteShadows()
 	D3DXMatrixAffineTransformation(&transformMatrix, 1.0f, &D3DXVECTOR3(0.0f,0.0f,0.0f), &m_Ragdoll->m_model->GetRotation(),  &m_Ragdoll->m_model->GetPosition());
 	//m_D3D->GetProjectionMatrix(projectionMatrix);
 
-	// Render the model with the depth shader.
-	m_Ragdoll->m_model->Render(m_D3D->GetDeviceContext());
-	result = m_ShaderManager->RenderShadowShader(m_D3D->GetDeviceContext(), m_Ragdoll->m_model->GetIndexCount(), transformMatrix, viewMatrix, projectionMatrix, lightViewMatrix,
-				lightProjectionMatrix, m_RenderTexture->GetShaderResourceView(), m_Light->GetPosition());
-	if(!result)
-	{
-		return false;
-	}
-
-	// Reset the world matrix.
-	m_D3D->GetWorldMatrix(worldMatrix);
+	RenderRagdoll();
 
 	// Reset the render target back to the original back buffer and not the render to texture anymore.
 	m_D3D->SetBackBufferRenderTarget();
@@ -1198,18 +1179,7 @@ bool GraphicsClass::Render()
 		m_D3D->GetWorldMatrix(worldMatrix);
 	}
 
-	transformMatrix = worldMatrix;
-	D3DXMatrixAffineTransformation(&transformMatrix, 1.0f, &D3DXVECTOR3(0.0f,0.0f,0.0f), &m_Ragdoll->m_model->GetRotation(),  &m_Ragdoll->m_model->GetPosition());
-	// Put the model vertex and index buffers on the graphics pipeline to prepare them for drawing.
-	m_Ragdoll->m_model->Render(m_D3D->GetDeviceContext());
-
-	result = RenderShaders(m_D3D->GetDeviceContext(), m_Ragdoll->m_model, transformMatrix, viewMatrix, projectionMatrix, m_Ragdoll->m_shaderType);
-
-	if(!result)
-	{
-		return false;
-	}
-	
+	RenderRagdoll();	
 	
 	// Turn off the Z buffer to begin all 2D rendering.
 	m_D3D->TurnZBufferOff();
@@ -1584,4 +1554,36 @@ void GraphicsClass::TestIntersection(int mouseX, int mouseY, int screenWidth, in
 	}
 
 	return;
+}
+
+bool GraphicsClass::RenderRagdoll()
+{
+	bool result;
+	D3DXMATRIX viewMatrix, baseViewMatrix, worldMatrix, projectionMatrix, orthoMatrix, transformMatrix;
+
+	m_Camera->GetViewMatrix(viewMatrix);
+	m_Camera->GetBaseViewMatrix(baseViewMatrix);
+	m_D3D->GetWorldMatrix(worldMatrix);
+	m_D3D->GetProjectionMatrix(projectionMatrix);
+	m_D3D->GetOrthoMatrix(orthoMatrix);
+
+	for(int i = 0; i < num_bones; ++i)
+	{
+		transformMatrix = worldMatrix;
+		D3DXMatrixAffineTransformation(&transformMatrix, 1.0f, &D3DXVECTOR3(0.0f,0.0f,0.0f), &m_Ragdoll->m_models[i]->GetRotation(),  &m_Ragdoll->m_models[i]->GetPosition());
+		// Put the model vertex and index buffers on the graphics pipeline to prepare them for drawing.
+		m_Ragdoll->m_model->Render(m_D3D->GetDeviceContext());
+
+		result = RenderShaders(m_D3D->GetDeviceContext(), m_Ragdoll->m_models[i], transformMatrix, viewMatrix, projectionMatrix, m_Ragdoll->m_shaderType);
+
+		if(!result)
+		{
+			return false;
+		}
+
+		// Reset the world matrix.
+		m_D3D->GetWorldMatrix(worldMatrix);
+	}
+
+	return true;
 }
