@@ -72,7 +72,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <CompileAsManaged>
       </CompileAsManaged>
-      <AdditionalIncludeDirectories>..\..\bullet-2.82-r2704\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Utils\bullet-2.82-r2704\src</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
